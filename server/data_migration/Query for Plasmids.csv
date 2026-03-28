@@ -1,0 +1,452 @@
+"Plasmid Name","Plasmid Backbone","Gene Source","Antibiotic Marker","Host Bacteria","Protein Purification status"
+"gRNA2 (hafsa Nasim)",2,6,40,1,0
+"Pet28",1,5,44,1,0
+"END CP1",1,1,44,3,0
+"END CP1",1,1,44,1,0
+"?RED SG",7,5,44,5,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"ECC-LAMBDA-RED-SG18-KANA",7,5,44,5,0
+"LAMBDA-RED-SGPC",7,5,44,6,0
+"G3-SSAU-SG-18",2,7,40,1,0
+"SG18-SSAU DELETED-LAMBDA RED",7,5,44,7,0
+"WT-SGPC-GRNA1",2,6,40,1,0
+"PCAS9-PLASMID",2,5,40,1,0
+"NEW-HAS-SSAU-TOP10",1,2,40,1,0
+"G3-SSAU/Grna-Cam",2,6,40,1,0
+"NEW-HAS-PET22B-SSAU",4,2,6,1,0
+"RECOMBINANT-SGPC-GRNA1-3-2900BP",2,7,40,5,0
+"LAMBDARED-CAS9 IN SG18( FOR SELECTION OF PHAGE ON CAM-KANA)",2,5,40,5,0
+"LAMBDARED-CAS9 IN SG18( FOR SELECTION OF PHAGE ON CAM-KANA)",7,5,44,5,0
+"GRNA4-SSAU-SG18-CAM",2,6,40,1,0
+"G3-SSAU-SG18-CAM/GRNA",2,6,40,1,0
+"pet21a",5,5,6,1,0
+"ND gene Puc57 comsats sahiwal",8,4,6,1,0
+"gRNA1 (Hafsa Nasim)",2,6,40,1,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"pET28a",1,5,44,1,0
+"CP1-Endo",1,1,44,1,0
+"CP1-Endo",1,1,44,3,0
+"SAPL-Hol",1,1,44,1,0
+"SAPL-Hol",1,1,44,3,0
+"RS-Endo",1,1,44,1,0
+"RS-endo",1,1,44,3,0
+"IQL-Endo",1,1,44,1,0
+"IQL Endo",1,1,44,3,0
+"ITTPL Endo",1,1,44,1,0
+"ITTPL-Endo",1,1,44,3,0
+"RL-Hol",1,1,44,1,0
+"RL-Hol",1,1,44,3,0
+"SG-13-SPA",1,1,44,3,0
+"d10a PLASMID",,,40,1,0
+"GRNA1-SGP13-for Insertion",2,6,40,1,0
+"gRNA3 -SG18",2,6,40,1,0
+"gRNA3-SGPC",2,6,40,1,0
+"PCRISPR plasmid",3,5,44,1,0
+"Pcas-RecAb-plasmid",6,5,83,1,0
+"Grna2-sgpc/cam",2,6,40,1,0
+"grna1-sgpc/cam",2,6,40,1,0
+"Grna4-sg18/cam for ssau",2,6,40,1,0
+"grna2-sgp13-for insertion",2,6,40,1,0
+"GRNA3-SSAU-SG18",2,6,40,1,0
+"LAMBDA-RED-KANA",7,5,44,1,0
+"GRNA-3-SG18-SSAU",2,6,40,1,0
+"GRNA1-SGP13-INSERTION",2,6,40,1,0
+"WT-SGPC-GRNA3",2,,44,1,0
+,,,,,0
+,,,,,1
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"pCasSA",2,,2,,0
+"pCasSa",2,,2,,0
+"pcassa",2,,,2,0
+"pNickclos",,,6,,0
+"?SPVB-SG18",,,,,0
+"pBAD-mCherry",9,5,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+,,,,,0
+"pBAD-mCherry",9,5,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (NcoI)",18,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+,,,,,0
+"pBAD-mCherry",9,5,6,1,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+"mutated pBAD (XhoI)",19,8,6,1,0
+,,,,,0
+,,,,,0
+"pET28a",1,5,44,1,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"pET28a",1,5,44,1,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"pET28a",1,5,44,1,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"pET28a",1,5,44,1,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"RL-HP1 in SG18",19,1,6,5,0
+"RL-HP2 in SG18",19,1,6,5,0
+"RL-HP3 in SG18",19,1,6,5,0
+"RL-HP4 in SG18",19,1,6,5,0
+"RL-HP5 in SG18",19,1,6,5,0
+"RL-HP7 in SG18",19,1,6,5,0
+"RL-HP8 in SG18",19,1,6,5,0
+"RL-HP9 in SG18",19,1,6,5,0
+"RL-HP10 in SG18",19,1,6,5,0
+"RL-HP11 in SG18",19,1,6,5,0
+"RL-HP12 in SG18",19,1,6,5,0
+"RL-HP13 in SG18",19,1,6,5,0
+"RL-HP14 in SG18",19,1,6,5,0
+"RL-HP15 in SG18",19,1,6,5,0
+"RL-HP16 in SG18",19,1,6,5,0
+"RL-HP17 in SG18",19,1,6,5,0
+"RL-HP18 in SG18",19,1,6,5,0
+"RL-HP19 in SG18",19,1,6,5,0
+"RL-HP20 in SG18",19,1,6,5,0
+"RL-HP21 in SG18",19,1,6,5,0
+"RL-HP22 in SG18",19,1,6,5,0
+"RL-HP23 in SG18",19,1,6,5,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"LAMBDA-RED-PLASMID-KANA",7,5,44,1,0
+"LAMBDA-RED-SG18-KANA",7,5,44,5,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+"RL-Phage Gene Product",1,1,44,1,0
+,,,,,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,2,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,1,0
+,,,,,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+"RL-Phage Gene Product",1,1,44,3,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+"Pcas9",,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0
+,,,,,0

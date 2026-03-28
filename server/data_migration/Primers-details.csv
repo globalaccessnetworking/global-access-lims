@@ -1,0 +1,1243 @@
+"ID","Primer Name","DNA sequence","Purpose","Binds with Phage/Bacteria/Plasmid","Phage","Bacteria","Plasmid","Freezer","Freezer Shelve","Box detail","Location in Box"
+9,"LBLMA1-rev","5'-CTC AAAACTAAACAAAGT TTC-3'","Lactobacillus specific Primers",1,,602,,1,,101,"J1"
+10,"2HA2-F SSAU","GAAAACAGAACAGACTACAGAAAAGAAGAGATAAAATTCCTGAAACGTTATT  ","new homology arm Fp OF HA2 for ssau gene",,,,,1,,23,"A3"
+11,"gRNA-4F-SSAU","AAACACAGAAAAGAAATTACGTGAG","Guide rna 4 for ssau-Fp",,,,,1,,23,"B4"
+12,"gRNA-4R-ssau","AAAACTCACGTAATTTCTTTTCTGT","Guide rna 4 for ssau-Rp",,,,,1,,23,"B5"
+13,"HA1_ssau_FP:","AAAATCTCTAGAAGCGGTATCCTGTTGAATTATACC","Homology arm 1 for ssau ",,,,,1,,23,"A4"
+14,"HA1_ssau_RP:","CGATGGTTCGAGTCCATTCAGACGAATTGTTGTGCCGACCGATTTAAA ","Homology arm 1 for ssau",,,,,1,,23,"A5"
+15,"HA2_ssau_Fp","TTTAAATCGGTCGGCACAACAATTCGTCTGAATGGACTCGAACCATCG ","homology arm 2 for ssau forward",,,,,1,,23,"A6"
+16,"HA2_ssau_Rp:","TTATGACTCGAGTGCTGCTTGCTGCGGTTTACCAGA","homology arm 2 for ssau reverse",,,,,1,,23,"A7"
+17,"SSau_screening_Fp:","ACGTCTATGCCGGTAGTGTTGGT","screening for ssau gene deletion sg18",,,,,1,,23,"A8"
+18,"SSau_screening_Rp:","CATTTGTATGGCTGTGGTTACCG","screening for ssau gene deletion sg18",,,,,1,,23,"A9"
+19,"gRNA1F_SSau","AAACTTATTTTTTGAAGTGGAACGG","grna 3 for ssau ",,,,,1,,23,"B2"
+20,"gRNA3R_SSau","AAAACCGTTCCACTTCAAAAAATAA","grna3 for ssau ",,,,,1,,23,"B3"
+21,"T7-pet22-Fp","GGGGTTATGCTAGTTATTGCTCAG","t7 primers for cloning dtection in pet plasmids",,,,,1,,23,"B4"
+22,"T7-pet22-Rp","CCCGCGAAATTAATACGACTCACT","t7 primers for cloning dtection in pet plasmids",,,,,1,,23,"B5"
+23,"PcasSA_scaffold","ATGGGTATGGACAGATCTC-------à","pcassa plasmid grna cloning detection, use it with Fp of gRNA cloned",,,,,1,,23,"B6"
+24,"Cas9_R","ATAGTGACTGGCGATGCTGTC----à","pcas9 plasmid grna cloning detection, use it with Fp of gRNA cloned",,,,,1,5,23,"D2"
+25,"pCRISPR-Rp","TCAGTGATAGAGATTGAC ATCCC","pCRISPR plasmid grna cloning detection, use it with Fp of gRNA cloned",,,,,1,,23,"B9"
+26,"Pcas-red-Fp","ATTCACTTTTTCTTCACAACCG","Lambda red plasmid detection Fp",,,,,1,,23,"C2"
+27,"Pcas-red-Rp","TATCACCAGTGGGTTTACTTTC","Lambda red plasmid detection  Rp",,,,,1,,23,"C3"
+28,"PcasAB-Fp","TTGCTAGACATTGCCAGCCAGT","pcasAB plasmid detcetion Fp",,,,,1,,23,"C8"
+29,"PcasAB-Rp","GGCAATGGATGCGTACCTTGAA","pcasAB plasmid detcetion Rp",,,,,1,,23,"C9"
+30,"Ssau_seq-Fp","GTATCAGCTTCTCTCTTCCT","ssau sequencing Fp",,,,,1,,23,"C4"
+31,"ssau-seq-new-Rp","CACCTTTATCGTCAAGCACT","ssau sequencing Rp",,,,,1,,23,"C5"
+32,"HA1-Fp/HP","AAAAGTTCTAGAGAGTGGTGTCGCGCTCATTCGAAG","Homology arm sgpc for hypothetical protein deletion",,,,,1,,23,"H8"
+33,"HA1-Rp/HP","ATTTGTCCTAGTTGAAGCGTTATAACACACATGTATCACAGGCAATTGTTTT","Homology arm sgpc for hypothetical protein deletion",,,,,1,,23,"H9"
+34,"HA2-Fp/HP","AAAACAATTGCCTGTGATACATGTGTGTTATAACGCTTCAACTAGGACAAAT","homology arm 2 sgpc for hypothetical deletion",,,,,1,,23,"I2"
+35,"HA2-Rp/HP","TTATGACTCGAGACGCAGTGCCTGTCCTGTTCCGGT","homology arm 2 sgpc for hypothetical deletion",,,,,1,,23,"I3"
+36,"gRNA1-Fp/HPs","AAACCCTGTGATACATGTGTCACAG","Grna 1 for HP(hypothetical protein) deletion",,,,,1,,23,"I4"
+37,"gRNA1-Rp/HPs","AAAACTGTGACACATGTATCACAGG","Grna 1 for HP(hypothetical protein) deletion",,,,,1,,23,"I5"
+38,"gRNA2-Fp/HP","AAACTTCGACCCTAATACGGATGGG","grna 2 for hp deletion",,,,,1,13,23,"I6"
+39,"gRNA2-Rp/HP","AAAACCCATCCGTATTAGGGTCGAA","grna 2 for hp deletion",,,,,1,,23,"I7"
+40,"Screening-Fp/HP","AACTTGTCCACGCCGTAGATGAT","screening for HP deletion",,,,,1,,23,"I8"
+41,"Screening-Rp/HP","CAGGAGCAGGTTTAGTATCTTAG","screening for HP deletion",,,,,1,,23,"I9"
+42,"gRNA3-Fp/HPs/1kb","AAACAACGAGATAGAGGAGTGTGGG","grna for 1kb HP deletion",,,,,1,,23,"J2"
+43,"gRNA3-Rp/HPs 1KB","AAAACCCACACTCCTCTATCTCGTT","grna for 1kb HP deletion",,,,,1,,23,"J3"
+44,"HA1-Fp/HPs/1kb","AAAAGTTCTAGATACCCCAACATAACAGGATGCTATTC","homology arm for 1kbb HP deletion",,,,,1,,23,"J4"
+45,"HA1-Rp/HPs/1kb","CTTGGTATCCGTATAATGTTTAAAATCCTCTATCTCGTTTCGTTAAAGTAA                      ","homology arm for 1 kb HP deletion",,,,,1,,23,"J5"
+46,"HA2-Fp/HPs/1kb","TTACTTTAACGAAACGAGATAGAGGATTTTAAACATTATACGGATACCAAG","homology arm for 1kbb HP deletion",,,,,1,,23,"J6"
+47,"HA2-Rp/HPs/1kb","TTATGACTCGAGCGCCTTTCACGCAAATGTGACGAATT","homology arm for 1 kb HP deletion",,,,,1,,23,"J7"
+48,"Screening-Fp/HPs/1kb","GTTAAGGCTCACTGAAACCCGC","screening for 1kb Hp deletion",,,,,1,,23,"J8"
+49,"Screening-Rp/HPs/1kb","CTGGCCTTCTTTCACATCTGCG","screening for 1kb Hp deletion",,,,,1,,23,"J9"
+50,"HA1-F SSAU-Amp","AGCGGTATCCTGTTGAATTATACc","homology arm 1 for ampicillin inssertion in sg18/sssau region",,,,,1,,23,"E2"
+51,"HA1-R- SSAU-Amp","gggttccgcgTTCTTTTCTGTAGGCTGTTC","homology arm 1 for ampicillin inssertion in sg18/sssau region",,,,,1,,23,"E3"
+52,"Ssau-Amp-Fp","cagaaaagaaCGCGGAACCCCTATTTGTTTATTTTTC","ampicillin insertion cassette primer hifi overlap",,,,,1,,23,"E4"
+53,"Ssau-Amp-Rp","attttatctcTTACCAATGCTTAATCAGTGAGG","ampicillin insertion cassette primer hifi overlap",,,,,1,,23,"E5"
+54,"HA2-F-SSAU-Amp","gcattggtaaGAGATAAAATTCCTGAAACGTTATTTGAACCCG","Homology arm 2 for ampiciilin insertion sg18/ssau",,,,,1,,23,"E6"
+55,"HA2-R-SSAU-Amp","TGCTGCTcGCTGCGGTTTACCAGA","Homology arm 2 for ampiciilin insertion sg18/ssau",,,,,1,,23,"E7"
+56,"lambda Fp","aagcagacagGACATGAGCGGATACATATTTG","lambda red Fp for construction of lambda without pcas9",,,,,1,,23,"D3"
+57,"lambda Rp","cgctcatgtcCTGTCTGCTTACATAAACAG","lambda red Rp for construction of lambda without pcas9",,,,,1,,23,"D4"
+58,"SNM-ssau-HA1-Fp","CTTCTGCACTGCTGTTTCTGGGCG","Single nucleotide modification Homology arm 1",,,,,1,,23,"D5"
+59,"SNM-ssau-HA1-Rp","gcgttccactTCAAAAAATAATGAGCGGG","single nucleotide modification homology arm1",,,,,1,,23,"D6"
+60,"SNM-ssau-HA2-Fp","tattttttgaAGTGGAACGCTGAGATAAAATTCCTG","SNM Homology arm 2",,,,,1,,23,"D7"
+61,"SNM-ssau-HA2-Rp","TGCTGCTCGCTGCGGTTTACCAGA","SNM Homology arm 2",,,,,1,,23,"D8"
+62,"SGPC-HA1-F","ATACCCCAACATAACAGGATGCTATTC","SGPC Homology arm for grna cassette",,,,,1,,23,"G6"
+63,"SGPC-1gRNA-HA1-R","atgttttagaTCCTCTATCTCGTTTCGATAAAGTAATAG","SGPC Homology arm for grna cassette",,,,,1,,23,"G7"
+64,"Cassett-SGPC-HA-F","agatagaggaTCTAAAACATGGAACTCAACAAGTCTC","cas9 cassette for sgpc grna ",,,,,1,,23,"G8"
+65,"Cassett-SGPC-HA-R","atatttaaaaCCTGAAGTCAGCCCCATACGATATAAG","cas9 cassette for sgpc grna ",,,,,1,,23,"G9"
+66,"SGPC-1gRNA-HA2-F","tgacttcaggTTTTAAATATTATACGGATACCAAGATTTACGAGAACGACC","SGPC Homology arm for grna cassette",,,,,1,,23,"H2"
+67,"SGPC-HA2-R","CGAGCGCCTTTCACGCAAATGTGA","SGPC Homology arm for grna cassette",,,,,1,,23,"H3"
+68,"SGPC-Amp-R-HA1-R","gcattggtaaTCCTCTATCTCGTTTCGATAAAGTAATAG","sgpc Homology arm for ampicillin cassette",,,,,1,,23,"H4"
+69,"Amp-R-SGPC-HA-F","agatagaggaTTACCAATGCTTAATCAGTGAGGC","Homology arm for ampiciilin insertion sgpc",,,,,1,,23,"H5"
+70,"Amp-R-SGPC-HA-R","atatttaaaaCGCGGAACCCCTATTTGTTTATTTTTC","Homology arm for ampiciilin insertion sgpc",,,,,1,,23,"H6"
+71,"SGPC-Amp-R-HA2-F","gggttccgcgTTTTAAATATTATACGGATACCAAGATTTACGAGAACGACC","homology arm 2 for ampicillin cassette use with Rp of sgpc HA grna casette primer",,,,,1,,23,"H7"
+72,"gRNA1F-SGP13","AAACGCCGTAAAGAAGATGCTCAGG","guide rna 1 for sgp13",,,,,1,,23,"F2"
+73,"gRNA1R-SGP13","AAAACCTGAGCATCTTCTTTACGGC","guide rna 1 for sgp13",,,,,1,,23,"F3"
+74,"gRNA2F-SGP13","AAACTGAAAAACGAATTACACCTGG","guide rna 2 for sgp13",,,,,1,,23,"E8"
+75,"gRNA2R-SGP13","AAAACCAGGTGTAATTCGTTTTTCA","guide rna 2 for sgp13",,,,,1,,23,"E9"
+76,"HA1-SGP13-Fp","CGTGTAAGTTGTCTCTTGTAACttc","Homology arm sgp 13 for helysin insertion",,,,,1,,23,"F4"
+77,"HA1-SGP13-Rp","tacgtgccgatcaTTTTTCACCGAAAGCGGTC","homology arm 1 sgp13 for helysin insertion",,,,,1,,23,"F5"
+78,"Cat-sgp13-Fp","ttcggtgaaaaaTGATCGGCACGTAAGAGG","cat promoter for helysin casette insertion in sgp 13",,,,,1,,23,"F6"
+79,"Cat-sgp13-Rp","atcgagcatcatTTTAGCTTCCTTAGCTCCTG","cat promoter for helysin casette insertion in sgp 13",,,,,1,,23,"F7"
+80,"HElysin-SGP13-Fp","taaggaagctaaaATGATGCTCGATACCGCC","helysin cassette for insertion in sgp13",,,,,1,,23,"F8"
+81,"HElysin-SGP13-Rp","aatcgtgctcgcaCTACCACAGCAAGGACGAG","helysin cassette for insertion in sgp13",,,,,1,,23,"F9"
+82,"HA2-SGP13-Fp","ttgctgtggtagTGCGAGCACGATTGGGCC","homology arm 2 for helysin insertion in sgp13",,,,,1,,23,"G2"
+83,"HA2-SGP13-Rp","GCAATTGTTATAACCGAGCTTAACG","homology arm 2 for helysin insertion in sgp13",,,,,1,,23,"G3"
+84,"hifi HelYSIN Fp-pet22","GTTTAACTTTAAGAAGGAGATATACATATGCGTGTAAGTTGTCTCTTGTAACTTC","helysin cassette for insertion in sgp13 with hifi overlap of pet22b ",,,,,1,,23,"G4"
+85,"hifi HelYSIN Rp-pet22","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGGCAATTGTTATAACCGAGCTTAACG","helysin cassette for insertion in sgp13 with hifi overlap of pet22b",,,,,1,,23,"G5"
+86,"Fp-spvb",,"spvb basit",,,,,1,,23,"C6"
+87,"Rp-spvb",,"spvb basit",,,,,1,,23,"C7"
+88,"Det-HE-Fp","ccgtttactcgccctatgagat","Helysin insertion detection RL",,,,,1,20,104,"D8"
+89,"Det-HE-Rp","gaacgctgtgctggttgtaca","Helysin insertion detection RL",,,,,1,20,104,"C2"
+90,"3kb-SGP13-Fp","gatttccttgatgtgccgtaga","3kb sgp13 Helysin casette amplification ",,,,,1,20,104,"G2"
+91,"3kb-SGP13-Rp","tcgacaaccaacaacctaccca","3kb sgp13 Helysin casette amplification",,,,,1,20,104,"H1"
+92,"SGPC-HA1-Fp","AACTATTCTCTTGCATACCCCAAC","SGPC Homology arm 1 for cas9 insertion",,,,,,,104,"A6"
+93,"SGPC-HA1-Rp","atgttttagaTCTCGTTTCGATAAAGTAATAG","SGPC Homology arm 1 for cas9 insertion",,,,,1,20,104,"A7"
+96,"Cas9-sgpc-Rp","gacttcaggtGAATTTTAAATATTATACGGATACCAAGATTTAC","HA2 Homology arm 2-SGPC for cas9 insertion",,,,,1,20,104,"D9"
+97,"HA2-SGPC-Fp","TTTCACGCAAATGTGACGAATTGA","HA2 Homology arm 2-SGPC for cas9 insertion",,,,,1,20,104,"B2"
+98,"7kb-SGPC-Fp","TCCGTGGAGATATAAGTGGGCA","7kb cassette  for SGPC insertion",,,,,1,,104,"B4"
+99,"7kb-SGPC-Rp","TGCCGACGCCATATACAACAGA","7kb cassette  for SGPC insertion",,,,,1,,104,"B5"
+101,"Cas-det-Rp","GATGACTCGGAAGTCTGAAGAAA","cas9 detection",,,,,1,,104,"B7"
+102,"7kb-new-sgpc-Fp","tgcacttgtgtaacccaatataat","7kb new sgpc full cassette primer",,,,,1,,104,
+103,"7kb-new-sgpc-Rp","ttaattagcgaggtgacgatgatt","7kb new sgpc full cassette primer",,,,,1,,104,
+104,"Hifi-7kb-new-Fp","AACTTTAAGAAGGAGATATACATATGtgcacttgtgtaacccaatataat","Hifi 7kb new full cassette primer",,,,,1,,104,
+105,"Hifi-7kb-new-Rp","AGTGGTGGTGGTGGTGGTGCTCGAGttaattagcgaggtgacgatgatt","Hifi 7kb new full cassette primer",,,,,1,,104,
+106,"Cas9-Rp","ATAGTGACTGGCGATGCTGTC","Cas9 Rp for grna cloning detection, use with grna Fp",,,,,1,,104,"B8"
+107,"T7-Fp","GGGGTTATGCTAGTTATTGCTCAG","screening primer for pet plasmids",,,,,1,,104,"c4"
+108,"T7-Rp","CCCGCGAAATTAATACGACTCACT","screening primers for pet plasmids",,,,,1,,104,"c5"
+109,"Seq-SGPC-Fp",,"sequencing of sgpc ",,,,,1,20,104,"A5"
+110,"Seq-SGPC-Rp",,"sequencing of sgpc ",,,,,1,20,104,"A6"
+111,"Amp-Fp","ACGAGTGGGTTACATCGAACT","ampicillin detection primer ",,,,,1,20,104,"D2"
+112,"Amp-Rp","AACTTTATCCGCCTCCATCCA","ampicillin detection primer ",,,,,1,20,104,"D3"
+115,"Fp-TLTP","CGTTGGCGTCAATATGCTGG","Detection of SGP-C phage",,,,,,,22,"A1"
+116,"Rp-TLTP","TCTGAGCGACATACGCATCC","Detection of SGP-C phage",,,,,,,22,"A2"
+117,"SGP-C-W-1-F","CCTGTCTGGACGCCAGCTCA","Amplification of Fragment 1 from SGP-C wild phage",,,,,,,22,"A3"
+118,"SGPC-W-1-R","GGCCTTAGTTTCATTCTTCTAGATTACTCAGATATAACC","Amplification of Fragment 1 from SGP-C wild phage",,,,,,,22,"A4"
+119,"SGPC-W-2-F","CCGGTTATATCTGAGTAATCTAG","Amplification of Fragment 2 from SGP-C wild phage",,,,,,,22,"A5"
+120,"SGPC-W-2-R","ACCTAAGTAACGAAAGGCCC","Amplification of Fragment 2 from SGP-C wild phage",,,,,,,22,"A6"
+121,"SGPC-W-3-F","CAAAATTAAGGCCCCTTGAAGGG","Amplification of Fragment 3 from SGP-C wild phage",,,,,,,22,"A7"
+122,"SGPC-W-3-R","CCCGGGCCCGACAAGAATAA","Amplification of Fragment 3 from SGP-C wild phage",,,,,,,22,"A8"
+123,"SGPC-W-4-F","TTTCTTCTTACCCCACATTC","Amplification of Fragment 4 from SGP-C wild phage",,,,,,,22,"A9"
+124,"SGPC-W-4-R","TTACTCTAAATCCCCTTCTG","Amplification of Fragment 4 from SGP-C wild phage",,,,,,,22,"A10"
+125,"SGPC-W-5-F","CTAACGACAACATAAAGACAACAGAAG","Amplification of Fragment 5 from SGP-C wild phage",,,,,,,22,"B1"
+126,"SGPC-W-5-R","TGCCTTGAACTCCCCGAAGTATATTTC","Amplification of Fragment 5 from SGP-C wild phage",,,,,,,22,"B2"
+127,"SGPC-W-6-F","ACCAAAGAGCCGCAGAAATATAC","Amplification of Fragment 6 from SGP-C wild phage",,,,,,,22,"B3"
+128,"SGPC-W-6-R","CGAAGGAATGGTTAGCCACTG","Amplification of Fragment 6 from SGP-C wild phage",,,,,,,22,"B4"
+129,"SGPC-W-4-Cas1gRNA-r","GTTCCATGTTTTAGATTACTCTAAATCCCCTTCTG","Reverse primer of Fragment 4 along with overhang site of 1gRNA cassette ",,,,,,,22,"B5"
+130,"SGPC-W-5-Cas2gRNA-f","GGGGCTGACTTCAGGCTAACGACAACATAAAGACAACAGAAG","Forward primer of Fragment 5 along with overhang site of cassette having gRNA (can be used for single as well as double gRNA insertion)",,,,,,,22,"B6"
+131,"SGPC-W-4-Cas2gRNA-r","ACTCCATTCAACATTGCCGATTACTCTAAATCCCCTTCTG","Reverse primer of Fragment 4 along with overhang site of 2gRNAs cassette",,,,,,,22,"B7"
+132,"SGPC-W—Cas-1gRNA-F","GGGGATTTAGAGTAATCTAAAACATGGAACTCAACAAGTC","Single gRNA (any) whole Cassette amplification for insertion between Fragment 4 and 5 of SGP-C",,,,,,,22,"B8"
+133,"SGPC-W-Cassette-r","TTATGTTGTCGTTAGCCTGAAGTCAGCCCCATAC","Single gRNA (any) whole Cassette amplification for insertion between Fragment 4 and 5 of SGP-C",,,,,,,22,"B9"
+134,"2nd-gRNA-SGPC-F","GTGATACGGGGGTCTGTCGGCAATGTTGAATGGAG","Amplification of 2nd gRNA with overhang that join between fragment 4 of SGP-C and main cassette having 1st gRNA",,,,,,,22,"B10"
+135,"2nd-gRNA-junction—new-R","GTTCCATGTTTTAGATATTTCTTAATAACTAAAAATATGGTATAATACTCTTAATAAATG","Amplification of 2nd gRNA with overhang phage overhangs",,,,,,,22,"C1"
+136,"1st-gRNA universal-F","AGTTATTAAGAAATATCTAAAACATGGAACTCAACAAGTC","Amplification of complete cassette having  gRNA with an overhanging site to join with 2nd gRNA",,,,,,,22,"C2"
+137,"Cas-det-F","TGATCCCTAGTAACTCTTTAAC","For amplification of region inside cas-9 from Pcas9 vector",,,,,,,22,"C3"
+138,"Cas-det-R","AAGTGATTATGATGTCGATC","For amplification of region inside cas-9 from Pcas9 vector",,,,,,,22,"C4"
+139,"SGP13_TLP_Fp","AAAGTGGTGTTAAGACGTG","For detection of SGP-13 phage",,,,,,,22,"C5"
+140,"SGP13_TLP_Rp","CTTGTATAGCTTCCATCGG","For detection of SGP-13 phage",,,,,,,22,"C6"
+141,"F1-Fwd","AACACTTATAGTAGAACTTACGCAAAACAG","Amplification of fragment 1 from SGP-13 wild phage",,,,,,,22,"C7"
+142,"F1-Rev","TCAGACCCCCGTATCACCAAAG","Amplification of fragment 1 from SGP-13 wild phage",,,,,,,22,"C8"
+143,"F2-Fwd","CGATGGCTAAGCTTTGGTGATAC","Amplification of fragment 2 from SGP-13 wild phage",,,,,,,22,"C9"
+144,"F2-Rev","TCTCATTTTAAGAATCTCAACAGGG","Amplification of fragment 2 from SGP-13 wild phage",,,,,,,22,"C10"
+145,"F3-Fwd","ATCGCTGATGCCCTGTTGAGATTC","Amplification of fragment 3 from SGP-13 wild phage",,,,,,,22,"D1"
+146,"F3-Rev","TTAACTTACGGTAACTACCGTACTATCTG","Amplification of fragment 3 from SGP-13 wild phage",,,,,,,22,"D2"
+147,"F4-Fwd","ATTTCAGATAGTACGGTAGTTAC","Amplification of fragment 4 from SGP-13 wild phage",,,,,,,22,"D3"
+148,"F4-Rev","GCCGGTGTAATCATTAATATTC","Amplification of fragment 4 from SGP-13 wild phage",,,,,,,22,"D4"
+149,"F5-Fwd","CGCGGGATACTGACATCGTGAATATTAATG","Amplification of fragment 5 from SGP-13 wild phage",,,,,,,22,"D5"
+150,"F5-Rev","CTGTTTTGCGTAAGTTCTACTAT","Amplification of fragment 5 from SGP-13 wild phage",,,,,,,22,"D6"
+151,"SGP-13-W-1-Cas1gRNA-r","gttccatgttttagacagacccccgtatcaccaaag","Reverse primer of Fragment 1 along with overhang site of 1gRNA cassette",,,,,,,22,"D7"
+152,"SGP-13-W-1-Cas2gRNA-r","attcaacattgccgaAGACCCCCGTATCACCAAAG","Reverse primer of Fragment 1 along with overhang site of 2gRNAs cassette",,,,,,,22,"D8"
+153,"SGP-13-W-2-Cas-cassete-F","ggggctgacttcaggCTCGATGGCTAAGCTTTG","Forward primer of Fragment 2 along with overhang site of cassette having gRNA (can be used for single as well as double gRNA insertion)",,,,,,,22,"D9"
+154,"Cassette-1gRNA-SGP-13-F","tgatacgggggtctgtctaaaacatggaactcaacaagtc","Single gRNA (any) whole Cassette amplification for insertion between Fragment 1 and 2 of SGP-13",,,,,,,22,"D10"
+155,"Cas-Cassette-SGP-13-W2-r","agcttagccatcgagCCTGAAGTCAGCCCCATAC","Single gRNA (any) whole Cassette amplification for insertion between Fragment 1 and 2 of SGP-13",,,,,,,22,"E1"
+156,"2nd-gRNA-SGP-13-F","gtgatacgggggtctgTCGGCAATGTTGAATGGAG","Amplification of 2nd gRNA with overhang that join between fragment 1 of SGP-C and main cassette having 1st gRNA",,,,,,,22,"E2"
+157,"Cat-P-new_F","atacgggggtctgattgatcggcacgtaagagg","Amplification of cat promoter form Cas9 plasmid for assembly with 2gRNA ",,,,,,,22,"E3"
+158,"Cat-P-new-R","agttattaagaaatatttagcttccttagctcctg","Amplification of cat promoter form Cas9 plasmid for assembly with 2gRNA",,,,,,,22,"E4"
+159,"2ndgRNA-Cat-P-new-F","Gctaaggaagctaaatatttcttaataactaaaaatatggtataatactcttaataaatg","Amplification of 2nd gRNA for assembly with cat promoter",,,,,,,22,"E5"
+160,"2-gRNA-Cat-P-jun-main-cas-R","Gttccatgttttagatcggcaatgttgaatggag","Reverse primer for 2nd gRNA for insertion in recombinant SGP-C phage having cat promoter",,,,,,,22,"E6"
+161,"1st-gRNA-jun-Cat-2nd-gRNA-F","attcaacattgccgatctaaaacatggaactcaacaagtc","Forward junction primer for main cassette 1st gRNA for insertion in recombinant SGP-C phage having cat promoter",,,,,,,22,"E7"
+162,"SpV-plasm-conf-Fp","ACGCCAGCGTCTGTGCTTCC","Confirmation of SpVB gRNA cloned Cas9 plasmid",,,,,,,22,"E8"
+163,"SpV-plasm-conf-Rp","CAGTGGTCAGGGCAGTGCTGC","Confirmation of SpVB gRNA cloned Cas9 plasmid",,,,,,,22,"E9"
+164,"Unique_SG_F","CTTAGTGAGTGGGCTGATTTCT ","amplification of Salomnella gallinarum unique region for real-time PCR",,,,,,,22,"E10"
+165,"F-Unique_SG_Probe-T","AGTTTCAGTGATGCCCTGCTGGAT","Real time amplification of Salomnella gallinarum unique region",,,,,,,22,"F1"
+166,"Unique_SG_R","CCGCTGCATCGATTTCTTTC ","amplification of Salomnella gallinarum unique region for real-time PCR",,,,,,,22,"F2"
+167,"Ssau-RT-F","ACTTCTGCACTGCTGTTTCT","Real time amplification of region from Salomnella gallinarum SSau gene",,,,,,,22,"F3"
+168,"F-Ssau-probe-T","TGTGGGTAGCGTGTTTCTTCAGGT","Real time amplification of region from Salomnella gallinarum SSau gene",,,,,,,22,"F4"
+169,"Ssau-RT-R","TGGCCTTGCTGGCAATAA","Real time amplification of region from Salomnella gallinarum SSau gene",,,,,,,22,"F5"
+170,"SpvB-RT-F","aagctgtgtcagtatcggattt","Real time amplification of region from Salomnella gallinarum SpvB gene",,,,,,,22,"F6"
+171,"F- SpvB -probe-T","atgaactgggtgaagccatacgc","Real time amplification of region from Salomnella gallinarum SpvB gene",,,,,,,22,"F7"
+172,"SpvB -RT-R","tcctgatgttccaccactttc","Real time amplification of region from Salomnella gallinarum SpvB gene",,,,,,,22,"F8"
+173,"Endolysin-SGP9-F","gcatcacatatggctaaagtacaattcaaacc","Detection of SGP-9 phage",,,,,,,22,"F9"
+174,"Endolysin-SGP9-R","atttaagcttccctcggtcagatgtaaccag","Detection of SGP-9 phage",,,,,,,22,"F10"
+175,"PhoE_F","attcaagtagtaaccaaacttttctttaaattaacataaggagattcaacATGAAGAAATCTACGTTGGCACTTGTCGTGATGGG","Amplification of Pho-E signal peptide template with over hangs of SGP-9",,,,,,,22,"G1"
+176,"PhoE_R","cccttaccctgattagtaccaatttgctgtccgccttgaatgttagccatAGCCTGAACAGACGCACTTGCCACGATGCCCATCACG","Amplification of Pho-E signal peptide template with over hangs of SGP-9",,,,,,,22,"G2"
+177,"Pho-E det-F","ATTCAAGTAGTAACCAAACT","Amplification of Pho-E signal peptide after insertion in SGP-9",,,,,,,22,"G3"
+178,"Pho-E det-R","CCCTTACCCTGATTAGTACC","Amplification of Pho-E signal peptide after insertion in SGP-9",,,,,,,22,"G4"
+179,"SCr_endo_Fp","ATGGCAAACCGAAACATCAGT","Detection of SCraw phage ",,,,,,,22,"G5"
+180,"SCr_endo_Rp","CTACTTTGCTTCGCGGCC","Detection of SCraw phage",,,,,,,22,"G6"
+181,"SGP3_DNApol_Fp","GAAGTATACAGATATGGGCGA","Detection of SGP-3 phage",,,,,,,22,"G7"
+182,"SGP3_DNApol_Rp","GCATAGTAAACTTCAGCAG","Detection of SGP-3 phage",,,,,,,22,"G8"
+183,"Frank 2 TMP Fp","cgtcgagcagttaaacaag","Detection of Frank 2 phage",,,,,,,22,"G9"
+184,"Frank 2 TMP Rp","accgccgtttgcataacct","Detection of Frank 2 phage",,,,,,,22,"G10"
+185,"Salg-flhB-F","TTCGCGACGAATTTAAAGAGAGCGAAG","Identification of Salmonella Gallinarum",,,,,,,22,"H1"
+186,"Salg-flh-R","CAGCGTTTAAGCTGCCAGACCCAGGCC","Identification of Salmonella Gallinarum",,,,,,,22,"H2"
+187,"Uni. Gal. 8522-F","TGGTGATTCTTCTCAGGATGCAGACACGCTT","Identification of Salmonella Gallinarum",,,,,,,22,"H3"
+188,"Uni-Gal. 9392-R","GCTGCGGCTGCATCCTGAGACCTGTGCA","Identification of Salmonella Gallinarum",,,,,,,22,"H4"
+189,"Rev-Uni-gall 89939","AAGTCCGCTGCATCGATTTCTTTCCCCGTCA","Identification of Salmonella Gallinarum",,,,,,,22,"H5"
+190,"Rev-Uni-gall 11556","GTCACGGAAAAATTCGCGATACT","Identification of Salmonella Gallinarum",,,,,,,22,"H6"
+191,"InvA-F","AAACCTAAAACCAGCAAAGG","Detection of Salmonella genus",,,,,,,22,"H7"
+192,"InvA-R","TGTACCGTGGCATGTCTGAG","Detection of Salmonella genus",,,,,,,22,"H8"
+193,"EMP1-F","AATACAGCCTCAACCAGCTA","Identification of Salmonella Enteritidis",,,,,,,22,"H9"
+194,"EMP1-R","ATTGGTTCACCCGTTGCAAT","Identification of Salmonella Enteritidis",,,,,,,22,"H10"
+195,"EMP2-F","AGATAAGCCCTCCCTGCTTA","Identification of Salmonella Enteritidis",,,,,,,22,"I1"
+196,"EMP2-R","CCCTCCTTTCACTGCAAGTC","Identification of Salmonella Enteritidis",,,,,,,22,"I2"
+197,"EMP3-F","CAAAAGCGACAAATAATCTG","Identification of Salmonella Enteritidis",,,,,,,22,"I3"
+198,"EMP3-R","TTTCTCCGCCTGTTTTCGTT","Identification of Salmonella Enteritidis",,,,,,,22,"I4"
+199,"TMP1-F","ATGCGGGTATGACAAACCCT","Identification of Salmonella Typhimurium",,,,,,,22,"I5"
+200,"TMP1-R","TTAGCCCCATTTGGACCTTT","Identification of Salmonella Typhimurium",,,,,,,22,"I6"
+201,"TMP2-F","CAGACCAGGTAAGTTTCTGG","Identification of Salmonella Typhimurium",,,,,,,22,"I7"
+202,"TMP2-R","CGCATATTTGGTGCAGAAAT","Identification of Salmonella Typhimurium",,,,,,,22,"I8"
+203,"TMP3-F","TTTACCTCAATGGCGGAACC","Identification of Salmonella Typhimurium",,,,,,,22,"I9"
+204,"TMP3-R","CCCAAAAGCTGGGTTAGCAA","Identification of Salmonella Typhimurium",,,,,,,22,"I10"
+205,"p25 F","ttgcaGAATTCatgagcctagcattcccg",,,,,,,,,
+206,"p25 R","ttataCCCGGGttacgctttgcggccatc",,,,,,,,,
+207,"p28 F","ttagaCCCGGGatgaacaagtccatctggc",,,,,,,,,
+208,"p28 R","aacttGTCGACtcagcgagtttgccgatg",,,,,,,,,
+209,"p40 F","cgttcGAATTCatgtttgagacgcgagtta",,,,,,,,,
+210,"p40 R","tcaatGTCGACttacgccctcgccactga",,,,,,,,,
+211,"p41 F","atggtGAATTCatggcgctgatctatgac",,,,,,,,,
+212,"p41 R","attgcGTCGACttacatgtgccctctgaatt",,,,,,,,,
+213,"p47 F","gcataGAATTCatggcgaacacccgagac",,,,,,,,,
+214,"p47 R","ttactGTCGACtcagcccgccggtgcggtg",,,,,,,,,
+215,"p48 F","ttagcGAATTCatggcaaccttcgccgctg",,,,,,,,,
+216,"p48 R","ttatcGTCGACtcacttgtagaccttggcct",,,,,,,,,
+217,"hp4 F","tactgGTCGACtcagcccacccttcccccgtag",,,,,,,,,
+218,"hp4 R","ttatcGAATTCatgggcggcgaagggcaggg",,,,,,,,,
+219,"hp3 F","acttaGTCGACtcaaccccctggcggggtggcgg",,,,,,,,,
+220,"hp3 R","gcaccGAATTCatgctgagcagacaggacagaggcg",,,,,,,,,
+221,"p02 F","taggaGAATTCttgacaccctgccaggaca",,,,,,,,,
+222,"p02 R","attgaGTCGACtcatctgtttgaccgcgcc",,,,,,,,,
+223,"p01 F","gcaatGAATTCatggcacacttcaaggct",,,,,,,,,
+224,"p01 R","gctacGTCGACttacaaacccttcccttgc",,,,,,,,,
+225,"p03 F","tgcatGAATTCatgaccaacgcaatctccaaa",,,,,,,,,
+226,"p03 R","atgctGTCGACtcaatgggcagcagcgcgcttg",,,,,,,,,
+227,"hp6 F","gcactGAATTCatgagcttcaagcaacgt",,,,,,,,,
+228,"hp6 R ","tcatgGTCGACtcactcccccttcgcctg",,,,,,,,,
+229,"hp7 F","tatcgGAATTCatggacttctggatcgccc",,,,,,,,,
+230,"hp7 R","tacgtGTCGACtcaccgcttcaggaggtg",,,,,,,,,
+231,"p04 F","gccatGAATTCatgcaagctttgaataccc",,,,,,,,,
+232,"p04 R","ctatgGTCGACtcacgcgaggacatggta",,,,,,,,,
+233,"p21 F","ttatgCCCGGGatgactcagcaactcaac",,,,,,,,,
+234,"p21 R","ttagcGTCGACttagacctgcggtact",,,,,,,,,
+235,"p(A) F","tcgcgGAATTCatggccgcaaagcgtaaa",,,,,,,,,
+236,"p(A) R","ttgcgGTCGACctatcgtctttcgattacc",,,,,,,,,
+237,"p27 F","gccgcGAATTCatggctactatgaagacc",,,,,,,,,
+238,"p27 R","ttagcGTCGACtcacttcaactccactgc",,,,,,,,,
+239,"p35 F","tgccgGAATTCatggctttctggctacca",,,,,,,,,
+240,"p35 R","ttgctGTCGACtcagttgcctcctttagg",,,,,,,,,
+241,"p39 F","ttagcGAATTCatgcgcggcattatcgcg",,,,,,,,,
+242,"p39 R","tgtgcGTCGACtcaaacattggtcagttccg",,,,,,,,,
+243,"hp1 F","tgcgcgGAATTCatgaagtggctcatcatagc",,,,,,,,,
+244,"hp1 R","ttatgcGTCGACtcatatgcgcttgctccagt",,,,,,,,,
+245,"p07 F","tgcgcgGAATTCatgaccgtcaagaccatgta",,,,,,,,,
+246,"p07 R","ttatttGTCGACtcattggtcggcctccc",,,,,,,,,
+247,"p07(2) F","tgttgcGAATTCatgatccgcacccataccca",,,,,,,,,
+248,"P07(2) R","ttatgaGTCGACtcactcggcggtgagtgt",,,,,,,,,
+249,"p10 F","ttcgcgGAATTCatgaccaacgtcaacaccaccac",,,,,,,,,
+250,"p10 R","ttatgGTCGACttactcgccctgggcgatggctt",,,,,,,,,
+251,"p11 F","ttagcGAATTCgtgagcaagcacaacccc",,,,,,,,,
+252,"p11 R","ttagcGTCGACtcagactcctgccagtttcag",,,,,,,,,
+253,"p13 F","ttagcgGAATTCatgagcaagacgagcctg",,,,,,,,,
+254,"p13 R","ttatgGTCGACtcattcatggccaggcg",,,,,,,,,
+255,"p11(2) F","tgcgcgGAATTCatggtatggcttatcgcgaac",,,,,,,,,
+256,"p11(2) R","ttataGTCGACtcatgcgggcgccgtag",,,,,,,,,
+257,"p51 F","ttagcGAATTCatgacctggcacctcca",,,,,,,,,
+258,"p51 R","ttatgGTCGACttagccaggagtcacggc",,,,,,,,,
+259,"hp2 F","tcgcgcGAATTCatgaagattcgaaagtccc",,,,,,,,,
+260,"hp2 R","tgctgGTCGACtcatactttgactcctacct",,,,,,,,,
+261,"par gene1 F","AGCTCGGTGGGGTTCTCTCATC",,,,,,,,,
+262,"par gene1 R","GCTTCCTCATACCACTGGTCATC",,,,,,,,,
+263,"cat+chloliTNot1rev","AGTCAGCGGCCGCcaggcgtttaagggcacc",,,,,,,,,
+264,"CAM-F  Nco1","CAACCATGGATGAAGCTGTTCAAGAAGAT",,,,,,,,,
+265,"CAM-R  Nde1","GTTACATATGGAACTTCTTGGCCTTGTGCA",,,,,,,,,
+266,"D8-F Nco1","CAACCATGGATGCTAAGACAACACCTAAG",,,,,,,,,
+267,"D8-R  Nde1","GAATCATATGGCTTAATCTAATTGTTTGACC",,,,,,,,,
+268,"SP-RLE-F","CAAAATGGTGCTACCGAGGCTGGTGCTGGTGCTAGCGTGAACAAGCC",,,,,,,,,
+269,"SP-RLE-R","GGCTTGTTCACGCTAGCACCAGCACCAGCCTCGGTAGCACCATTT TG",,,,,,,,,
+270,"Nuc-F","F-GTGCTGGCATATGTATGGCAATTG",,,,,,,,,
+271,"Nuc-R","R-CTGAATCAGCGTGTCTTCGCTCCAA",,,,,,,,,
+272,"16S rRNA-F","F-GCGGACGGGTGAGTAATGT",,,,,,,,,
+273,"16S rRNA-R","R-TCATCCTCTCAGACCAGCTA",,,,,,,,,
+274,"SGP13-RT-F","GGCTCCTACGAAAGAAGAGTTC",,,,,,,,,
+275,"SGP13-RT-R"," AGCGGTTAGCAGATTAGTAACG",,,,,,,,,
+276,"SGP13-CLO-F","TCGCA GAATTC GGCTCCTACGAAAGAAGAGTTC",,,,,,,,,
+277,"SGP13-CLO-R","TAGTCCTCGAG AGCGGTTAGCAGATTAGTAACG",,,,,,,,,
+278,"SGP9-RT-F","GTTAGCAGACCAGTCGAGAAG",,,,,,,,,
+279,"SGP9-RT-R","CTGGAGCCTCTTGTTGGATAA",,,,,,,,,
+280,"SGP9-CLO-F","TCGCA GAATTC GTTAGCAGACCAGTCGAGAAG",,,,,,,,,
+281,"SGP9-CLO-R","TAGTCCTCGAG CTGGAGCCTCTTGTTGGATAA",,,,,,,,,
+282,"FRANK-RT-F","GAGCAGCAGTTACCAACCTATAA",,,,,,,,,
+283,"FRANK-RT-R","CCTTACGCAAGAGCGGATAAA",,,,,,,,,
+284,"FRANK-CLO-F","TCGCA GAATTC GAGCAGCAGTTACCAACCTATAA",,,,,,,,,
+285,"FRANK-CLO-R","TAGTCCTCGAG CCTTACGCAAGAGCGGATAAA",,,,,,,,,
+286,"SCr-RT-F","CACCCGCGATAGCGTTATTA",,,,,,,,,
+287,"SCr-RT-R","CACCGGCCTCAATGATACTAC",,,,,,,,,
+288,"SCr-CLO-F","TCGCA GAATTC CACCCGCGATAGCGTTATTA",,,,,,,,,
+289,"SCr-CLO-F","TAGTCCTCGAG CACCGGCCTCAATGATACTAC",,,,,,,,,
+290,"SGP3-RT-F","CAGTTTCCTCTCCAGCAACTTA",,,,,,,,,
+291,"SGP3-RT-R","GTCAGTCCATCCAACGTATCTC",,,,,,,,,
+292,"SGP3-CLO-F","TCGCA GAATTC CAGTTTCCTCTCCAGCAACTTA",,,,,,,,,
+293,"SGP3-CLO-R","TAGTCCTCGAG GTCAGTCCATCCAACGTATCTC",,,,,,,,,
+294,"New-J1-F.","ggacgaggaaaaagagcgcaacg",,,,,,,,,
+295,"New-J1-R","gtggttgctaaggtggaaaaagg",,,,,,1,20,99,"E7"
+296,"New-J2-F.","ccgcccatccgacgctatttgt",,,,,,,,,
+297,"New-J2-R","gaatctggtcgcgaagagactta",,,,,,1,20,99,"E6"
+298,"ssHA for pCasRecAb","TTGTAGAGAGTTGAGTTCATGGAATCCCTAACGTTACAACTAAGTCAACCCGGCTGAATGAATAACGGGCGATAACATAG",,,,,,,,,
+299,"aroAHAs sal1 F","GCAGCAGTCGACGCTGCTTATATGCATTACTGCC",,,,,,,,,
+300,"aroAHAs Sal1R","AGAAGAGTCGACCCAGCCCGAAAGATGACAATG",,,,,,,,,
+301,"pcasHAs det F","caccggaaggagctgactggg",,,,,,,,,
+302,"PcasHAs det R","gtgtgatcgtccattccgacagc",,,,,,,,,
+303,"aprgRNA2F","AAAACCCGCATTGCACTACGCCGAGGCG",,,,,,,,,
+304,"AprgRNA2R","AAACCGCCTCGGCGTAGTGCAATGCGG",,,,,,,,,
+305,"AprgRNA1F","aaaacGTGGGACCGATCACCCTACGAGG",,,,,,,,,
+306,"AprgRNA1R","aaacCCTCGTAGGGTGATCGGTCCCAC",,,,,,,,,
+307,"RCF WT1_fwd","gcactgctacgccaagggtaattggggtc",,,,,,,,,
+308,"RCF WT1_rev","ttctccatcgttgccagttcggatttcttac",,,,,,,,,
+309,"RCF WT 2_fwd","gaactggcaacgatggagaaagaccttaag",,,,,,,,,
+310,"RCF WT 2_rev","cagagcaccagcagactgcaacaatgtg",,,,,,,,,
+311,"RCF WT 3_fwd","tgcagtctgctggtgctctgatttgtaagctg",,,,,,,,,
+312,"RCF WT 3_rev","gagtgtcctcacggtcatcaccagcacc",,,,,,,,,
+313,"RCF WT 4_fwd","tgatgaccgtgaggacactccggctggc",,,,,,,,,
+314,"RCF WT 4_rev","tgttcggttgccatgtcagggttccctgtc",,,,,,,,,
+315,"RCF WT fwd","cctgacatggcaaccgaacaggtcgcaaag",,,,,,,,,
+316,"RCF WT D5_rev","ttctttatcgttaaacagaagcaatgatgcgc",,,,,,,,,
+317,"RCF WT D6_fwd","ttctgtttaacgataaagaacaaggatgttc",,,,,,,,,
+318,"RCF WT rev","tacccttggcgtagcagtgcgtgttcatag",,,,,,,,,
+319,"RCF C5 Rev","accttatattTTAAACAGAAGCAATGATGCGC",,,,,,,,,
+320,"RCF Cas_fwd","ttctgtttaaAATATAAGGTTCCGTCTAAAAAG",,,,,,,,,
+321,"RCF Cas_rev","ttctttatcgGTTTTGGGACCATTCAAAAC",,,,,,,,,
+322,"RCF C6 fwd","gtcccaaaacCGATAAAGAACAAGGATGTTC",,,,,,,,,
+323,"RCF WT 5 Rev","attgttctccTTAAACAGAAGCAATGATGCGC",,,,,,,,,
+324,"RCF WT 6_fwd","ttctgtttaaGGAGAACAATATGGTTAAGTATGAAAAC",,,,,,,,,
+325,"aroAUS_fwd","GTCTTCGCGCAGTTAAGC",,,,,,,,,
+326,"aroAUS_rev","GTGCCGATCAGTTGTAACGTTAGGGATTCC",,,,,,,,,
+327,"Cat+CmR_fwd","ACGTTACAACTGATCGGCACGTAAGAGGTTCCAACTTTC",,,,,,,,,
+328,"Cat+CmR_rev","GGTTGACTTATTACGCCCCGCCCTGCCA",,,,,,,,,
+331,"lys F","aaaagaggatgaatcATGGCTAAAGTACAATTCAAA",,,,,,,,,
+332,"Lys R","tggtgagttgagcatTCACCCTCGGTCAGATGTAAC",,,,,,,,,
+333,"LysF2b-F","tctgaccgagggtgaATGCTCAACTCACCAATCG",,,,,,,,,
+334,"LysF2 a-R","ttgtactttagccatGATTCATCCTCTTTTCTCGTTAA",,,,,,,,,
+335,"RL-F","aaaagaggatgaatcTGATGCTCGATACCGCCACC",,,,,,,,,
+336,"RL-R","ttggtgagttgagcatTCAGTCTCCTTGATTCAGGGC",,,,,,,,,
+337,"RL F2b-F","aatcaaggagactgaATGCTCAACTCACCAATCGG",,,,,,,,,
+338,"RL F2a-R","cggtatcgagcatcaGATTCATCCTCTTTTCTCGTTAAC",,,,,,,,,
+339,"16S-RT-Clon-F","TCGCA GAATTCCGGTGAATACGTTCCCGG",,,,,,,,,
+340,"16S-RT-Clon-R","TAGTCCTCGAGTACGGCTACCTTGTTACGACTT",,,,,,,,,
+341,"HP 23 F XhoI","ATCGCTCGAGGTGAAAGAACTGCATCCGCT",,,,,,,,,
+342,"HP 22 F XhoI","TACACTCGAGATGCCCACCGAGGAAGAA",,,,,,,,,
+343,"Hp 21 F XhoI","ATCACTCGAGATGAAGATTCGAAAGTCCCA",,,,,,,,,
+344,"Hp 20 F XhoI","ATCACTCGAGATGAATGAGGTGATGGTATGGCT",,,,,,,,,
+345,"Hp 19 F XhoI","ATAACTCGAGGTGAGCAAGCACAACCCC",,,,,,,,,
+346,"Hp 18 F XhoI","AATACTCGAGATGATCCGCACCCATACCCA",,,,,,,,,
+347,"Hp 17 F XhoI","TCAGACTCGAGATGATCGCCGCGCTGCTT",,,,,,,,,
+348,"HP 17 R SalI","GTCAGTCGACTTATTTGATGTTCAGGTGACGCTTCAGC",,,,,,,,,
+349,"Hp 16 F XhoI","CAGTCTCGAGATGACCGTCAAGACCATGTATGTCA",,,,,,,,,
+350,"Hp 15 F XhoI","TAGCCTCGAGATGAATCCTACTTACGTCGTCC",,,,,,,,,
+351,"Hp 14 F XhoI","TCGATCTCGAGATGTCCTCGCGTGATCCCT",,,,,,,,,
+352,"Hp 13 F XhoI","GTCACTCGAGATGCAAGCTTTGAATACCCTG",,,,,,,,,
+353,"Hp 12 F XhoI","TGATTCTCGAGATGGACTTCTGGATCGCCC",,,,,,,,,
+354,"HP 1_F_XhoI","ACTACTCGAGATGACTCAGCAACTCAACGCTCTGCA",,,,,,,,,
+355,"HP 1_R SalI","ACATGTCGACTTAGACCTGCGGTACTGCCGGCACTA",,,,,,,,,
+356,"HP 3_F_XhoI","ATACCTCGAGATGGCCGCAAAGCGTAAA",,,,,,,,,
+357,"HP 4_F_XhoI","ATCTCTCGAGATGGTTATGTCACCCACAGT",,,,,,,,,
+358,"HP 5_F_XhoI","ACATCTCGAGGTGCTGGGCAAGACCATC",,,,,,,,,
+359,"HP 6_F_XhoI","ATAACTCGAGATGAAAACCACCGCAGCTATGCTC",,,,,,,,,
+360,"HP  5&6 R SalI","ATCGGTCGACTCAGTAGTTGATACCGAGGGTTTGCG",,,,,,,,,
+361,"HP 7_F_XhoI","ATACCTCGAGATGCTGAGCAGACAGGACA",,,,,,,,,
+362,"HP 8_F_XhoI","ATACCTCGAGATGGCACACTTCAAGGCTAA",,,,,,,,,
+363,"HP 9_F_XhoI","CTAGCTCGAGATGCCACGTGTGAATGAAC",,,,,,,,,
+364,"HP 10_F_XhoI","AACACTCGAGATGACCAACGCAATCTCC",,,,,,,,,
+365,"HP 11_F_XhoI","ATCACTCGAGATGAGCTTCAAGCAACGTCTG",,,,,,,,,
+366,"Pbad_F_XhoI","GGAGGTTATAAAAAATCTCGAGCAAGGGCGAGGAGG",,,,,,,,,
+367,"Pbad_R_XhoI","CCTCCTCGCCCTTGCTCGAGATTTTTTATAACCTCC",,,,,,,,,
+368,"HP 2 NCOI F","TCAGACCATGGGGAGCCTAGCATTCCCGG",,,,,,,,,
+369,"HP2 XHOI R","TCGACTCGAGTTACGCTTTGCGGCCATCT",,,,,,,,,
+370,"1-6 bf NCOI F","TGATCCATGGGGGATAACGTCGCATTGCCA",,,,,,,,,
+371,"fh3  NCOI F","TGATCCATGGGGGATAACGTCGCATTGCCA",,,,,,,,,
+372,"1-6bf R stop XhoI 40","TGACCTCGAGTTAATATTTACCTTCGGTATAAAGATCAGC",,,,,,,,,
+373,"GRNA1-Fp","aaacATCAACCGCATAATACAAGG",,,,,,,,,
+374,"Grna1-Rp","aaaacCCT TGT ATT ATG CGG TTG AT",,,,,,,,,
+377,"FH-HA1Fp","GTCAGCAGCTGAATACGCAGCT",,,,,,,,,
+378,"FH-HA1Rp","aactgatcatTATGCGGTTGATACCGAGATTC",,,,,,,,,
+379,"FH-Tail-Fp","caaccgcataATGATCAGTTACAACAACTC",,,,,,,,,
+380,"FH-Tail-Rp","cacgcagatcTATTTTTTCTCTAGCAGTTCC ",,,,,,,,,
+381,"FH-HA2Fp","agaaaaaataGATCTGCGTGATGAGCTAGG",,,,,,,,,
+382,"FH-HA2Rp","AGAGGTGAGTGCATCGAACTCA",,,,,,,,,
+383,"FH-Tail-Scr","GTCGGATGGGACAACTAAAG",,,,,,,,,
+384,"FH-Tail-Scr ","GGTTGCATTTGATCCCCAAG",,,,,,,,,
+389,"AF-HA1Fp","GTACACATGCTTTTGAAACAGG ",,,,,,,,,
+390,"AF-HA1Rp","CTGACCTACATTATTAACTGCATTAG",,,,,,,,,
+391,"AF-Tail-Fp","ATGATCAGTTACAACAACTCAG ",,,,,,,,,
+392,"AF-Tail-Rp","catctgttccaTATTTTTTCTCTAGCAGTTCCAG",,,,,,,,,
+393,"AF-HA2Fp","gagaaaaaataTGGAACAGATGGTACAATCTCTG",,,,,,,,,
+394,"AF-HA2Rp","TTTAGCTTCGTTAATCTTCGTTTC",,,,,,,,,
+395,"S.epidermidis-Fwd","ATGAAAAAGAGATTTTTATCT",,,,,,,,,
+396,"S.epidermidis-Rev","GTTTGGTGACACTCTTAAG",,,,,,,,,
+397,"D8-1F","GCTGGTGCTGGTGCTAGCAATAGTGGAACACCTAAAAATGTTTCACGTGGAACATCGTCTACTAAGACAACACCTAAGTACAAGGTGAAAAATGGGGACAACCTTACTAAAATCGCTA",,,,,,1,,100,"C7"
+398,"D8-1R","TAGCGATTTTAGTAAGGTTGTCCCCATTTTTCACCTTGTACTTAGGTGTTGTCTTAGTAGACGATGTTCCACGTGAAACATTTTTAGGTGTTCCACTATT",,,,,,1,,100,"A10"
+399,"D8-2F","CCTTACTAAAATCGCTAAAAAGCATAATACAACGGTTGCTACTTTGTTGAAGCTTAACCCAGGTATCAAAGACCCTAACATGATTAGAGTTGGACAAACACTAAATGTTACAG",,,,,,1,,100,"C6"
+402,"D8-2R","CTGTAACATTTAGTGTTTGTCCAACTCTAATCATGTTAGGGTCTTTGATACCTGGGTTAAGCTTCAACAAAGTAGCAACCGTTGTATTATGCTTTTTAGCGATTTTAGTAAGG",,,,,,1,,100,"D4"
+403,"D8-3F","GGACAAACACTAAATGTTACAGGTAGCGGCGGTAAAACACATAAGGTGAAGAGTGGTGACACACTCAGTAAAATTGCCGTTGATAATAAAACAACTGTAAGT",,,,,,1,,100,"C3"
+404,"D8-3R","ACTTACAGTTGTTTTATTATCAACGGCAATTTTACTGAGTGTGTCACCACTCTTCACCTTATGTGTTTTACCGCCGCTACCTGTAACATTTAGTGTTTGTCC",,,,,,1,,100,"C9"
+405,"D8-4F","GATAATAAAACAACTGTAAGTAAGTTAATGAATCTAAACCCTGAAATTACGAATCCGAATCATATAAAAGTAGGTCAAACAATTAGATTAAGCTGATAGAGTCGACCTGCAGGCATGCAAGC",,,,,,1,,100,"C5"
+407,"D8-4R","GCTTGCATGCCTGCAGGTCGACTCTATCAGCTTAATCTAATTGTTTGACCTACTTTTATATGATTCGGATTCGTAATTTCAGGGTTTAGATTCATTAACTTACTTACAGTTGTTTTATTATC",,,,,,1,,100,"D3"
+409,"PBAD+Pet28forward","AGGAGGTTATAAACCATGGAGGAGATATACCATGGGCAGC",,,,,,1,,100,"D5"
+410,"Pet28reverse(xho1)+d8f","CTATTGCTAGCACCAGCAAGCTTGTCGACGGAGCTC",,,,,,,,,
+412,"Ittplreverse","GTCGACGCTCGAGCTTGAAGGATTGATAGGCT",,,,,,,,,
+413,"CAMA-1F","AGGAGGTTATAAACCATGGATGCATCATCATCATCATCATAAGTGGAAGCTGTTCAAGAAGATCGGCAAGGGCAAGTTCCTGCACA",,,,,,1,,100,"D6"
+415,"CAMA-1R","TGT GCA GGA ACT TGC CCT TGC CGA TCT TCT TGA ACA GCT TCC ACT TAT GAT GATGATGATGAT GCA TCC ATG GTT TAT AAC CTC CT",,,,,,1,,100,"D2"
+416,"CAMA-2F","AGG GCA AGT TCC TGC ACA AGG CCA AGA AGT TCG CTG GTG CTG GTG CTA GCC ATA TGG TCG ACC TGC AGG CAT GCA AGC T",,,,,,1,,100,"D1"
+417,"CAMA-2R","AGCT TGC ATG CCT GCA GGT CGA CCA TAT GGC TAG CAC CAG CAC CAG CGA ACT TCT TGG CCT TGT GCA GGA ACT TGC CCT",,,,,,1,,100,"C10"
+418,"Pbad-specific-FP ","GTAAGGAGGTTATAAACCATGG",,,,,,1,,100,"C2"
+419,"Pbad-RP ","AGC TTG CAT GCC TGC AGG TC",,,,,,1,,100,"C4"
+421,"1-6bf -rev-STOP ","TGACCTCGAGTTAATATTTACCTTCGGTATAAAGAT",,,,,,,,,
+422,"1-6bf-rev","TGACCTCGAGATATTTACCTTCGGTATAAAGATCAGC",,,,,,,,,
+423,"1-6bf-fwd","TGACCCATGGGATAACGTCGCATTGCCA",,,,,,,,,
+424,"fh3-fwd","TGACCCATGGGATAACGTCGCATTGCCA",,,,,,,,,
+425,"fh3-rev","TGCACTCGAGATATTTACCTTCGGTATAAAGATCAGC",,,,,,,,,
+426,"fh3-rev-Stop","TGACCTCGAGTTAATATTTACCTTCGGTATAAAGATCAG",,,,,,,,,
+427,"Pet28-Hind-R","ATTAAGTCCTTGTTAGCAGCCGGATCT    ",,,,,,1,,100,"C1"
+428,"RL-HP 7 F","TCGACCATGGATGCTGAGCAGACAGGACA",,,,,,,,,
+429,"RL-HP-7 R","TAGAGTCGACGTGTCAACCCCCTGGCG",,,,,,,,,
+430,"RL-HP-10 F","TGCACCATGGATGACCAACGCAATCTCC",,,,,,,,,
+431,"RL-HP-10 R","ATCATGTCGACGAGTCAATGGGCAGCAGC",,,,,,,,,
+432,"RL-HP-12 F","TGATTCCATGGATGGACTTCTGGATCGCCC",,,,,,,,,
+433,"RL-HP-12 R","CTAAGTCGACTCACCGCTTCAGGAGGTGG",,,,,,,,,
+434,"RL-HP-13 F","GTCACTCCATGGATGCAAGCTTTGAATACCCTG",,,,,,,,,
+435,"RL-HP-13 R","ATGCAGTCGACTCACGCGAGGACATGGTAAG",,,,,,,,,
+436,"RL-HP-14 F","TCGATCCATGGATGTCCTCGCGTGATCCCT",,,,,,,,,
+437,"RL-HP-14 R","CGATGTCGACTCATTTACGGGTCGGTAGCTGT",,,,,,,,,
+438,"RL-HP-16 F","CAGTCCATGGATGACCGTCAAGACCATGTATG",,,,,,,,,
+439,"RL-HP-16 R","ATAAGTCGACTCATTGGTCGGCCTCCCC",,,,,,,,,
+440,"RL-HP-17 F","TCAGACCATGGATGATCGCCGCGCTGCTT",,,,,,,,,
+441,"RL-HP-17 R","GTCAGTCGACTTATTTGATGTTCAGGTGACGCTTC",,,,,,,,,
+442,"RL-HP-18 F","AATACCATGGATGATCCGCACCCATACCCA",,,,,,,,,
+443,"RL-HP-18 R","ATACGTCGACTCACTCGGCGGTGAGTGTCA",,,,,,,,,
+444,"RL-HP-19 F","ATAACCATGGGTGAGCAAGCACAACCCC",,,,,,,,,
+445,"RL-HP-19 R","AGTAGTCGACTCAGACTCCTGCCAGTTTCAG",,,,,,,,,
+446,"RL-HP-20 F","ATCACCATGGATGAATGAGGTGATGGTATGGCT",,,,,,,,,
+447,"RL-HP-20 R","ATAAGTCGACTCATGCGGGCGCCGTA",,,,,,,,,
+448,"RL-HP-21 F","ATCACCATGGATGAAGATTCGAAAGTCCCA",,,,,,,,,
+449,"RL-HP-21 R","ATCAGTCGACTCATACTTTGACTCCTACCT",,,,,,,,,
+450,"RL-HP-22 F","TACACCATGGATGCCCACCGAGGAAGAA",,,,,,,,,
+451,"RL-HP-22 R","TCGAGTCGACTCATTTGCTGTACCAGTTGCTT",,,,,,,,,
+452,"RL-HP-23 F","ATCGCCATGGGTGAAAGAACTGCATCCGCT",,,,,,,,,
+453,"RL-HP-23 R","TACAGTCGACTCAGGCGTTCGAGGCGTG",,,,,,,,,
+454,"RL-HP-6 F","ATAACCATGGATGAAAACCACCGCAGCTAT",,,,,,,,,
+455,"RL-HP-5 & 6 R","ATCGGTCGACTCAGTAGTTGATACCGAGGGTTTGC",,,,,,,,,
+456,"RL-HP-5 F","TAGTACCATGGGTGCTGGGCAAGACCATC",,,,,,,,,
+457,"Salmonella sp-Fwd","TCGCAGAATTCAGCGTACTGGAAAGGGAAAG",,,,,,,,,
+458,"Salmonella sp-Rev","TAGTCCTCGAGCACCGAAATACCGCCAATAAAG",,,,,,,,,
+459,"E.coli-Fwd","TCGCAGAATTCACTAATGCAGGCTACCCAATC",,,,,,,,,
+460,"E.coli-Rev","TAGTCCTCGAGGTGACCACAAACCACCAAATC",,,,,,,,,
+461,"Clostridium-Fwd","TCGCAGAATTCCTTGGAGAGGCTATGCACTATTT",,,,,,,,,
+462,"Clostridium-Rev","TAGTCCTCGAGCTTAACATGTCCTGCGCTATCA",,,,,,,,,
+463,"S.gallinarum-Fwd","TCGCAGAATTCCAGGCGATCATATCTACAAGCA",,,,,,,,,
+464,"S.gallinarum-Rev","TAGTCCTCGAG TCTTGTCGCTTTCATCGACCG",,,,,,,,,
+465,"S.pull&gall-Fwd","TCGCA GAATTCGGATGTCCACGCTCATTTCTC",,,,,,,,,
+466,"S.pull&gall-Rev","TAGTCCTCGAGTGAAAGCTGGCGTTACGGTTA",,,,,,,,,
+467,"S.typ-Fwd","TCGCA GAATTCTTCAGCTCCGGTAAAGAGAAAG",,,,,,,,,
+468,"S.typ-Rev","TAGTCCTCGAGAGCAGCGGCACTACATATTC",,,,,,,,,
+469,"S.ent-Fwd","TCGCA GAATTCTCTGGGACGCCAAAAAGC",,,,,,,,,
+470,"S.ent-Rev","TAGTCCTCGAGTGACGGTAGATTGTGTCTCAAA",,,,,,,,,
+471,"SG Ssau Cured-Fwd","TCGCA GAATTCCTGGTTTCCATCTGTATGAGC",,,,,,,,,
+472,"SG Ssau Cured-Rev","TAGTCCTCGAGGTGATGAAGATAGATTATGCGC",,,,,,,,,
+473,"r-gRNA-SGPC-Fwd","TCGCA GAATTCAGCTTATCGATGATAAGCTGTCA",,,,,,,,,
+474,"r-gRNA-SGPC-Rev","TAGTCCTCGAGCCTGTATCCCCAAAGCTTAAC",,,,,,,,,
+475,"Hifi Pbad R","AAGGATCTTCAGAGTTTGTAGAAACGCAAAAAGG",,,,,,,,,
+476,"Hifi Pbad F","GTTTTTCTAACTGTCAGACCAAGTTTACTCATATATACTTTAG",,,,,,,,,
+477,"Kana F","TACAAACTCTGAAGATCCTTTGATCTTTTCTACGGG",,,,,,,,,
+478,"Kana R","GGTCTGACAGTTAGAAAAACTCATCGAGCATCAAATG",,,,,,,,,
+479,"gtf B-F","ACTACACTTTCGGGTGGCTTGG",,,,,,,,,
+480,"gtf B-R","CAGTATAAGCGCCAGTTTCATC",,,,,,,,,
+481,"PBAD-EP1-F ","AGTACCATGGATGGGAAGTAGATTACATTCAA",,,,,,,,,
+482,"PBAD-EP1-R","GACAGGTCGACGTTAATAAGGTTGTTTACAAATTCC",,,,,,,,,
+483,"PBAD-EP2-F","CACTACCATGGAAACGGAATTTGTAAACAAC",,,,,,,,,
+484,"PBAD-EP2-R","GACAGGTCGACTTAATTACAATTATTGCAACGATATA",,,,,,,,,
+485,"newscr_fwd","GATGCGGGTTACTGGGCAGCAAG",,,,,,,,,
+486,"newscr_rev","CCTTTCCCTGCACCGCTTGGGCC",,,,,,,,,
+487,"NewgRNA1F","AAACTCGCTCGTGTCGATGGCACT",,,,,,,,,
+488,"NewgRNA1R","AAAACAGTGCCATCGACACGAGCGA",,,,,,,,,
+489,"NewHA1rev","GGTTGACTTAGTTGTAACGTTAGGGATTCC",,,,,,,,,
+490,"nebuilderHA_fwd","GTCGACGGAGCTCGAATTCGGCTGCTTATATGCATTACTGCC",,,,,,,,,
+491,"nebuilderHA_rev","GAGCGGATAACAATTCCCCTCCAGCCCGAAAGATGACAATG",,,,,,,,,
+492,"fyuA scr_fwd","GTACCCTGCAACAGGTTTTCGGTA",,,,,,,,,
+493,"fyuAscr_rev","CACTAACTTGTGCCTGGACATCCAG",,,,,,,,,
+494,"fyuAHA1_fwd","CCCGGCTGGACGATCCGC",,,,,,,,,
+495,"fyuAHA1_rev","TGGCGTCGGCCGTCGAAAAAAGCATGTTGCCGC",,,,,,,,,
+496,"fyuAgRNA1_fwd","AAACTTTTCGACGATCTCGCTACG",,,,,,,,,
+497,"fyuAgRNA1_rev","AAAACCGTAGCGAGATCGTCGAAAA",,,,,,,,,
+498,"fyuAgRNA2-fwd","AAACGATGCAGACATTAAGCAATG",,,,,,,,,
+499,"fyuagRNA2-rev","AAAACCATTGCTTAATGTCTGCATC",,,,,,,,,
+500,"fyuAHA2_fwd","TTTTTCGACGGCCGACGCCACCGGCGTT",,,,,,,,,
+501,"fyuAHA2_rev","CCGTCCCTGTCAAGCATGCATAGTTTATC",,,,,,,,,
+502,"fyuAHA1-2_fwd","GTCGACGGAGCTCGAATTCGATCCGCATCGTTGATCAAG",,,,,,,,,
+503,"fyuAHA1-2_rev","GAGCGGATAACAATTCCCCTGTATCTTCTTAAGTATCACAGGAG",,,,,,,,,
+504,"SG-F","5’-GATCTGCTGCCA GCTCAA 3’",,,,,,,,,
+505,"SG-R","5’ GCGCCCTTTTCAAAACATA 3’",,,,,,,,,
+506,"SGP-F","5’ CGGTGTACTGCCCGCAT 3’",,,,,,,,,
+507,"SGP-R","5’ CTGGGCATTGACGCAAA 3’",,,,,,,,,
+508,"F_unique","5’ TGGTGATTCTTCTCAGGATGCAGACACGCTT 3’",,,,,,,,,
+509,"R_unique","5’ GCTGCGGCTGCATCCTGAGACTGTGCA 3’",,,,,,,,,
+510,"RT-16S rRNA-F","CGGTGAATACGTTCCCGG",,,,,,,,,
+511,"RT-16S rRNA-R","TACGGCTACCTTGTTACGACTT",,,,,,,,,
+512,"Rt-E.coli-APEC-F","ACTAATGCAGGCTACCCAATC",,,,,,,,,
+513,"Rt-E.coli-APEC-R","GTGACCACAAACCACCAAATC",,,,,,,,,
+514,"RT-CLOS-PERF-F","CTTGGAGAGGCTATGCACTATTT",,,,,,,,,
+515,"RT-CLOS-PERF-R","CTTAACATGTCCTGCGCTATCA",,,,,,,,,
+516,"RT-Salmon-Spec-F","AGCGTACTGGAAAGGGAAAG",,,,,,,,,
+517,"RT-Salmon-Spec-R","CACCGAAATACCGCCAATAAAG",,,,,,,,,
+518,"RT_SalGal-F","CAGGCGATCATATCTACAAGCA",,,,,,,,,
+519,"RT_SalGal-R","TCTTGTCGCTTTCATCGACCG",,,,,,,,,
+520,"RT-SP-SG-F","GGATGTCCACGCTCATTTCTC",,,,,,,,,
+521,"RT-SP-SG-R","TGAAAGCTGGCGTTACGGTTA",,,,,,,,,
+522,"RT-Sal-typhim-F","TTCAGCTCCGGTAAAGAGAAAG",,,,,,,,,
+523,"RT-Sal-typhim-R","AGCAGCGGCACTACATATTC",,,,,,,,,
+524,"RT-Sal-Enter-F","TCTGGGACGCCAAAAAGC",,,,,,,,,
+525,"RT-Sal-Enter-R","TGACGGTAGATTGTGTCTCAAA",,,,,,,,,
+526,"RT-SG-SSAU-F","CTGGTTTCCATCTGTATGAGC",,,,,,,,,
+527,,"GTGATGAAGATAGATTATGCGC",,,,,,,,,
+528,"RT-r-gRNA-SGPC-F","AGCTTATCGATGATAAGCTGTCA",,,,,,,,,
+529,"RT-r-gRNA-SGPC-F","CCTGTATCCCCAAAGCTTAAC",,,,,,,,,
+530,"tamra-16S rRNA-P-BHQ2","CTTGTACACACCGCCCGTC",,,,,,,,,
+531,"ROX-E.coli-APEC-P-BHQ2","CCAGGTTCTGGTCGATGCAATCAAGAAAT",,,,,,,,,
+532,"CY5-CLOS-PERF-BHQ3","CCATATCATCCTGCTAATGTTACTGCCGT",,,,,,,,,
+533,"CY5-Salmon-Spec-BHQ3","TTACGGTTCCTTTGACGGTGCGAT",,,,,,,,,
+534,"FAM_SalGal-P-BHQ1","ACTCGCGTATGTTTTGAAAAGGGC",,,,,,,,,
+535,"ROX-SP-SG-P-BHQ2","CGTCAGGCCCACCGCCGACAG",,,,,,,,,
+536,"FAM-Sal-typhim-BHQ1","CGTTTGAGTGCCTGGTCTATCTGCA ",,,,,,,,,
+537,"ROX-Sal-Enter-P-BHQ2","TCAAACTTACTCAGGAGATCGCCGCTG",,,,,,,,,
+538,"ROX-SG-SSAU-P-BHQ2","GCCTACAGAAAAGAAGAGATAAAATTC CTGAAACG",,,,,,,,,
+539,"CY5-r-gRNA-SGPC-P-BHQ3","GGGCTGACTTCAGGAAAGAAAGGGGCCATCA",,,,,,,,,
+540," RL-HP 3 F","CACTACCATGGATGGCCGCAAAGCGTAAA",,,,,,,,,
+541,"RL-HP 3 R","CACAGGTCGACCTATCGTCTTTCGATTACCCG",,,,,,,,,
+542,"RL-HP 4 F","ACGAATCCATGGATGGTTATGTCACCCACAGT",,,,,,,,,
+543,"RL-HP 4 R","TATGCCGTCGACTCACTTCAACTCCACTGCGA",,,,,,,,,
+544,"RL-HP 8 F","TGCAACCCATGGATGGCACACTTCAAGGCTAA",,,,,,,,,
+545,"RL-HP 8 R","GTACAGTCGACTTACAAACCCTTCCCTTGCG",,,,,,,,,
+546,"RL-HP 9 F","GATACCCATGGATGCCACGTGTGAATGAAC",,,,,,,,,
+547,"RL-HP 9 R","ATCAGTCGACTCAGATGGATTTGTTCAGGTAAG",,,,,,,,,
+548,"RL-HP 11 F","GACTCCATGGATGAGCTTCAAGCAACGTCTG",,,,,,,,,
+549,"RL-HP 11 R","TAAGTCGACTCACTCCCCCTTCGCCTG",,,,,,,,,
+550,"RL-HP 15 F","TAGCCCATGGATGAATCCTACTTACGTCGTCC",,,,,,,,,
+551,"RL-HP 15 R","TACGGTCGACTTACTCGCCCTCCTTCACG",,,,,,,,,
+552,"pBAD MUT F","GTAAGGAGGTTATAAACCATGGTGAGCAAGGGCG",,,,,,,,,
+553,"pBAD MUT R","CGCCCTTGCTCACCATGGTTTATAACCTCCTTAC",,,,,,,,,
+554,"SKP1-F","ATGCATATG ATGGACATATCTACCAGCA",,,,,,1,,100,"E10"
+555,"SKP1-R","ATGCTCGAG TTAAACCATAAAACGAGCAC",,,,,,,,,
+556,"PhoE.amp.F","tgcgtccagaagctgctggcgctatcgttctcccaaaggtgtcggggtaaATGAAGAAATCTACGTTGGCACTTGTCGTGATGGG",,,,,,1,20,99,"G7"
+557,"PhoE.amp.R","gtctaagctcatagtcttctgactaagagtaactccagtggggtcgggaaAGCCTGAACAGACGCACTTGCCACGATGCCCATCACG",,,,,,,,,
+558,,"ctatcaggctgaccagattatc",,,,,,,,,
+559,"PhoE.conf.R","gtactgtatcagccggagttac",,,,,,1,20,99,"G8"
+560,"HA1 ssai F","gctggaataacagagcttcctct",,,,,,,,,
+561,"HA 1 ssai R","tcctccttccgatatacaaggcgtcgattatcttgccagaatatc",,,,,,,,,
+562,"HA 2 ssef F","tctggcaagataatcgacgccttgtatatcggaaggaggactatt",,,,,,,,,
+563,"HA 2 ssef R","ctccgggcattaacgaggtaaa",,,,,,,,,
+564,"Scr ssai F","gggtaataatactaatagcgcat",,,,,,,,,
+565,"Scr ssef R","atcaatgattactgcgggtggc",,,,,,,,,
+566,"HA cas F","gcccagcttatccagccattcc",,,,,,,,,
+567,"HA cas R","ttacttgggcagcagtttatat",,,,,,,,,
+568,"gRNA _1_ssai_F","aaacaatggattatatgcagttaa",,,,,,,,,
+569,"gRNA _1_ssai_R","aaaacttaactgcatataatccatt",,,,,,1,,,
+570,"grna 2 ssef F","aaacttccgatatacaagcgaagg",,,,,,,,,
+571,"gRNA 2 ssef R","aaaacccttcgcttgtatatcggaa",,,,,,,,,
+574,"HA1-2F","GCTTATATGCATTACTGCCCG",,,,,,,,,
+576,"gRNA1 F","AAACTGCGAAATTATCGGTAACGG",,,,,,,,,
+577,"gRNA1R","AAAACCCGTTACCGATAATTTCGCA",,,,,,,,,
+578,"gRNA2F","AAACACTATTTCGAGCAATTGGCG",,,,,,,,,
+579,"gRNA2R","AAAACCGCCAATTGCTCGAAATAGT",,,,,,,,,
+581,"HA1-2R","TTACTTACCAGAGGCGATACGATC",,,,,,,,,
+589,"RzR","ATGCTCGAGTCAATCAGTGGGTGTTCGA",,,,,,,,,
+590,"RLH -F","ATGCATATGATGATGCTCGATACCGC",,,,,,,,,
+591,"RS Endo-F","GAGCCAAAAATCCCTGTC",,,,,,,,,
+592,"RS Endo-R","TTATAGCAGTTCGAAATGGAAC",,,,,,,,,
+593,"RS63-11F","ATGCCGTACAAAACCAGAGAAC",,,,,,,,,
+594,"RS63-11R","CTATTCCTCGTCCGCCCA",,,,,,,,,
+598,"Hifi-7kb-new-Rp","AGTGGTGGTGGTGGTGGTGCTCGAGttaattagcgaggtgacgatgatt",,,,,,,,,
+599,"fimCF","GCCGATGGTGTAAAGGATGG",,,,,,,,,
+600,"fimCR","GGGTAAGTGCGCCATAATCA",,,,,,,,,
+601,"papCF","GCTGATATCACGCAGTCAGT",,,,,,,,,
+602,"papCR","GTCAACAAGAAGACGTGTTCC",,,,,,,,,
+603,"tshF"," GTCTGTCAGACGTCTGTGTTTC",,,,,,,,,
+604,"tshR"," ATAGGATGACAGGCTACCGAC",,,,,,,,,
+605,"matF"," CGACCTGGTCAGCAACAGCC",,,,,,,,,
+606,"matR","TCCACGCCCACATTCAGTGT",,,,,,,,,
+607,"fyuAF"," ATGTGAAACTGCGTCTGGCG",,,,,,,,,
+608,"fyuAR"," CGCAGTAGGCACGATGTTGTA",,,,,,,,,
+609,"irp2F"," CTGATGAACTCACTCGCTATCC",,,,,,,,,
+610,"irp2R"," AGCATCTCCTGGCTCTGCTC",,,,,,,,,
+611,"iucDF","GAAGCATATGACACAATCCTG",,,,,,,,,
+612,"iucDR","CAGAGTGAAGTCATCACGCAC",,,,,,,,,
+615,"issF"," ATCACATAGGATTCTGCCG",,,,,,,,,
+616,"issR"," CAGCGGAGTATAGATGCCA",,,,,,,,,
+617,"neuF","GGTGGTACATTCCGGGATGTC",,,,,,,,,
+618,"neuR","CATGGTGGTGAAAAGACATTAGC",,,,,,,,,
+619,"ompAF","AGCTATCGCGATTGCAGTG",,,,,,,,,
+620,"ompAR"," GGTGTTGCCAGTAACCGG",,,,,,,,,
+621,"vatF"," TCCATGCTTCAACGTCTCAGAG",,,,,,,,,
+622,"vatR"," CTGTTGTCAGTGTCGTGAACG",,,,,,,,,
+623,"ibeAF","TGGCAATAGCAGCGGCAGTC",,,,,,,,,
+624,"ibeAR","CTGCCTGTTCAAGCATTGCA",,,,,,,,,
+625,"ibeBF"," GTTCTCACTCAGCCAGAACG",,,,,,,,,
+626,"ibeBR","CATCCAGCACTTCCAGATAAC",,,,,,,,,
+627,"iroNF"," CCTCCGACGATGATAATGACG",,,,,,,,,
+628,"iroNR","GATACCATTATGCGTAATGCC",,,,,,,,,
+633,"ChuA.1","GACGAACCAACGGTCAGGAT",,,,,,,,,
+634,"ChuA.2","TGCCGCCAGTACCAAAGACA",,,,,,,,,
+635,"YjaA.1","TGAAGTGTCAGGAGACGCTG",,,,,,,,,
+636,"YjaA.2","ATGGAGAATGCGTTCCTCAAC",,,,,,,,,
+637,"TspE4C2.1","GAGTAATGTCGGGGCATTCA",,,,,,,,,
+638,"TspE4C2.2","CGCGCCAACAAAGTATTACG",,,,,,,,,
+639,"PhoE_F","attcaagtagtaaccaaacttttctttaaattaacataaggagattcaacATGAAGAAATCTACGTTGGCACTTGTCGTGATGGG",,,,,,,,,
+640,"PhoE_R","cccttaccctgattagtaccaatttgctgtccgccttgaatgttagccatAGCCTGAACAGACGCACTTGCCACGATGCCCATCACG",,,,,,,,,
+641,"Pho-E det-F","ATTCAAGTAGTAACCAAACT",,,,,,,,,
+642,"Pho-E det-R","CCCTTACCCTGATTAGTACC",,,,,,,,,
+643,"SGPC-Cas-J1-F1","cttccgcacgagaatcgg",,,,,,1,20,99,"F5"
+644,"SGPC-Cas-J1-R1","agctcccgctgctttta",,,,,,1,20,99,"E4"
+645,"SGPC-Cas-J1-F2","cagtgtgctgaagttttggg",,,,,,1,20,99,"E2"
+646,"SGPC-Cas-J1-R2","ctggctagtgccggagaa",,,,,,1,20,99,"F3"
+647,"SGPC-Cas-J2-F1","acaagcgctttcaaaacgc",,,,,,1,20,99,"E5"
+648,"SGPC-Cas-J2-R1","tctccctctcgtttggtatg",,,,,,1,20,99,"F4"
+649,"SGPC-Cas-J2-F2","agcttatcgatgataagctg",,,,,,1,20,99,"E3"
+650,"SGPC-Cas-J2-R2","cttcttccggttcctgtgc",,,,,,1,20,99,"F2"
+651,"JKP2-F","CGGAGATGATTAATATGGCG",,,,,,,,,
+652,"JKP2-R","ACAGGCTCTTCCCG",,,,,,,,,
+654,"Su-Sap F","TTG GAA TTC CAT ATG GAG GAC TGT AGA TTG GCT",,,,,,,,,
+656,"eSAP F","TTG GAA TTC AGA GAG CAT ATG TTC AAT CGA AAG CTA AG",,,,,,,,,
+657,"eSAP R","AAA AGG ATC CGA ATT CAC TCG ATA CTT CTT CACT",,,,,,,,,
+658,"Hol 2 F","TTTAATTCATATGGTGGGATTCCAGGACACC",,,,,,,,,
+659,"Hol2 R","TAT TAG AGC TCG AGC TGG CCA TCG TCA ATC T",,,,,,,,,
+660,"Hyp F","TTTAATTCATATGGCCAGTAAGAAGGAAAGCC",,,,,,,,,
+661,"Hyp R","TTA ATA AGC TTC TCG AGT TGA CAT GAC TCA CAC AC",,,,,,,,,
+662,"R-SGPC-J2-R1","cttcaaagctggtgtatc",,,,,,1,20,99,"C9"
+663,"R-SGPC-J2-F2","cgtcggcaatatgaaatat",,,,,,1,20,99,"F9"
+664,"R-SGPC-J2-R2","tttttctaacgctttgcaca",,,,,,1,20,99,"F8"
+665,"SPVB-gRNA-2F","AAACCTGAAATGGGACCACGCCAG",,,,,,,,,
+666,"SPVB-gRNA-2R","AAACCTGGCGTGGTCCCATTTCAG",,,,,,,,,
+667,"RZ F","ATGCATATGGTGGTAGCCCTGGGAG",,,,,,,,,
+668,"RZ R","ATGCTCGAGTCTCCTCCTGGGCGATA",,,,,,,,,
+669,"RZ1 F","ATGCATATGGTGCTGTGCGAACACC",,,,,,,,,
+670,"RZ1 R","ATGCTCGAGTCAGTCTCCTTGATTCAGGG",,,,,,,,,
+671,"JAK2-V617F-F","TATTCCAGGCTTACACAGGGG",,,,,,,,,
+672,"JAK2-V617F-R","ACCTAGCTGTGATCCTGAAACT",,,,,,,,,
+673,"ECMLV4-F"," ACAACCGGCTGGGGCGAATCC",,,,,,,,,
+674,"ECMLV4-R"," GTCAGCAAATCCAGAGAAGGCA",,,,,,,,,
+675,"ECMLV5-F"," GCGGCGCTGAAGAAGAAAGC  ",,,,,,,,,
+676,"ECMLV5-R"," CTCCCGGCAGGCGAAGCATTGT         ",,,,,,,,,
+677,"ECMLV6-F"," CAAAGAGCAATAACACTTTTAGCA ",,,,,,,,,
+678,"ECMLV6-R"," GCAGCAGGGACAACGGAAGCTAA         ",,,,,,,,,
+679,"ECMLV7-F"," GTGAAGGATAAGCTGCATTTGTCA ",,,,,,,,,
+680,"ECMLV7-R"," GCCTGACGCTAAAGATAAAGAAGA",,,,,,,,,
+682,"SpV-plasm-conf-Rp","CAGTGGTCAGGGCAGTGCTGC",,,,,,,,,
+683,"spvb-Scr-Fp:","ggaattcgtcagtaagggggga",,,,,,,,,
+684,"spvb-Scr-Rp:","aaccgcgattccgcacagcagaa",,,,,,,,,
+687,,"gatttccttgatgtgccgtaga",,,,,,,,,
+690,"SGPC-HA1-Rp","atgttttagaTCTCGTTTCGATAAAGTAATAG",,,,,,1,20,99,"A7"
+691,"Cas9-sgpc-Fp","cgaaacgagaTCTAAAACATGGAACTCAACAAGTC","cas9 cassette 5 kb for sgpc insertion",,,,,1,20,99,"A9"
+693,"HA2-SGPC-Fp","gacttcaggtGAATTTTAAATATTATACGGATACCAAGATTTAC",,,,,,,,,
+695,"7kb-SGPC-Fp","TCCGTGGAGATATAAGTGGGCA",,,,,,1,20,99,"G3"
+696,,"TGCCGACGCCATATACAACAGA",,,,,,,,,
+697,"Cas-det-Fp","gcaatatgttcatgtaaactatcgc","cas9 detection",,,,,1,21,99,"A8"
+699,"HA2-SGPC-Rp","TTTCACGCAAATGTGACGAATTG",,,,,,,,,
+700,"Rl-hol-F","CCGCACATATGATGCTCGATACCGCC",,,,,,1,,100,"A1"
+701,"Rl-hol-R","ACATCCTCGAGCTTCTTGAACCTCCG",,,,,,1,,100,"A7"
+702,"SAPL-HOL-F","CCGCACATATGTCAATAACCCTACAAG",,,,,,1,,100,"A5"
+703,"SAPL-HOL-R","ATTGACTCGAGAGCCTTCTTGTGGAATA",,,,,,,,,
+704,"HA1-Fp-hifi","GAGCGGATAACAATTCCCCTCTAGAAACTATTCTCTTGCATACCCCAAC",,,,,,,,,
+705,"HA2-RP-Hifi","AGTGGTGGTGGTGGTGGTGCTCGAGTTTCACGCAAATGTGACGAATTG",,,,,,,,,
+706,"GSTM!-F","CATGTGACAGTATTCTTATTTC",,,,,,,,,
+707,"GSTM!-R","ACTCAATCTCAGCATCACAGC",,,,,,,,,
+708,"GSTT1-F","ATCTGTGGTCCCCAAATCAG",,,,,,,,,
+709,"GSTT1-R","GGGGGTTGTCTTTTGCATAG",,,,,,,,,
+710,"SGPC-W-5-Cas2gRNA-f","ggggctgacttcaggCTAACGACAACATAAAGACAACAGAAG",,,,,,,,,
+711,"SGPC-W-Casette-r","ttatgttgtcgttagCCTGAAGTCAGCCCCATAC",,,,,,,,,
+712,"SGPC-W-4-Cas2gRNA-r","tcaataattctttatTTACTCTAAATCCCCTTCTG",,,,,,,,,
+713,"SGPC-W-4-Cas1gRNA-r","gttccatgttttagaTTACTCTAAATCCCCTTCTG",,,,,,,,,
+714,"2ndgRNA-junction_r","gttccatgttttagaAGCCGTTACAACTTACCTC",,,,,,,,,
+715,"SGPC-W-Cas-1gRNA-f","ggggatttagagtaaTCTAAAACATGGAACTCAACAAGTC",,,,,,,,,
+716,"SGPC-W-2nd-gRNA-F","ggggatttagagtaaATAAAGAATTATTGATTTTTATACCATATTATGAG",,,,,,,,,
+717,"Cassette-1gRNA-F","taagttgtaacggctTCTAAAACATGGAACTCAACAAGTC",,,,,,,,,
+720,"Unique_SG_F","CTTAGTGAGTGGGCTGATTTCT ","amplification of Salomnella gallinarum unique region",,,,,,,,
+721,"F-Unique_SG_Probe-T","AGTTTCAGTGATGCCCTGCTGGAT",,,,,,,,,
+722,"Unique_SG_R","CCGCTGCATCGATTTCTTTC ","amplification of Salomnella gallinarum unique region",,,,,,,,
+724,"F-Ssau-probe-T","TGTGGGTAGCGTGTTTCTTCAGGT",,,,,,,,,
+725,"Ssau-RT-R","TGGCCTTGCTGGCAATAA",,,,,,,,,
+726,"Spanin F","cggcctggtgccgcgcggcagccatATGAATTGGAAAGTAACCGC",,,,,,,,,
+727,"Spanin R","cagtggtggtggtggtggtgctcgaCTACTCGGTAGCACCATTTTG",,,,,,,,,
+729,"spvB-rt-R","tcctgatgttccaccactttc",,,,,,1,,100,"I10"
+730,"Screening-spvb-Fp","ggaattcgtcagtaagggggga",,,,,,,,,
+731,"Screening-spvb-Rp","aaccgcgattccgcacagcagaa",,,,,,,,,
+732,"hifi HelYSIN Fp-pet22","GTTTAACTTTAAGAAGGAGATATACATATGCGTGTAAGTTGTCTCTTGTAACTTC",,,,,,,,,
+733,"hifi HelYSIN Rp-pet22","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGGCAATTGTTATAACCGAGCTTAACG",,,,,,,,,
+734,"T7-Fp","CCCGCGAAATTAATACGACTCACT",,,,,,,,,
+735,,"ggggttatgctagttattgctcag",,,,,,,,,
+736,"HA2-Fp-2SNM","tattttttgaAGTGGAACGCATAGATAAAATTCCTG",,,,,,,,,
+737,"HA2-Fp-2SNM-Modify","tattttttgaAGTAGAACGCAGAGATAAAATTCCTG",,,,,,,,,
+738,"HA1-Rp-2SNM-Modify","gcgttcTactTCAAAAAATAATGAGCGGG",,,,,,,,,
+742,"HElysin-det-Fp","ccgtttactcgccctatgagat",,,,,,,,,
+743,"HElysin-det-Rp","gaacgctgtgctggttgtaca",,,,,,,,,
+744,"Cat-P-F-New2","gatttagagtaatgatcggcacgtaagag",,,,,,,,,
+745,"SGP-C-F4-Cat -R","tacgtgccgatcattactctaaatccccttctg",,,,,,,,,
+746,"CP16 Pf","CATATTTAACCCTCCAACC","detection primer for CP16P",,,,,1,17,24,"F1"
+747,"CP16 Pr","TTGCTTTAGAAGATGAG",,,,,,,,,
+748,"CP1- EP1-F","GCAAATGGGTCGCGGATCCGAATTCATGGGAAGTAGATTACAT"," primers for CP1P enolysin cassette",,,,,1,17,24,"A1"
+749,"CP16-end-R","TCAGTGGTGGTGGTGGTGGTGCTCGAGctatatcttttcagtaaa",,,,,,,,,
+751,"CP1-EP2-F","GCAAATGGGTCGCGGATCCGAATTCATGAAAACGGAATTTGTA"," primers for CP1P enolysin cassette",,,,,1,17,24,"B1"
+752,"2nd-gRNA-HF- F","ctgttaagtatcttcctggcat",,,,,,,,,
+753,"CP16-EP-R","TCAGTGGTGGTGGTGGTGGTGCTCGAGttaattacaattattgcaacg",,,,,,,,,
+755,"CP16 Pf 2","TCCCCCTTGCATCATTTGC",,,,,,,,,
+756,"CP1-EP1-R","TCAGTGGTGGTGGTGGTGGTGCTCGAGTTAATAAGGTTGTTTACA",,,,,,,,,
+757,"CP1-EP2-R","TCAGTGGTGGTGGTGGTGGTGCTCGAGTTAATTACAATTATTGCAACG",,,,,,,,,
+758,"CP1-END-F","GCAAATGGGTCGCGGATCCGAATTCATGATAATTGGAAGTAGA"," primers for CP1P enolysin cassette",,,,,1,17,24,"C1"
+759,"CP1-END-R","TCAGTGGTGGTGGTGGTGGTGCTCGAGCTATATCTTTTCAGTAAA",,,,,,,,,
+764,"HA1-SGP13-Fp","CGTGTAAGTTGTCTCTTGTAACttc",,,,,,,,,
+765,"HA1-SGP13-Rp","tacgtgccgatcaTTTTTCACCGAAAGCGGTC",,,,,,,,,
+768,"HElysin-SGP13-Fp","taaggaagctaaaATGATGCTCGATACCGCC",,,,,,,,,
+770,"HA2-SGP13-Fp","ttgctgtggtagTGCGAGCACGATTGGGCC",,,,,,,,,
+771,"HA2-SGP13-Rp","GCAATTGTTATAACCGAGCTTAACG",,,,,,,,,
+772,"2HA1-SGP13-Fp","gaaGGGTCAGTTGGTAATTTGtaatatc",,,,,,,,,
+773,"2HA1-SGP13-Rp","tacgtgccgatcaTTTACGGCAACCAGATTG",,,,,,,,,
+774,"2cat-sgp13-Fp","ggttgccgtaaaTGATCGGCACGTAAGAGG",,,,,,,,,
+775,"HA1-F SSAU-Amp","AGCGGTATCCTGTTGAATTATACc",,,,,,,,,
+776,"HA1-R- SSAU-Amp","gggttccgcgTTCTTTTCTGTAGGCTGTTC",,,,,,,,,
+777,"Ssau-Amp-Fp","cagaaaagaaCGCGGAACCCCTATTTGTTTATTTTTC",,,,,,,,,
+778,"Ssau-Amp-Rp","attttatctcTTACCAATGCTTAATCAGTGAGG",,,,,,,,,
+779,"HA2-F-SSAU-Amp","gcattggtaaGAGATAAAATTCCTGAAACGTTATTTGAACCCG",,,,,,,,,
+780,"HA2-R-SSAU-Amp","TGCTGCTcGCTGCGGTTTACCAGA",,,,,,,,,
+782,"lambda Rp","cgctcatgtcCTGTCTGCTTACATAAACAG",,,,,,,,,
+783,"SNM-ssau-HA1-Fp","CTTCTGCACTGCTGTTTCTGGGCG",,,,,,,,,
+784,"SNM-ssau-HA1-Rp","gcgttccactTCAAAAAATAATGAGCGGG",,,,,,,,,
+785,"SNM-ssau-HA2-Fp","tattttttgaAGTGGAACGCTGAGATAAAATTCCTG",,,,,,,,,
+786,"SNM-ssau-HA2-Rp","TGCTGCTCGCTGCGGTTTACCAGA",,,,,,,,,
+787,"Asp_N_SG_Fp","GGCCTGGTGCCGCGCGGCAGCCATATGAACGGCATTAGCTGCTCTGGTAA",,,,,,1,,100,"J6"
+788,"Asp_N_SG_Rp","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGTTAACGCTCTGGCGTACGCTGGTAG",,,,,,1,,100,"J5"
+789,"Frank 2 TMP Fp","cgtcgagcagttaaacaag",,,,,,,,,
+792,"K1-F","GGTGCTCTTTACATCATTGC",,,,,,1,,100,"F8"
+793,"K1-R"," GCAATGGCCATTTGCGTTAG",,,,,,1,,99,"F7"
+794,"K2-F","GACCCGATATTCATACTTGACAGAG",,,,,,1,,100,"G7"
+795,"K2-R","CCTGAAGTAAAATCGTAAATAGATGGC",,,,,,1,,100,"H2"
+796,"K5-R","CCTGAACCCACCCCAATC",,,,,,1,,100,"F4"
+797,"K5-F","TGGTAGTGATGCTCGCGA",,,,,,1,,100,"H3"
+798,"K54-F","CATTAGCTCAGTGGTTGGCT",,,,,,1,,100,"F2"
+799,"K54-R","GCTTGACAAACACCATAGCAG",,,,,,1,,100,"F1"
+800,"K57-F","CTCAGGGCTAGAAGTGTCA",,,,,,1,,99,"G1"
+801,"K57-R","CACTAACCCAGAAAGTCGAG",,,,,,1,,100,"F9"
+802,"K20-F","CGGTGCTACAGTGCATCATT",,,,,,1,,100,"F3"
+803,"K20-R","GTTATACGATGCTCAGTCGC",,,,,,1,,100,"E1"
+804,"Cat-P-new-F","atacgggggtctgatTGATCGGCACGTAAGAGG",,,,,,,,,
+809,"SGP-13-W-1-Cas1gRNA-r","gttccatgttttagaCAGACCCCCGTATCACCAAAG",,,,,,,,,
+812,"Seq-SGPC-Fp","ATGATGCTTCGGCGGCTATGT",,,,,,,,,
+813,"Seq-SGPC-Rp","CTCTTTAACAAACACCAGCGCT",,,,,,,,,
+814,"Holin_SG13_F","GGCCTGGTGCCGCGCGGCAGCCATATGATGCTCAACTCACCAATCGG",,,,,,1,,100,"H8"
+815,"Holin_SG13_R","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGATGTTTCGGTTTGACATACATCC",,,,,,1,,100,"H9"
+816,"RCDF3A_fwd ","AATTAGCAGTTGCTTTAGCG ","amplifies fragment 3 with auto-cytolysin",,,,,1,17,24,"A3"
+817,"RCDF3A_rev ","GCTATCCCAACAACCTTAAACCCTCCTAATCCATTC ","amplifies fragment 3 with auto-cytolysin",,,,,1,17,24,"A4"
+818,"RIDF3_fwd ","ATTAGGAGGGTTTAAGGTTGTTGGGATAGCTCAAC ","amplfies integarse from fragment 3 without  Integrase",,,,,1,17,24,"B3"
+819,"RIDF3_rev ","GTATTCCTCTCCTCACGGAACTGTTCCGCCATCTTTTAAATAC ","amplfies integarse from fragment 3 without  Integrase",,,,,1,17,24,"B4"
+820,"RF4_fwd ","GGCGGAACAGTTCCGTGAGGAGAGGAATACCTAAC","amplifies the fragment 4 of Cp1 phage",,,,,1,17,24,"C3"
+821,"RF4_rev ","CTTGCTTGTACAACGCCATATAAAC ","amplifies the fragment 4 of Cp1 phage",,,,,1,17,24,"C4"
+822,"Asp_Kleb_F","GGCCTGGTGCCGCGCGGCAGCCATATGGGCAAGGCGGTTATAGCAATT",,,,,,1,,100,"J10"
+823,"Asp_Kleb_R","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGCTATTCGCGATAAATGCCAATG",,,,,,1,,100,"J9"
+824,"tAsp_SG_F","AGCGGCCTGGTGCCGCGCGGCAGCCATATGTCAAATTATACGGCTGGTAAAG",,,,,,1,,100,"J7"
+825,"tAsp_SG_R","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGTTAATACTAATTGAACATCGTC",,,,,,1,,100,"J8"
+826,"Holin_SG_F","GGCCTGGTGCCGCGCGGCAGCCATATGACAGCAGAAGAAAAAAGCGTCC",,,,,,,,,
+827,"Holin_SG_R","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGTACTGTTTCCCCCTGCCCTTA",,,,,,,,,
+829,"HA1-Rp/HPs/1kb","CTTGGTATCCGTATAATGTTTAAAATCCTCTATCTCGTTTCGTTAAAGTAA                      ",,,,,,,,,
+830,"HA2-Fp/HPs/1kb","TTACTTTAACGAAACGAGATAGAGGATTTTAAACATTATACGGATACCAAG",,,,,,,,,
+831,"HA2-Rp/HPs/1kb","TTATGACTCGAGCGCCTTTCACGCAAATGTGACGAATT",,,,,,,,,
+832,"Screening-Fp/HPs/1kb","GTTAAGGCTCACTGAAACCCGC",,,,,,,,,
+833,"Screening-Rp/HPs/1kb","CTGGCCTTCTTTCACATCTGCG",,,,,,,,,
+834,"2nd-gRNA-F-SG-13-F","tgatacgggggtctgTCGGCAATGTTGAATGGAG",,,,,,,,,
+835,"2nd-gRNA-F-SGPC-F","cagaaggggatttagagtaatcggcaatgttgaatggag",,,,,,,,,
+836,"2ndgRNA-junction_r","gttccatgttttagaaagtatattttagatgaagattatttcttaataactaaaaatatg",,,,,,,,,
+838,"SGPC-W-5-Cas2gRNA-f","ggggctgacttcaggCTAACGACAACATAAAGACAACAGAAG",,,,,,,,,
+839,"SGPC-W-Casette-r","ttatgttgtcgttagCCTGAAGTCAGCCCCATAC",,,,,,,,,
+840,"SGPC-W-4-Cas2gRNA-r","tcaataattctttatTTACTCTAAATCCCCTTCTG",,,,,,,,,
+841,"SGPC-W-4-Cas1gRNA-r","gttccatgttttagaTTACTCTAAATCCCCTTCTG",,,,,,,,,
+843,"SGPC-W-Cas-1gRNA-f","ggggatttagagtaaTCTAAAACATGGAACTCAACAAGTC",,,,,,,,,
+844,"SGPC-W-2nd-gRNA-F","ggggatttagagtaaATAAAGAATTATTGATTTTTATACCATATTATGAG",,,,,,,,,
+845,"Cassette-1gRNA-F","taagttgtaacggctTCTAAAACATGGAACTCAACAAGTC",,,,,,,,,
+848,"plcF","ATATGAATGGCAAAGAGGAAAC","for MLST of C.perfringens",,,,,1,17,24,"D3"
+849,"plcR","AGTTTTTCCATCCTTTGTTTTG","for MLST of C.perfringens",,,,,1,17,24,"D4"
+850,"ddlAF","ATAATGGGGGATCATCAGTTGC","for MLST of C.perfringens",,,,,1,17,24,"E3"
+851,"ddlAR","TTATTCCTGCTGCACTTTTAGG","for MLST of C.perfringens",,,,,1,17,24,"E4"
+852,"dutF","TTAAGTATTTTGATAACGCAAC","for MLST of C.perfringens",,,,,1,17,24,"F3"
+853,"dutR","CTGTAGTACCAAATCCACCACG","for MLST of C.perfringens",,,,,1,17,24,"F4"
+854,"glpKF","TGGGTTGAGCATGATCCAATGG","for MLST of C.perfringens",,,,,1,17,24,"G3"
+855,"glpKR","CACCTTTTGCTCCAAGGTTTGC","for MLST of C.perfringens",,,,,1,17,24,"G4"
+856,"gmKF","TAAGGGAACTATTTGTAAAGCC","for MLST of C.perfringens",,,,,1,17,24,"H3"
+857,"gmKR","TACTGCATCTTCTACATTATCG","for MLST of C.perfringens",,,,,1,17,24,"H4"
+858,"recAF","GCTATAGATGTTTTAGTTGTGG","for MLST of C.perfringens",,,,,1,17,24,"I3"
+859,"recAR","CTCCATATGAGAACCAAGCTCC","for MLST of C.perfringens",,,,,1,17,24,"I4"
+860,"sodF","GATGCTTTAGAGCCATCAATAG","for MLST of C.perfringens",,,,,1,17,24,"J3"
+861,"sodR","AATAATAAGCATGTTCCCAAAC","for MLST of C.perfringens",,,,,1,17,21,"J4"
+862,"tpiF","AAATGTGAAGTTGTTGTTTGCC","for MLST of C.perfringens",,,,,1,17,21,"A5"
+863,"tpiR","CATTAGCTTGGTCTGAAGTAGC","for MLST of C.perfringens",,,,,1,17,24,"A6"
+865,"F1_Rev","TCAGACCCCCGTATCACCAAAG",,,,,,,,,
+866,"F2_Fwd","CGATGGCTAAGCTTTGGTGATAC",,,,,,,,,
+867,"F2_rev","TCTCATTTTAAGAATCTCAACAGGG",,,,,,,,,
+868,"F3_Fwd","ATCGCTGATGCCCTGTTGAGATTC",,,,,,,,,
+869,"F3_Rev","TTAACTTACGGTAACTACCGTACTATCTG",,,,,,,,,
+870,"F4_Fwd","ATTTCAGATAGTACGGTAGTTAC",,,,,,,,,
+871,"F4_rev","GCCGGTGTAATCATTAATATTC",,,,,,,,,
+872,"F5_Fwd","CGCGGGATACTGACATCGTGAATATTAATG",,,,,,,,,
+873,"F5_Rev","CTG TTT TGC GTA AGT TCT ACT AT",,,,,,,,,
+875,"SGPC-Cassete-2GRNA-F","cagaaggggatttagagtaaTCGGCAATGTTGAATGGAG",,,,,,,,,
+876,"SGPC-Cassete-2-1GRNA-R","gcctgatggcccctttctttCCTGAAGTCAGCCCCATAC",,,,,,,,,
+877,"SGPC_F5-2-1gRNA-Cassette-F","cgtatggggctgacttcaggAAAGAAAGGGGCCATCAGG",,,,,,,,,
+878,"SGPC_F5-2gRNA-Cassette-R","ATGCCTTGAACTCCCCGAAG",,,,,,,,,
+879,"SGPC_F4-1gRNA-Cassette-R","gttgagttccatgttttagaTTACTCTAAATCCCCTTCTG",,,,,,,,,
+880,"SGPC-Cassete-1gRNA-F","cagaaggggatttagagtaaTCTAAAACATGGAACTCAACAAGTC",,,,,,,,,
+881,"2gRNA-GIbson-R","gttccatgttttagaAAGTATATTTTAGATGAAGATTATTTCTTAATAACTAAAAATATG",,,,,,,,,
+882,"Cassette-GIbson-F","atctaaaatatacttTCTAAAACATGGAACTCAACAAGTC",,,,,,,,,
+883,"SGPC-W-1-F","cctgtctggacgccagctca",,,,,,,,,
+884,"SGPC-W-1-R","ggccttagtttcattcttctagattactcagatataacc",,,,,,,,,
+885,"SGPC-W-2-F","ccggttatatctgagtaatctagaag",,,,,,,,,
+886,"SGPC-W-2-R","acctaagtaacgaaaggccc",,,,,,,,,
+887,"SGPC-W-3-F","caaaattaaggccccttgaaggg",,,,,,,,,
+888,"SGPC-W-3-R","cccgggcccgacaagaataa",,,,,,,,,
+889,"SGPC-W-4-F","tttcttcttaccccacattc",,,,,,,,,
+890,"SGPC-W-4-R","ttactctaaatccccttctg",,,,,,,,,
+891,"SGPC-W-5-F","ctaacgacaacataaagacaacagaag",,,,,,,,,
+892,"SGPC-W-5-R","tgccttgaactccccgaagtatatttc",,,,,,,,,
+893,"SGPC-W-6-F","accaaagagccgcagaaatatac",,,,,,,,,
+894,"SGPC-W-6-R","cgaaggaatggttagccactg",,,,,,,,,
+895,"CP1F1-FWD","GTATAAAGGAGAATAGGAATGAGATTAAGTGAAATGAATAATG","amplify WT fragment of CP1 phage",,,,,1,17,24,"B5"
+896,"CP1F1_REV","TTTGTCCATAAATACCTCCTATTTGTTAAGTGTTACGC","amplify WT fragment of CP1 phage",,,,,1,17,24,"B6"
+897,"CP1F2_FWD","TAACACTTAACAAATAGGAGGTATTTATGGACAAAGATAAG","amplify WT fragment of CP1 phage",,,,,1,17,24,"C5"
+898,"CP1F2_REV","TTAAGCACGCTTTACTATCACTCATTCAATTCAACCTC","amplify WT fragment of CP1 phage",,,,,1,17,24,"C6"
+899,"CP1F3_FWD","GTTGAATTGAATGAGTGATAGTAAAGCGTGCTTAATAAC","amplify WT fragment of CP1 phage",,,,,1,17,24,"D5"
+900,"CP1F3_REV","GAGGATTGCTCCCCTTCCTAAAATCCAAACCAATTAGG","amplify WT fragment of CP1 phage",,,,,1,17,24,"D6"
+901,"CP1F4_FWD","AATTGGTTTGGATTTTAGGAAGGGGAGCAATCCTCTTC","amplify WT fragment of CP1 phage",,,,,1,17,24,"E5"
+902,"CP1F4_REV","ATTTCACTTAATCTCATTCCTATTCTCCTTTATACTAAATAAATTTCAATTG","amplify WT fragment of CP1 phage",,,,,1,17,24,"E6"
+903,"CP1F3A_FWD","TAGTAAAGCGTGCTTAATAAC",,,,,,,,,
+904,"CP1F3A_REV","ATTGTCAATAGTTATCTTAAACCCTCCTAATCCATTC",,,,,,,,,
+905,"CP1F3B_FWD","TTAGGAGGGTTTAAGATAACTATTGACAATATAATTAAGTATGTTATAATTAAG",,,,,,,,,
+906,"CP1F3B_REV","CTAAAATCCAAACCAATTAGG",,,,,,,,,
+907,"gRNA-spvbCas9F","GGTGCGGAGATGAAGCGTTATGCTAAGTAAATGGATAAGAAATACTCAATAGGCTT",,,,,,,,,
+908,"gRNA-spvbCas9R","GCAAATCCCGCCAGTTCCACTATAATCGGTGTTCTGGGACCATTCAAAACAGCATAG",,,,,,,,,
+909,"SGPc_Fg4CST-R","ATCCAAGCCTATTGAGTATTTCTTATCCATTTACTTAGCATAACGCTTCATC",,,,,,,,,
+910,"SGPc_Fg5CST-F","AGAGCTATGCTGTTTTGAATGGTCCCAAAACACTGATTATAGCGGTACTGGCGGG",,,,,,,,,
+911,"ssau-screen1-Fp","GTCATTGATGGTTTTGGTCGTCCC",,,,,,,,,
+912,"ssau-screen1-Rp","TCGGCAAGCAAGACGACTCGCTT",,,,,,,,,
+913,"6kb-ssau-Fp","TGGCGGTTATCTTGACGGTGTAG",,,,,,,,,
+914,"6kb-ssau-Rp","CCCTCCAGCATGTAGTCCGGTAA",,,,,,,,,
+915,"ssau-screen2-Rp","ATCTACCCTATCGTCGTCGCGCAA",,,,,,,,,
+916,"Ssau_seq-Rp","TTAGAGCACCACCTTGACAT",,,,,,,,,
+917,"CP1_Endo_F","CGCTCTAGATGATAATTGGAAGTAGGACA",,,,,,1,,100,"A8"
+918,"CP1_Endo_R","ACGGCTCGAGCTATATCTTTTCAGTAAAGC",,,,,,1,,,"A9"
+919,"CPL1_FP","GACGAAGACAAGCAATACCC",,,,,,1,,100,"F5"
+920,"CPL1_RP","GCCCGGTAAAGAAGATTTCG",,,,,,1,,100,"H4"
+922,"R5_sgpc","ACCTTAAAGATACTTATTCGGAGATTGAATTTGGCGCTAGTAATCCACTATACCCG",,,,,,,,,
+923,"IQL_endo_F","AATTGTCATATGGCTCTAACTGAGCAA",,,,,,1,,100,"A2"
+924,"IQL_endo_R","GGATTCTCGAGTTACTTGAAGGATTGATAGGC",,,,,,1,,100,"A3"
+927,"gRNA-spvb-casst_Cas9-F","GGTGCGGAGATGAAGCGTTATGCTAAGTAAATGGATAAGAAATACTCAATAGGCTT",,,,,,,,,
+928,"gRNA-spvb-casst_Cas9-R","GCAAATCCCGCCAGTTCCACTATAATCGGTGTTCTGGGACCATTCAAAACAGCATAG",,,,,,,,,
+929,"SGPc_Fg4-casset_R","ATCCAAGCCTATTGAGTATTTCTTATCCATTTACTTAGCATAACGCTTCATC",,,,,,,,,
+930,"SGPc_Fg5-casset_F","AGAGCTATGCTGTTTTGAATGGTCCCAAAACACTGATTATAGCGGTACTGGCGGG",,,,,,,,,
+931,"SGPC_cF1","TGGGGTGTAGATGTGTTATTCGGCGATGTATGTTATTCGGCGATGTATATGGTGCGTAC",,,,,,,,,
+932,"SGPC_cR5","GTACGCACCATATACATCGCCGAATAACATACATCGCCGAATAACACATCTACACCCCAGGTCATGATC",,,,,,,,,
+933,"Chl_F","CAGTCTAGACCCGGGTGATCGGCACGTAAGAGGTTCCAA",,,,,,,,,
+934,"Chl_R","GTCACATTAGACTTGGAACTTTTGCTTATGCATTACGCCCCGCCCTGCCACTCATC",,,,,,,,,
+935,"CP_HAs_F","TGCGATGAGTGGCAGGGCGGGGCGTAATGCATAAGCAAAAGTTCCAACT",,,,,,,,,
+936,"Cp_HAs_R","CCAGTGGGATCCTATTCAAAGGTTTTTGGTGTCTCC",,,,,,,,,
+937,"PcasSA-5F-ssau","GAAATTATTTTTTGAAGTGGAACG",,,,,,,,,
+938,"PcasSA-5R-ssau","AAACCGTTCCACTTCAAAAAATAA",,,,,,,,,
+939,"New-Cas9gR_SpR","AAAACCGGTATACGACTCTGTGATC",,,,,,1,21,99,"A4"
+940,"New-CasSAgR_SpR","AAACCGGTATACGACTCTGTGATC",,,,,,,,,
+941,"Nick-gRNA-casset-Fp","GAGATCACCAAATTAGATATATCTAGATTGACAGCTAGCTCAGTCCT",,,,,,,,,
+942,"Nick-gRNA-casset-Rp","AGAAACTGTTGTTATACTTATATCTAATATGCACCGACTCGGTGCCACTTT",,,,,,,,,
+943,"pNick_Rp","CTACGGTTCCAGGTAATGAAATCCCT",,,,,,,,,
+944,"SGPC_Fg1_F1","TGTTATTCGGCGATGTATATGGTGCGTACACGGCAACCG",,,,,,,,,
+945,"SGPC_Fg1_F2","GTGTCCCCGTCAGTTATACCTTCAGGGTGTATGTCG",,,,,,,,,
+946,"SGPC_Fg1_R","TTCATAGCGTTTACAGCGAGGATTAGATAATGGCGTTACAACCATATAAGGGCG",,,,,,,,,
+947,"SGPC_Fg2_F","CGGTCATCGCGCCCTTATATGGTTGTAACGCCGTTATCTAATCCTCGCTGTAAATGC",,,,,,,,,
+948,"SGPC_Fg2_R","CCTATACGGACGCCTTTCGTTGGGTGGCTGTAATGTTGGGCAAACCGGAAGATACC",,,,,,,,,
+949,"SGPC_Fg3_F","ACCTCGGTATCTTCCGGTTTGCCCAACATTACAGCCACCCAACGTAAGGCGTC",,,,,,,,,
+950,"SGPC_Fg3_R","GGCACGCGCCGCGGAGAACTCGCACCTCTTGTTTCAGGGTGACAGGCCCATC",,,,,,,,,
+951,"SGPC_Fg4_F","GAATCGATGGGCCTGTCACCCTGAAACAAGAAGTGCGCGTTCTCCGCGGCGC",,,,,,,,,
+952,"SGPC_Fg4_R","GCAAATCCCGCCAGTTCCACTATAATCGGTTTACTTAGCATAACGCTTCATC",,,,,,,,,
+953,"SGPC_Fg5_F","GGTGCGGAGATGAAGCGTTATGCTAAGTAAACTGATTATAGCGGTACTGGCGGG",,,,,,,,,
+954,"SGPC_Fg5_R","TACATCGCCGAATAACACATCTACACCCCAGGTCATGATC",,,,,,,,,
+955,"CTX-M15-F","AGCACCAGTAAAGTGATGGC",,,,,,,,,
+956,"CTX-M15-R","TCAGCTTATTCATCGCCACG",,,,,,,,,
+957,"CPA_Screening_F","AGATTTTATTATCCCCTTTGCCCT",,,,,,,,,
+958,"CPA_Screening_R","AGATTTTATTATCCCCTTTGCCCT",,,,,,,,,
+959,"Endolysin_SGP9_F","GCATCACATATGGCTAAAGTACAATTCAAACC",,,,,,,,,
+960,"Endolysin_SGP9_R","ATTTAAGCTTCCCTCGGTCAGATGTAACCAG",,,,,,,,,
+961,"CP1-F","GCAATAACAACTGCCATGGGAACT",,,,,,,,,
+962,"CP1-R","GGAACATACCCAAAGTGATTGGGC",,,,,,,,,
+963,"TpeL-F","CATTTGCCATTTATTTTCAG",,,,,,,,,
+964,"TpeL-R","TATTCATTTTGTTTGGGTTG",,,,,,,,,
+966,"JKP2_Endo_F","GGCGCCATATGAGTTTAAGGACTAAGGTTATT",,,,,,,,,
+967,"JKP2_Endo_R","AAATCTCGAGTGGCAATGCGGCTACCGCGACT",,,,,,,,,
+968,"TKP-2_SLT_R","GCATCTCGAGTTATTGTCCTGAGTAGC",,,,,,1,,100,"H1"
+969,"TKP-2_SLT_F","AGTCCATATGGCCAGAGATTTGGGTTTG",,,,,,1,,100,"G8"
+970,"SGB2_Frag1_Fp","ACGAGATTTTCTGGATCCCGAATTTTCAGGTACTGCGTAAGGTGGCATCAGGTA",,,,,,,,,
+971,"SGB2_Frag1_Rp","GTCAGCCGGTCTTCAAAACGCTTAAACTCATTCATCCCACTTGCTCACCAG",,,,,,,,,
+972,"SGB2_Frag2_Fp","TGCGAACTGGTGAGCAAGTGGGATGAATGAGTTTAAGCGTTTTGAAGACCGGCT",,,,,,,,,
+973,"SGB2_Frag2_Rp","TTTGCGCGGCATTGCCATCGGTCAGGCTCCTTAATTGCTGTTAACCGAGGTGA",,,,,,,,,
+974,"SGB2_Frag3_Fp","AATCTGGTCACCTCGGTTAACAGCAATTAAGGAGCCTGACCGATGGCAATGCCG",,,,,,,,,
+975,"SGB2_Frag3_Rp","CAAGTAACAATATAATTGTAGCAAAATTATGTCAAGTGAACAAAGTGAGAAACTAAAG",,,,,,,,,
+976,"SGB2_Frag4_Fp","CTTTAGTTTCTCACTTTGTTCACTTGACATAATTTTGCTACAATTATATTGTTACTTG",,,,,,,,,
+977,"SGB2_Frag4_Rp","GTTACGTGTTTTGCCTGAAAACGGTTTCGCGCGGCTCCTCTTTC",,,,,,,,,
+978,"Frag3_CasSA_Rp","TAATCCCCTGTATATTTTGCAAACTCTATGTCAAGTGAACAAAGTGAGAAACTAAAG",,,,,,,,,
+980,"CasSA_spvbcasset_RP","CAAGTAACAATATAATTGTAGCAAAATTTCAGTCACCTCCTAGCTGACTCAA",,,,,,,,,
+981,"Frag4_CasSA_Fp","ATTGATTTGAGTCAGCTAGGAGGTGACTGAAATTTTGCTACAATTATATTGTTACTTG",,,,,,,,,
+982,"27F","AGAGTTTGATCMTGGCTCAG",,,,,,1,20,99,"A2"
+983,"1492R","TACGGYTACCTTGTTACGACTT",,,,,,1,20,99,"A3"
+984,"gRNA1_F","AAACTTATTCTATACCTGACACAGG",,,,,,,,,
+985,"gRNA1_R","CTGTGTCAGGTATAGAATAACAAAA",,,,,,,,,
+986,"gRNA2_F","AAACGCTAGATATGAATGGCAAAGG",,,,,,,,,
+987,"gRNA2_R","CTTTGCCATTCATATCTAGCCAAAA",,,,,,,,,
+988,"CP_HA1F","ATTGTGAGCGGATAACAATTCCCCTCTAGATGCATCAGCAAAAGTTCCAACTC",,,,,,,,,
+989,"CP_HA1R","GTAAATACCACCAAAACCAATTGATAACGATTAACACTTGCAC",,,,,,,,,
+990,"CP_HA2F","GTGCAAGTGTTAATCGTTATCAATTGGTTTTGGTGGTATTTAC",,,,,,,,,
+991,"CP_HA2R","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGCAGAATATTCAAAGGTTTTTGGTG",,,,,,,,,
+992,"Hamza_HA1F","ATTGTGAGCGGATAACAATTCCCCTCTAGAAGCGGTATCCTGTTGAATTATACC",,,,,,,,,
+993,"Hamza_HA2R","ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGTGCTGCTTGCTGCGGTTTACCAGA",,,,,,,,,
+1206,"PF-CaP",,,,,,,1,20,99,"A1"
+1207,"SG-endo_FP",,,,,,,1,20,99,"A10"
+1213,"grna2_ssap_F",,,,,,,1,20,99,"B5"
+1218,"SG_holin_FP",,,,,,,1,20,99,"B10"
+1237,"PR-CaP",,,,,,,1,20,99,"E1"
+1240,"PR-GpM",,,,,,,1,20,99,"E10"
+1243,"New-J2-F",,,,,,,1,20,99," F6"
+1260,"RT-SG-SSAU-R",,,,,,,1,20,99,"H10"
+1269,"ssau-seq-HF_F",,,,,,,1,20,99,"I8"
+1270,"ssau-seq-HF_F",,,,,,,1,20,99,"I9"
+1271,"ssau-seq FP",,,,,,,1,20,99,"I10"
+1273,"EndoL-F",,,,,,,1,20,99,"J2"
+1274,"ESBP-L Base plate R",,,,,,,1,20,99,"J3"
+1275,"RL Hol R",,,,,,,1,20,99,"J4"
+1278,"Megannin-2-PS",,,,,,,1,20,99,"J5"
+1279,"RL-EL-R",,,,,,,1,20,99,"J6"
+1280,"RL Hol F",,,,,,,1,20,99,"J7"
+1281,"RL EL F",,,,,,,1,20,99,"J8"
+1282,"Megannin-2-RC",,,,,,,1,20,99,"J9"
+1283,"ESBP-L Base plate F",,,,,,,1,20,99,"J10"
+1284,"Us-Sap_F","TTG AAT TCA TAT GTT GGC TAA AAA GCG AGT GAG",,,,,,1,,100,"A4"
+1285,"Us-Sap_R","TAT TAG AGC TCG AGC TTT TTC TTG CGA ATG CCT",,,,,,1,,100,"A6"
+1286,"Ittpl reverse",,,,,,,1,,100,"B1"
+1287,"Su-Sap_F",,,,,,,1,,100,"B2"
+1288,"ITTP_endo_Fp",,,,,,,1,,100,"B4"
+1289,"eSAP_R",,,,,,,1,,100,"B5"
+1290,"Hol_2_F",,,,,,,1,,100,"B6"
+1291,"Hol_2_R",,,,,,,1,,100,"B7"
+1292,"Hyp_F",,,,,,,1,,100,"B8"
+1293,"Hyp_R",,,,,,,1,,100,"B9"
+1294,"eSAP_F",,,,,,,1,,100,"B10"
+1295,"Pet28 reverse(xho1)-d8f",,,,,,,1,,100,"C8"
+1296,"SE-R",,,,,,,1,,100,"D8"
+1297,"SE-F",,,,,,,1,,100,"D9"
+1298,"SKP-1R",,,,,,,1,,102,"D10"
+1299,"SC-F",,,,,,,1,,100,"D2"
+1300,"SC-R",,,,,,,1,,100,"E3"
+1301,"SF-R",,,,,,,1,,100,"E4"
+1302,"SF-F",,,,,,,1,,100,"E5"
+1303,"SK-F",,,,,,,1,,100,"E6"
+1304,"SK-R",,,,,,,1,,100,"E7"
+1305,"SKP-1_endo-F",,,,,,,1,,100,"F6"
+1306,"RL-HP_8_R",,,,,,,1,,100,"F10"
+1307,"SKP-1_endo-R",,,,,,,1,,100,"G2"
+1308,"SKP-1_spanin_F",,,,,,,1,,100,"G3"
+1309,"JKP2-Endo-F",,,,,,,1,,100,"G4"
+1310,"SKP-1_spanin_R",,,,,,,1,,100,"G5"
+1311,"JKP2-Endo-R",,,,,,,1,,100,"G6"
+1312,"RS_endo_Rp",,,,,,,1,,100,"H5"
+1313,"Spanin-R",,,,,,,1,,100,"H6"
+1314,"Spanin-F",,,,,,,1,,100,"H7"
+1315,"Hifi_Pbad_R",,,,,,,1,,100,"H10"
+1316,"RL-HP_3_R",,,,,,,1,,100,"I1"
+1317,"Pbad_MUT_F",,,,,,,1,,100,"I2"
+1318,"RL-HP_4_R",,,,,,,1,,100,"I3"
+1319,"RL-HP_8_F",,,,,,,1,,100,"I4"
+1320,"RL-HP_15_F",,,,,,,1,,100,"I5"
+1321,"RL-HP_9_F",,,,,,,1,,100,"I6"
+1322,"Holin-SG_R",,,,,,,1,,100,"I7"
+1323,"Holin-SG_F",,,,,,,1,,100,"I8"
+1324,"SpvB-RT-F","aagctgtgtcagtatcggattt","Real time amplification of region from Salomnella gallinarum SpvB gene",,,,,1,,99,"I9"
+1326,"RL-HP_9_R",,,,,,,1,,100,"J1"
+1327,"RL-HP_4_F",,,,,,,1,,100,"J2"
+1328,"Pbad_MUT_R",,,,,,,1,,100,"J3"
+1329,"RL-HP_11_R",,,,,,,1,,100,"J4"
+1330,"RL-HP_11_F",,,,,,,1,,101,"A1"
+1331,"RL-HP_11_F",,,,,,,1,,101,"A1"
+1332,"Hifi_Pbad_F",,,,,,,1,,101,"A2"
+1333,"RL-HP_3_F",,,,,,,1,,101,"A3"
+1334,"RL-HP-5_&_6_R",,,,,,,1,,101,"A4"
+1335,"RL-HP-5_F",,,,,,,1,,101,"A5"
+1336,"RL-HP-12_R",,,,,,,1,,101,"A6"
+1337,"RL-HP-12_F",,,,,,,1,,101,"A7"
+1338,"RL-HP-18_F",,,,,,,1,,101,"A8"
+1339,"RL-HP-18_R",,,,,,,1,,101,"A9"
+1340,"RL-HP-20_F",,,,,,,1,,101,"A10"
+1341,"RL-HP-16_F",,,,,,,1,,101,"B1"
+1342,"RL-HP-16_R",,,,,,,1,,101,"B2"
+1343,"RL-HP-23_R",,,,,,,1,,101,"B3"
+1344,"RL-HP-23_F",,,,,,,1,,101,"B4"
+1345,"RL-HP-22_R",,,,,,,1,,101,"B5"
+1346,"RL-HP-22_F",,,,,,,1,,101,"B6"
+1347,"RL-HP-21_R",,,,,,,1,,101,"B7"
+1348,"RL-HP-21_F",,,,,,,1,,101,"B8"
+1349,"RL-HP-20_R",,,,,,,1,,101,"B9"
+1350,"RL-HP-19_R",,,,,,,1,,101,"B10"
+1351,"RL-HP-19_F",,,,,,,1,,101,"C1"
+1352,"RL-HP-14_F",,,,,,,1,,101,"C2"
+1353,"RL-HP-15_R",,,,,,,1,,101,"C3"
+1354,"RL-HP-14_R",,,,,,,1,,101,"C4"
+1355,"RL-HP-17_F",,,,,,,1,,101,"C5"
+1356,"RL-HP-6_F",,,,,,,1,,101,"C6"
+1357,"RL-HP-13_F",,,,,,,1,,101,"C7"
+1358,"RL-HP-17_R",,,,,,,1,,101,"C8"
+1359,"RL-HP_7_F",,,,,,,1,,101,"C9"
+1360,"RL-HP-7_R",,,,,,,1,,101,"C10"
+1361,"vatF",,,,,,,1,,101,"D1"
+1362,"vatR",,,,,,,1,,101,"D2"
+1363,"irp2F",,,,,,,1,,101,"D3"
+1364,"aroA_Screening_R","GTAATGCCGCTAGTGCCA",,,,,,1,,101,"D4"
+1365,"gRNA1R",,,,,,,1,,101,"D5"
+1366,"gRNA2R",,,,,,,1,,101,"D6"
+1367,"aroAHA1_rev","GGTTGACTTACGCAACGCGTACGATCGG",,,,,,1,,101,"D7"
+1368,"RL-HP-13_R",,,,,,,1,,101,"D8"
+1369,"RL-HP-10_F",,,,,,,1,,101,"D9"
+1370,"RL-HP-10_R",,,,,,,1,,101,"D10"
+1371,"ECO2-R","GATAAGGAATGCACATCGCC",,,,,,1,,101,"E1"
+1372,"ECO-F","CGATGTTGAGCGCAAGGTTG",,,,,,1,,101,"E2"
+1373,"aroAHA1_Fwd","GTCTTCGCGCAGTTAAGCCAATGAGT",,,,,,1,,101,"E3"
+1374,"aroAHA2_rev","CGCAATTATAGCGGGCTG",,,,,,1,,101,"E4"
+1375,"aroA_screening_F","GAAGTGAGTCACCGTGGC",,,,,,1,,101,"E5"
+1376,"matR",,,,,,,1,,101,"E6"
+1377,"fyuAF",,,,,,,1,,101,"E7"
+1378,"matF",,,,,,,1,,101,"E8"
+1379,"fyuAR",,,,,,,1,,101,"E9"
+1380,"irp2R",,,,,,,1,,101,"E10"
+1381,"CasSA_spvbcasset-FP",,,,,,,1,,101,"F1"
+1382,"SGB2_Frag2_Rp",,,,,,,1,,101,"F2"
+1383,"G2r_SpvB",,,,,,,1,,101,"F3"
+1384,"SpvB-HA2_FP",,,,,,,1,,101,"F4"
+1385,"SGPC_Fg3_R",,,,,,,1,,101,"F5"
+1386,"SGPC_Fg3_F",,,,,,,1,,101,"F6"
+1387,"ECO18-R","AGAAGCATTGAGCTGTGGAC",,,,,,1,,101,"F7"
+1388,"ECO1-R","CATTAGGTGTCTCTGGCACG",,,,,,1,,101,"F8"
+1389,"ECO078-R","TAGGTATTCCTGTTGCGGAG",,,,,,1,,101,"F9"
+1390,"aroAHA2_fwd","ACGCGTTGCGTAAGTCAACCCGGCTGAATG",,,,,,1,,101,"F10"
+1391,"Frag3_CasSA_RP",,,,,,,1,,101,"G1"
+1392,"G2f_SpvB",,,,,,,1,,101,"G2"
+1393,,,,,,,,1,,101,"G3"
+1394,"SGPC_Fg2_R",,,,,,,1,,101,"G4"
+1395,"SGPC_Fg2_F",,,,,,,1,,101,"G5"
+1396,"SGB2_Frag3_Fp",,,,,,,1,,101,"G6"
+1397,"SGB2_Frag4_Rp",,,,,,,1,,101,"G7"
+1398,"g1r_SpvB",,,,,,,1,,101,"G8"
+1399,"SpvB-HA1_RP",,,,,,,1,,101,"G9"
+1400,"SGPc_Fg4-casset_R",,,,,,,1,,101,"G10"
+1401,"SGB2_Frag1_Rp",,,,,,,1,,101,"H1"
+1402,"Frag4_CasSA_Fp",,,,,,,1,,101,"H2"
+1403,"SGB2_Frag2_Fp",,,,,,,1,,101,"H3"
+1404,"SGB2_Frag1_Fp",,,,,,,1,,101,"H4"
+1405,"SGB2_Frag3_Rp",,,,,,,1,,101,"H5"
+1406,"New-CasSAgR_5pR",,,,,,,1,,101,"H6"
+1407,"CasSA_spvbcasset_RP","CTTTAGTTTCTCACTTTGTTCACTTGACATAGAGTTTGCAAAATATACAGGGGATTA",,,,,,1,,101,"H7"
+1408,"gRNA-spvb-casst_Cas9-F",,,,,,,1,,101,"H8"
+1409,"SGB2_Frag4_Fp",,,,,,,1,,101,"H9"
+1410,"R5_sgpc",,,,,,,1,,101,"H10"
+1411,"SGPc_Fg4CST-R",,,,,,,1,,101,"I1"
+1412,"g1f-casSA_SpvB",,,,,,,1,,101,"I2"
+1413,"gRNA-spvb-casst_Cas9-R",,,,,,,1,,101,"I3"
+1414,"g1R-casSA_SpvB",,,,,,,1,,101,"I4"
+1415,"SGPC_Fg4_R",,,,,,,1,,101,"I5"
+1416,"SGPC_Fg4_F",,,,,,,1,,101,"I6"
+1417,"SGPc_Fg5CST-F",,,,,,,1,,101,"I7"
+1418,"SGPC_Fg1_R",,,,,,,1,,101,"I8"
+1419,"g1f_SpvB",,,,,,,1,,101,"I9"
+1420,"SpvB-HA2_RP",,,,,,,1,,101,"I10"
+1421,"aroADS_fwd","CGGGGCGTAATAAGTCAACCCGGCTGAATG",,,,,,1,,101,"J1"
+1422,"aroADS_rev","CGCAATTATAGCGGGCTG",,,,,,1,,101,"J2"
+1423,"ssap_screening_F",,,,,,,1,,101,"J3"
+1424,"Scr_ssef_R",,,,,,,1,,101,"J4"
+1425,"F1_sgpc","TTACGGGTATAGTGGATTACTAGCGCCAAAATTCAATCTCCGAATAAGTATCTTTA",,,,,,1,,101,"J5"
+1426,"SGPC_Fg5_F",,,,,,,1,,101,"J6"
+1427,"SpvB-HA1_FP",,,,,,,1,,101,"J7"
+1428,"SGPc_Fg5-casset_F",,,,,,,1,,101,"J8"
+1429,"gRNA-spvbCas9R",,,,,,,1,,101,"J9"
+1430,"gRNA-spvbCas9F",,,,,,,1,,101,"J10"
+1431,"SPVB-gRNA-2F",,,,,,,1,,103,"B1"
+1432,"RS63-11R",,,,,,,1,,103,"B2"
+1433,"SPVB-gRNA-2R",,,,,,,1,,103,"B3"
+1434,"RS63-11F",,,,,,,1,,103,"B4"
+1435,"RS_150_F",,,,,,,1,,103,"B5"
+1436,"RS_150_R",,,,,,,1,,103,"B6"
+1437,"RS_Endo-F",,,,,,,1,,103,"C1"
+1438,"Hp_16_F_Xho1",,,,,,,1,,103,"C2"
+1439,"Hp_20_F_Xho1",,,,,,,1,,103,"C3"
+1440,"Hp_19_F_Xho1",,,,,,,1,,103,"C4"
+1441,"RCF_WT_3_rev",,,,,,,1,,103,"C5"
+1442,"RCF_WT_1_fwd",,,,,,,1,,103,"C6"
+1443,"RCF_WT_6_rev",,,,,,,1,,103,"C7"
+1444,"RCF_C6_fwd",,,,,,,1,,103,"C8"
+1445,"RCF_WT_2_fwd",,,,,,,1,,103,"C9"
+1446,"Hp_18_F_Xho1",,,,,,,1,,103,"C10"
+1447,"RS_Endo-R",,,,,,,1,,103,"D1"
+1448,"Hp_10_F_Xho1",,,,,,,1,,103,"D2"
+1449,"Hp_23_F_Xho1",,,,,,,1,,103,"D3"
+1450,"Pbad_R_Xho1",,,,,,,1,,103,"D4"
+1451,"RCF_Cas_rev",,,,,,,1,,103,"D5"
+1452,"Hp_5_F_Xho1",,,,,,,1,,103,"D6"
+1453,"Hp_12_F_Xho1",,,,,,,1,,103,"D7"
+1454,"Hp_8_F_Xho1",,,,,,,1,,103,"D8"
+1455,"Hp_21_F_Xho1",,,,,,,1,,103,"D9"
+1456,"Hp_17_R_Sal1",,,,,,,1,,103,"D10"
+1457,"GRNA1-Fp FH",,,,,,,1,,103,"E1"
+1458,"HP_2_NCO1_F",,,,,,,1,,103,"E2"
+1459,"Hp_1_F_Xho1",,,,,,,1,,103,"E3"
+1460,"Pbad_F_Xho1",,,,,,,1,,103,"E4"
+1461,"RCF_WT_4_fwd",,,,,,,1,,103,"E5"
+1462,"Hp_3_F_Xho1",,,,,,,1,,103,"E6"
+1463,"Hp_11_F_Xho1",,,,,,,1,,103,"E7"
+1464,"Hp_17_F_Xho1",,,,,,,1,,103,"E8"
+1465,"Hp_5_F_Xho1",,,,,,,1,,103,"E9"
+1466,"Hp_15_F_Xho1",,,,,,,1,,103,"E10"
+1467,"FH-GRNA2-Rp","aaaacCAT GGA ACA CTG GAC GCT CT",,,,,,1,,103,"F1"
+1468,"FH-GRNA2-Fp","aaacAGAGCGTCCAGTGTTCCATG",,,,,,1,,103,"F2"
+1469,"Hp_1_R_Sal1",,,,,,,1,,103,"F3"
+1470,"Hp_5&6_R_Sal1",,,,,,,1,,103,"F4"
+1471,"Hp_7_F_Xho1",,,,,,,1,,103,"F5"
+1472,"HP2_XHO1_R",,,,,,,1,,103,"F6"
+1473,"Hp_4_F_Xho1",,,,,,,1,,103,"F7"
+1474,"RCF_WT_2_rev",,,,,,,1,,103,"F8"
+1475,"RCF_WT_3_fwd",,,,,,,1,,103,"F9"
+1476,"Hp_9_F_Xho1",,,,,,,1,,103,"F10"
+1477,"Grna1-Rp FH",,,,,,,1,,103,"G1"
+1478,"AF-Grna2-Rp","aaaac CCC ATC TTT ACC GGG CTG GC",,,,,,1,,103,"G2"
+1479,"AF-Grna2-Fp","Aaac GCCAGCCCGGTAAAGATGGG",,,,,,1,,103,"G3"
+1480,"AF-GRNA1-Rp","aaaacTCTGTAGCACCAAACTGACC",,,,,,1,,103,"G4"
+1481,"AF-GRNA1-Fp","aaac GGTCAGTTTGGTGCTACAGA","7kb cassette  for SGPC insertion",,,,,1,,103,"G5"
+1482,"ibeAR",,,,,,,1,,103,"G6"
+1483,"ibeBF",,,,,,,1,,103,"G7"
+1484,"ibeBR",,,,,,,1,,103,"G8"
+1485,"ibeAF",,,,,,,1,,103,"G9"
+1486,"iroNR",,,,,,,1,,103,"G10"
+1487,"iroNF",,,,,,,1,,103,"H1"
+1488,"ompAR",,,,,,,1,,103,"H2"
+1489,"ompAF",,,,,,,1,,103,"H3"
+1490,"papCR",,,,,,,1,,103,"H4"
+1491,"papCF",,,,,,,1,,103,"H5"
+1492,"fimCR",,,,,,,1,,103,"H6"
+1493,"fimCF",,,,,,,1,,103,"H7"
+1494,"neuR",,,,,,,1,,103,"H8"
+1495,"neuF",,,,,,,1,,103,"H9"
+1496,"ECO-F","CGATGTTGAGCGCAAGGTTG",,,,,,1,,103,"H10"
+1497,"colVR"," CGCAGCATAGTTCCATGCT",,,,,,1,,103,"I1"
+1498,"iucDR",,,,,,,1,,103,"I2"
+1499,"iucDF",,,,,,,1,,103,"I3"
+1500,"tshR",,,,,,,1,,103,"I4"
+1501,"tshF",,,,,,,1,,103,"I5"
+1502,"issR",,,,,,,1,,103,"I6"
+1503,"issF",,,,,,,1,,103,"I7"
+1504,"ECO18-R","AGAAGCATTGAGCTGTGGAC",,,,,,1,,103,"I8"
+1505,"ECO2-R","GATAAGGAATGCACATCGCC",,,,,,1,,103,"I9"
+1506,"ECO1-R","CATTAGGTGTCTCTGGCACG",,,,,,1,,103,"I10"
+1507,"colVF"," TCCAAGCGGACCCCTTATAG",,,,,,1,,103,"J1"
+1508,"RzR",,,,,,,1,,103,"J2"
+1509,"RZ1_F",,,,,,,1,,103,"J3"
+1510,"RZ1_R",,,,,,,1,,103,"J4"
+1511,"RZ_F",,,,,,,1,,103,"J5"
+1512,"Endolysin_RSP_R","AAACAAGCTTTAGCAGTTCGAAATGGAACC",,,,,,1,,103,"J6"
+1513,"RS_endo_Fp",,,,,,,1,,103,"J7"
+1514,"JKP2-F",,,,,,,1,,103,"J8"
+1515,"JKP2-R",,,,,,,1,,103,"J9"
+1516,"RLH_-F",,,,,,,1,,103,"J10"
+104402,"CP1-EP1-F",," primers for CP1P enolysin cassette",,,,,,,24,"A1"
+104403,"CP1-EP2-F",," primers for CP1P enolysin cassette",,,,,,,24,"B1"
+104404,"CP1-END-F","GCAAATGGGTCGCGGATCCGAATTCATGATAATTGGAAGTAGA"," primers for CP1P enolysin cassette",,,,,,,24,"C1"
+104405,"CP16-EP-F","GCAAATGGGTCGCGGATCCGAATTCatgagtttgatgaaaacg"," primers for CP16P enolysin cassette",,,,,,,24,"D1"
+104406,"CP16-END-F",," primers for CP16P enolysin cassette",,,,,,,24,"E2"
+104407,"CP16-Pf",,"detection primer for CP16P",,,,,,,24,"F1"
+104408,"Cp16-Pf-2",,,,,,,,,,
+104409,"WTF1_fwd",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"G1"
+104410,"WTF2_fwd",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"H1"
+104411,"WTF3_fwd",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"I1"
+104412,"WTF4_fwd",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"J1"
+104413,"RCDF3A_fwd",,"amplifies fragment 3 with out cytolysin",,,,,,,24,"A3"
+104414,"RIDF3_fwd",,"amplfies integarse from fragment 3 without  Integrase ",,,,,,,24,"B3"
+104415,"RF4_fwd",,"amplifies the fragment 4 of Cp1 phage",,,,,,,24,"C3"
+104416,"plcF",,"for MLST of C.perfringens",,,,,,,24,"D3"
+104417,"ddIAF",,"for MLST of C.perfringens",,,,,,,24,"E3"
+104418,"dutF",,"for MLST of C.perfringens",,,,,,,24,"F3"
+104419,"glpKF",,"for MLST of C.perfringens",,,,,,,24,"G3"
+104420,"gmkF",,"for MLST of C.perfringens",,,,,,,24,"H3"
+104421,"recAF",,"for MLST of C.perfringens",,,,,,,24,"I3"
+104422,"sodF",,"for MLST of C.perfringens",,,,,,,24,"J3"
+104423,"tpiF",,"for MLST of C.perfringens",,,,,,,24,"A5"
+104424,"CP1F1-FWD",,"amplify WT fragment of CP1 phage",,,,,,,24,"B5"
+104425,"CP1F2_FWD",,"amplify WT fragment of CP1 phage",,,,,,,24,"C5"
+104426,"CP1F3_FWD",,"amplify WT fragment of CP1 phage",,,,,,,24,"D5"
+104427,"CP1F4_FWD",,"amplify WT fragment of CP1 phage",,,,,,,24,"E5"
+104428,"CP1F3A_FWD",,"amplfy with out cytolysin",,,,,,,24,"F5"
+104429,"CP1F3B_FWD",,"amplify without integrase",,,,,,,24,"G5"
+104430,"pNickclosFor.",,"for detetction of pNickclos",,,,,,,24,"H5"
+104431,"CPB_F",,"primer for toxinotyping",,,,,,,24,"I5"
+104432,"ETX_F",,"primer for toxinotyping",,,,,,,24,"J5"
+104433,"IA_F",,"primer for toxinotyping",,,,,,,24,"A7"
+104434,"CPA_F",,"primer for toxinotyping",,,,,,,24,"B7"
+104435,"CPE_F",,"primer for toxinotyping",,,,,,,24,"C7"
+104436,"NetB_FP",,"primer for toxinotyping",,,,,,,24,"D7"
+104437,"NetB_F",,"primer for toxinotyping",,,,,,,24,"E7"
+104438,"TpeL-F",,"primer for toxinotyping",,,,,,,24,"F7"
+104439,"CP1F",,"detection of CP1 phage",,,,,,,24,"G7"
+104440,"gRNA1_F",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"H7"
+104441,"gRNA2_F",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"I7"
+104442,"CPHAs_F",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"J7"
+104443,"CP_HA2F",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"A9"
+104444,"CPA_Screening_F",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"B9"
+104445,"CP_HA1F",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"C9"
+104446,"Chl_F",,"for amplification of chloramphenicol gene",,,,,,,24,"D9"
+104447,"CP1-EP1-R",," primers for CP1P enolysin cassette",,,,,,,24,"A2"
+104448,"CP1-EP2-R",," primers for CP1P enolysin cassette",,,,,,,24,"B2"
+104449,"CP1-END-R",," primers for CP1P enolysin cassette",,,,,,,24,"C2"
+104450,"CP16-EP-R","GCAAATGGGTCGCGGATCCGAATTCatgataattggaagtaga"," primers for CP16P enolysin cassette",,,,,,,24,"D2"
+104451,"CP16-END-R",," primers for CP16P enolysin cassette",,,,,,,24,"E2"
+104452,"CP16-Pf-2",,"detection primer for CP16P",,,,,,,24,"F2"
+104453,"WTF1_rev",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"G2"
+104454,"Wtf2_rev",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"H2"
+104455,"WTF3_rev",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"I2"
+104456,"WTF4_rev",,"new primers for HiFi assembly of CP1 Pahge",,,,,,,24,"J2"
+104457,"RCDF3A_rev",,"amplifies fragment 3 with out cytolysin",,,,,,,24,"A4"
+104458,"RIDF3_rev",,"amplfies integarse from fragment 3 without  Integrase ",,,,,,,24,"B4"
+104459,"RF4_rev",,"amplifies the fragment 4 of Cp1 phage",,,,,,,24,"C4"
+104460,"plcR",,"for MLST of C.perfringens",,,,,,,24,"D4"
+104461,"ddIAR",,"for MLST of C.perfringens",,,,,,,24,"E4"
+104462,"dutR",,"for MLST of C.perfringens",,,,,,,24,"F4"
+104463,"glpKR",,"for MLST of C.perfringens",,,,,,,24,"G4"
+104464,"gmkR",,"for MLST of C.perfringens",,,,,,,24,"H4"
+104465,"recAR",,"for MLST of C.perfringens",,,,,,,24,"I4"
+104466,"sodR",,"for MLST of C.perfringens",,,,,,,24,"J4"
+104467,"tpiR",,"for MLST of C.perfringens",,,,,,,24,"A6"
+104468,"CP1F1_REV",,"amplify WT fragment of CP1 phage",,,,,,,24,"B6"
+104469,"CP1F2_REV",,"amplify WT fragment of CP1 phage",,,,,,,24,"C6"
+104470,"CP1F3_REV",,"amplify WT fragment of CP1 phage",,,,,,,24,"D6"
+104471,"CP1F4_REV",,"amplify WT fragment of CP1 phage",,,,,,,24,"E6"
+104472,"CP1F3A_REV",,"amplfy with out cytolysin",,,,,,,24,"F6"
+104473,"CP1F3B_REV",,"amplify without integrase",,,,,,,24,"G6"
+104474,"pNickclosRev.",,"for detetction of pNickclos",,,,,,,24,"H6"
+104475,"CPB_R",,"primer for toxinotyping",,,,,,,24,"I6"
+104476,"ETX_R",,"primer for toxinotyping",,,,,,,24,"J6"
+104477,"IA_R",,"primer for toxinotyping",,,,,,,24,"A8"
+104478,"CPA_R",,"primer for toxinotyping",,,,,,,24,"B8"
+104479,"CPE_R",,"primer for toxinotyping",,,,,,,24,"C8"
+104480,"NetB_RP",,"primer for toxinotyping",,,,,,,24,"D8"
+104481,"NetB_R",,"primer for toxinotyping",,,,,,,24,"E8"
+104482,"TpeL-R",,"primer for toxinotyping",,,,,,,24,"F8"
+104483,"CP1R",,"detection of CP1 phage",,,,,,,24,"G8"
+104484,"gRNA1_R",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"H8"
+104485,"gRNA2_R",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"I8"
+104486,"CPHAs_R",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"J8"
+104487,"CP_HA2R",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"A10"
+104488,"CPA_Screening_R",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"B10"
+104489,"CP-HA1R",,"for CRISPR/cas 9 based deletion of alpha toxin",,,,,,,24,"C10"
+104490,"Chl_R",,"for amplification of chloramphenicol gene",,,,,,,24,"D10"
+104491,"SMG-F","ACCATGTCTATCTCAGTGTGCT","Identification of M.Smegmatis",1,,,,1,,101,"D2"
+104492,"SMG-R","ACGCTCGAGGTCCACTACAA","Identification of M.Smegmatis",,,,,1,,101,"D3"
+104493,"R16-1 (F)","5'-CTTGTACACACCGCCCGTCA-3'","Lactobacillus Specific primer",1,,,,1,,101,"J2"

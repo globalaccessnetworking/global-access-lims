@@ -1,0 +1,32 @@
+[
+  {
+    "table_name": "ext_lab_projects",
+    "column_name": "lead_investigator_id",
+    "foreign_table_name": "Users",
+    "foreign_column_name": "id"
+  },
+  {
+    "table_name": "ext_lab_tasks",
+    "column_name": "project_id",
+    "foreign_table_name": "ext_lab_projects",
+    "foreign_column_name": "id"
+  },
+  {
+    "table_name": "ext_lab_tasks",
+    "column_name": "assigned_to_id",
+    "foreign_table_name": "Users",
+    "foreign_column_name": "id"
+  },
+  {
+    "table_name": "ext_experiment_comments",
+    "column_name": "experiment_id",
+    "foreign_table_name": "Experiments",
+    "foreign_column_name": "id"
+  },
+  {
+    "table_name": "ext_experiment_comments",
+    "column_name": "user_id",
+    "foreign_table_name": "Users",
+    "foreign_column_name": "id"
+  }
+]

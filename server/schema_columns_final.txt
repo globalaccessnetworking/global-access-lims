@@ -1,0 +1,4 @@
+
+STRAINS: ["id","ID","Specie","Strain_No","Wild_type_Recom","Glycerol_Stock_tube_label","GS_Freezer_Number","GS_Rack_Number","GS_Box_details","Genomic_DNA_Label","GD_Freezer_Number","GD_Rack_Number","GD_Box_detail","Antibiotic_sensitivity","Antibiotic_resistance","Detail_of_Bacterial_Strain","Genomic_DNA_tube_Label","Location_in_Box_GS","Loction_in_Box_PD"]
+PHAGES: ["id","ID","Bacteriophage_Name","WT_RECOMB","Host_Bacteria","Host_Range","Genome_Size","Plaque_Morphology","Characterization_details","Glycerol_Stock_tube_Label","GS_Freezer_Name","GS_Racks","GS_Box_details","_4C_Stock_detail","_4C_Fridge_Number","_4C_Rack_Number","Against_Species","DNA_Storage_Label","DNA_storage_Box_detail","GS_position_in_Box","_4C_Position_in_box"]
+STOCK: ["id","ID","Item_Name","Manufacturer","Pack_Size","Category","Available_Quantity","Location_Area","Location_shelf","Location_details","Location_Area_final","Cat__","Field1"]

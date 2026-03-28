@@ -1,0 +1,99 @@
+
+STORAGE LOCATIONS columns: [
+  {
+    "column_name": "id",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "freezer_name",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "rack",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "box",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "position",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "createdAt",
+    "data_type": "timestamp with time zone"
+  },
+  {
+    "column_name": "updatedAt",
+    "data_type": "timestamp with time zone"
+  }
+]
+
+BIOLOGICAL ASSETS columns: [
+  {
+    "column_name": "id",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "type",
+    "data_type": "USER-DEFINED"
+  },
+  {
+    "column_name": "species",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "strain_number",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "source",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "characteristics",
+    "data_type": "text"
+  },
+  {
+    "column_name": "storage_location_id",
+    "data_type": "integer"
+  },
+  {
+    "column_name": "createdAt",
+    "data_type": "timestamp with time zone"
+  },
+  {
+    "column_name": "updatedAt",
+    "data_type": "timestamp with time zone"
+  },
+  {
+    "column_name": "image_url",
+    "data_type": "character varying"
+  },
+  {
+    "column_name": "morphology",
+    "data_type": "json"
+  },
+  {
+    "column_name": "sequence_data",
+    "data_type": "text"
+  },
+  {
+    "column_name": "endotoxin_units",
+    "data_type": "double precision"
+  },
+  {
+    "column_name": "sterility_status",
+    "data_type": "USER-DEFINED"
+  },
+  {
+    "column_name": "last_validated_date",
+    "data_type": "date"
+  },
+  {
+    "column_name": "source_id",
+    "data_type": "integer"
+  }
+]
+        

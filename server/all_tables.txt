@@ -1,0 +1,131 @@
+AntibioticSensitivities
+AuditLogs
+AvailableAntibiotics
+BiologicalAssets
+Chemicals
+CustomForms
+Experiments
+GenericRecords
+InventoryStocks
+PhageHostInteractions
+PurchaseOrders
+SavedQueries
+Sources
+StorageLocations
+Users
+ext__80_freezer_stoage_details_final
+ext__80_freezer_storage_details
+ext_antibiotics
+ext_available_antibiotics_discs
+ext_bacterial_species
+ext_bacterial_strains
+ext_bacterial_strains_entry_form
+ext_bacteriophage_names
+ext_bacteriophages
+ext_chemical_storage_area_details
+ext_cloninig_methods
+ext_equipment_logs
+ext_find_duplicates_for_primers_details
+ext_gene_source
+ext_lab_stock
+ext_location_detail_box_name
+ext_location_detail_freezer
+ext_location_detail_rack
+ext_lytic_lysogenic
+ext_manufacturers
+ext_plasmid_vectors
+ext_plasmids
+ext_primer_binding_organism_type
+ext_primers_details
+ext_query_for_bacterial_strains
+ext_query_for_plasmids
+ext_stock_category
+ext_wild_type_recomb
+phage_host_matrix
+system_audit_logs
+TABLE: PhageHostInteractions
+id (integer), phage_id (integer), host_id (integer), sensitivity (USER-DEFINED), createdAt (timestamp with time zone), updatedAt (timestamp with time zone)
+
+TABLE: ext__80_freezer_stoage_details_final
+id (integer), ID (text), Location_detail (text), A (text), B (text), C (text), D (text), E (text), F (text), G (text), H (text), I (text), J (text), K (text), L (text), M (text), N (text), O (text)
+
+TABLE: ext__80_freezer_storage_details
+id (integer), ID (text), Location (text), A (text), B (text), c (text), D (text), E (text), F (text), G (text), H (text), I (text), J (text), K (text), L (text), M (text), N (text), O (text)
+
+TABLE: ext_antibiotics
+id (integer), ID (text), Complete_Name (text), Abbreviation (text), Quantity (text)
+
+TABLE: ext_available_antibiotics_discs
+id (integer), ID (text), Antibiotic_Disc (text), Quntity (text)
+
+TABLE: ext_bacterial_species
+id (integer), ID (text), Species (text)
+
+TABLE: ext_bacterial_strains
+id (integer), ID (text), Specie (text), Strain_No (text), Wild_type_Recom (text), Glycerol_Stock_tube_label (text), GS_Freezer_Number (text), GS_Rack_Number (text), GS_Box_details (text), Genomic_DNA_Label (text), GD_Freezer_Number (text), GD_Rack_Number (text), GD_Box_detail (text), Antibiotic_sensitivity (text), Antibiotic_resistance (text), Detail_of_Bacterial_Strain (text), Genomic_DNA_tube_Label (text), Location_in_Box_GS (text), Loction_in_Box_PD (text)
+
+TABLE: ext_bacterial_strains_entry_form
+id (integer), _______________________________________________________________ (text)
+
+TABLE: ext_bacteriophage_names
+id (integer), ID (text), Bacteriophage_Name (text), Host_Name (text), Lytic_Lysogenic (text), Wild_type_Recombinant (text)
+
+TABLE: ext_bacteriophages
+id (integer), ID (text), Bacteriophage_Name (text), WT_RECOMB (text), Host_Bacteria (text), Host_Range (text), Genome_Size (text), Plaque_Morphology (text), Characterization_details (text), Glycerol_Stock_tube_Label (text), GS_Freezer_Name (text), GS_Racks (text), GS_Box_details (text), _4C_Stock_detail (text), _4C_Fridge_Number (text), _4C_Rack_Number (text), Against_Species (text), DNA_Storage_Label (text), DNA_storage_Box_detail (text), GS_position_in_Box (text), _4C_Position_in_box (text)
+
+TABLE: ext_chemical_storage_area_details
+id (integer), ID (text), Storage_Area (text), Field1 (text)
+
+TABLE: ext_cloninig_methods
+id (integer), ID (text), Cloninig_Method (text)
+
+TABLE: ext_equipment_logs
+id (integer), equipment_name (character varying), serial_number (character varying), last_calibration_date (date), next_due_date (date), status (USER-DEFINED), notes (text), createdAt (timestamp with time zone), updatedAt (timestamp with time zone)
+
+TABLE: ext_find_duplicates_for_primers_details
+id (integer), Primer_Name (text), ID (text), DNA_sequence (text), Purpose (text), Freezer (text), Box_detail (text), Location_in_Box (text)
+
+TABLE: ext_gene_source
+id (integer), ID (text), Donar_DNA_detail (text)
+
+TABLE: ext_lab_stock
+id (integer), ID (text), Item_Name (text), Manufacturer (text), Pack_Size (text), Category (text), Available_Quantity (text), Location_Area (text), Location_shelf (text), Location_details (text), Location_Area_final (text), Cat__ (text), Field1 (text)
+
+TABLE: ext_location_detail_box_name
+id (integer), ID (text), Box_detail (text)
+
+TABLE: ext_location_detail_freezer
+id (integer), ID (text), Freezer (text)
+
+TABLE: ext_location_detail_rack
+id (integer), ID (text), Rack_No (text), Consumeable_location_rack (text)
+
+TABLE: ext_lytic_lysogenic
+id (integer), ID (text), Type (text)
+
+TABLE: ext_manufacturers
+id (integer), ID (text), Manufacturers (text)
+
+TABLE: ext_plasmid_vectors
+id (integer), ID (text), Plasmid_Name (text)
+
+TABLE: ext_plasmids
+id (integer), ID (text), Plasmid_Name (text), Plasmid_Backbone (text), Gene_Source (text), Cloning_Method (text), Antibiotic_Marker (text), Cloned_Gene_Sequence (text), Cloned_Protein_Sequence (text), Glycerol_Stock_Tube_Label (text), Host_Bacteria (text), Activity_Shown_Against (text), Protein_Purification_status (text), Expression_Picture (text), Purified_Protein_Picture (text), GLycerol_Stock_Freezer (text), Glycerol_Stock_Rack (text), Glycerol_Stock_Box (text), PLasmid_DNA_Label (text), DNA_Store_Freezer (text), DNA_Store_Rack (text), DNA_Store_Box_Detail (text), Location_in_Box_GS (text)
+
+TABLE: ext_primer_binding_organism_type
+id (integer), ID (text), Field1 (text)
+
+TABLE: ext_primers_details
+id (integer), ID (text), Primer_Name (text), DNA_sequence (text), Purpose (text), Binds_with_Phage_Bacteria_Plasmid (text), Phage (text), Bacteria (text), Plasmid (text), Freezer (text), Freezer_Shelve (text), Box_detail (text), Location_in_Box (text)
+
+TABLE: ext_query_for_bacterial_strains
+id (integer), Specie (text), Strain_No (text), Wild_type_Recom (text)
+
+TABLE: ext_query_for_plasmids
+id (integer), Plasmid_Name (text), Plasmid_Backbone (text), Gene_Source (text), Antibiotic_Marker (text), Host_Bacteria (text), Protein_Purification_status (text)
+
+TABLE: ext_stock_category
+id (integer), ID (text), Category (text)
+
+TABLE: ext_wild_type_recomb
+id (integer), ID (text), Field1 (text)

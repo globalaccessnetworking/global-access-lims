@@ -1,0 +1,6 @@
+DB Connected.
+--- Bacterial Strains ---
+--- Lab Stock ---
+[PASS] ext_lab_stock.Item_Name
+[PASS] ext_lab_stock.Available_Quantity
+--- Bacteriophages ---

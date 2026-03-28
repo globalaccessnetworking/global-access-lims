@@ -1,0 +1,9 @@
+@echo off
+echo Stopping Node processes...
+taskkill /F /IM node.exe
+timeout /t 2
+echo Starting Backend...
+start "LIMS Backend" node d:\Bacteriophage_LIMS\server\server.js
+echo Starting Frontend...
+start "LIMS Frontend" node d:\Bacteriophage_LIMS\client\node_modules\vite\bin\vite.js --port 5174 --strictPort
+echo Done.

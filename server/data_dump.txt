@@ -1,0 +1,55 @@
+
+STRAINS: [
+  {
+    "id": 1,
+    "Specie": "2",
+    "Strain_No": "PA 13",
+    "Detail_of_Bacterial_Strain": "NS"
+  },
+  {
+    "id": 2,
+    "Specie": "2",
+    "Strain_No": "PA 35",
+    "Detail_of_Bacterial_Strain": "NS"
+  },
+  {
+    "id": 3,
+    "Specie": "2",
+    "Strain_No": "PA 26",
+    "Detail_of_Bacterial_Strain": "NS"
+  },
+  {
+    "id": 4,
+    "Specie": "2",
+    "Strain_No": "PA33",
+    "Detail_of_Bacterial_Strain": "NS"
+  },
+  {
+    "id": 5,
+    "Specie": "2",
+    "Strain_No": "PA31",
+    "Detail_of_Bacterial_Strain": "NS"
+  }
+]
+PHAGES: [
+  {
+    "id": 1,
+    "Bacteriophage_Name": "52"
+  },
+  {
+    "id": 2,
+    "Bacteriophage_Name": "1"
+  },
+  {
+    "id": 3,
+    "Bacteriophage_Name": "1"
+  },
+  {
+    "id": 4,
+    "Bacteriophage_Name": "1"
+  },
+  {
+    "id": 5,
+    "Bacteriophage_Name": "1"
+  }
+]

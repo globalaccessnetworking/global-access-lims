@@ -1,0 +1,382 @@
+"Primer Name","ID","DNA sequence","Purpose","Freezer","Box detail","Location in Box"
+"2ndgRNA-junction_r",714,"gttccatgttttagaAGCCGTTACAACTTACCTC",,,,
+"2ndgRNA-junction_r",836,"gttccatgttttagaaagtatattttagatgaagattatttcttaataactaaaaatatg",,,,
+"7kb-SGPC-Fp",695,"TCCGTGGAGATATAAGTGGGCA",,1,99,"G3"
+"7kb-SGPC-Fp",98,"TCCGTGGAGATATAAGTGGGCA","7kb cassette  for SGPC insertion",1,104,"B4"
+"CasSA_spvbcasset_RP",1407,"CTTTAGTTTCTCACTTTGTTCACTTGACATAGAGTTTGCAAAATATACAGGGGATTA",,1,101,"H7"
+"CasSA_spvbcasset_RP",980,"CAAGTAACAATATAATTGTAGCAAAATTTCAGTCACCTCCTAGCTGACTCAA",,,,
+"Cassette-1gRNA-F",845,"taagttgtaacggctTCTAAAACATGGAACTCAACAAGTC",,,,
+"Cassette-1gRNA-F",717,"taagttgtaacggctTCTAAAACATGGAACTCAACAAGTC",,,,
+"Chl_F",104446,,"for amplification of chloramphenicol gene",,24,"D9"
+"Chl_F",933,"CAGTCTAGACCCGGGTGATCGGCACGTAAGAGGTTCCAA",,,,
+"Chl_R",934,"GTCACATTAGACTTGGAACTTTTGCTTATGCATTACGCCCCGCCCTGCCACTCATC",,,,
+"Chl_R",104490,,"for amplification of chloramphenicol gene",,24,"D10"
+"CP_HA1F",104445,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"C9"
+"CP_HA1F",988,"ATTGTGAGCGGATAACAATTCCCCTCTAGATGCATCAGCAAAAGTTCCAACTC",,,,
+"CP_HA2F",104443,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"A9"
+"CP_HA2F",990,"GTGCAAGTGTTAATCGTTATCAATTGGTTTTGGTGGTATTTAC",,,,
+"CP_HA2R",104487,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"A10"
+"CP_HA2R",991,"ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGCAGAATATTCAAAGGTTTTTGGTG",,,,
+"CP16-END-R",104451,," primers for CP16P enolysin cassette",,24,"E2"
+"CP16-end-R",749,"TCAGTGGTGGTGGTGGTGGTGCTCGAGctatatcttttcagtaaa",,,,
+"CP16-EP-R",104450,"GCAAATGGGTCGCGGATCCGAATTCatgataattggaagtaga"," primers for CP16P enolysin cassette",,24,"D2"
+"CP16-EP-R",753,"TCAGTGGTGGTGGTGGTGGTGCTCGAGttaattacaattattgcaacg",,,,
+"Cp16-Pf-2",104408,,,,,
+"CP16-Pf-2",104452,,"detection primer for CP16P",,24,"F2"
+"CP1-END-F",104404,"GCAAATGGGTCGCGGATCCGAATTCATGATAATTGGAAGTAGA"," primers for CP1P enolysin cassette",,24,"C1"
+"CP1-END-F",758,"GCAAATGGGTCGCGGATCCGAATTCATGATAATTGGAAGTAGA"," primers for CP1P enolysin cassette",1,24,"C1"
+"CP1-END-R",104449,," primers for CP1P enolysin cassette",,24,"C2"
+"CP1-END-R",759,"TCAGTGGTGGTGGTGGTGGTGCTCGAGCTATATCTTTTCAGTAAA",,,,
+"CP1-EP1-R",756,"TCAGTGGTGGTGGTGGTGGTGCTCGAGTTAATAAGGTTGTTTACA",,,,
+"CP1-EP1-R",104447,," primers for CP1P enolysin cassette",,24,"A2"
+"CP1-EP2-F",104403,," primers for CP1P enolysin cassette",,24,"B1"
+"CP1-EP2-F",751,"GCAAATGGGTCGCGGATCCGAATTCATGAAAACGGAATTTGTA"," primers for CP1P enolysin cassette",1,24,"B1"
+"CP1-EP2-R",104448,," primers for CP1P enolysin cassette",,24,"B2"
+"CP1-EP2-R",757,"TCAGTGGTGGTGGTGGTGGTGCTCGAGTTAATTACAATTATTGCAACG",,,,
+"CP1F1_REV",896,"TTTGTCCATAAATACCTCCTATTTGTTAAGTGTTACGC","amplify WT fragment of CP1 phage",1,24,"B6"
+"CP1F1_REV",104468,,"amplify WT fragment of CP1 phage",,24,"B6"
+"CP1F1-FWD",895,"GTATAAAGGAGAATAGGAATGAGATTAAGTGAAATGAATAATG","amplify WT fragment of CP1 phage",1,24,"B5"
+"CP1F1-FWD",104424,,"amplify WT fragment of CP1 phage",,24,"B5"
+"CP1F2_FWD",897,"TAACACTTAACAAATAGGAGGTATTTATGGACAAAGATAAG","amplify WT fragment of CP1 phage",1,24,"C5"
+"CP1F2_FWD",104425,,"amplify WT fragment of CP1 phage",,24,"C5"
+"CP1F2_REV",104469,,"amplify WT fragment of CP1 phage",,24,"C6"
+"CP1F2_REV",898,"TTAAGCACGCTTTACTATCACTCATTCAATTCAACCTC","amplify WT fragment of CP1 phage",1,24,"C6"
+"CP1F3_FWD",104426,,"amplify WT fragment of CP1 phage",,24,"D5"
+"CP1F3_FWD",899,"GTTGAATTGAATGAGTGATAGTAAAGCGTGCTTAATAAC","amplify WT fragment of CP1 phage",1,24,"D5"
+"CP1F3_REV",900,"GAGGATTGCTCCCCTTCCTAAAATCCAAACCAATTAGG","amplify WT fragment of CP1 phage",1,24,"D6"
+"CP1F3_REV",104470,,"amplify WT fragment of CP1 phage",,24,"D6"
+"CP1F3A_FWD",104428,,"amplfy with out cytolysin",,24,"F5"
+"CP1F3A_FWD",903,"TAGTAAAGCGTGCTTAATAAC",,,,
+"CP1F3A_REV",904,"ATTGTCAATAGTTATCTTAAACCCTCCTAATCCATTC",,,,
+"CP1F3A_REV",104472,,"amplfy with out cytolysin",,24,"F6"
+"CP1F3B_FWD",905,"TTAGGAGGGTTTAAGATAACTATTGACAATATAATTAAGTATGTTATAATTAAG",,,,
+"CP1F3B_FWD",104429,,"amplify without integrase",,24,"G5"
+"CP1F3B_REV",104473,,"amplify without integrase",,24,"G6"
+"CP1F3B_REV",906,"CTAAAATCCAAACCAATTAGG",,,,
+"CP1F4_FWD",901,"AATTGGTTTGGATTTTAGGAAGGGGAGCAATCCTCTTC","amplify WT fragment of CP1 phage",1,24,"E5"
+"CP1F4_FWD",104427,,"amplify WT fragment of CP1 phage",,24,"E5"
+"CP1F4_REV",104471,,"amplify WT fragment of CP1 phage",,24,"E6"
+"CP1F4_REV",902,"ATTTCACTTAATCTCATTCCTATTCTCCTTTATACTAAATAAATTTCAATTG","amplify WT fragment of CP1 phage",1,24,"E6"
+"CPA_Screening_F",104444,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"B9"
+"CPA_Screening_F",957,"AGATTTTATTATCCCCTTTGCCCT",,,,
+"CPA_Screening_R",104488,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"B10"
+"CPA_Screening_R",958,"AGATTTTATTATCCCCTTTGCCCT",,,,
+"dutF",852,"TTAAGTATTTTGATAACGCAAC","for MLST of C.perfringens",1,24,"F3"
+"dutF",104418,,"for MLST of C.perfringens",,24,"F3"
+"dutR",104462,,"for MLST of C.perfringens",,24,"F4"
+"dutR",853,"CTGTAGTACCAAATCCACCACG","for MLST of C.perfringens",1,24,"F4"
+"ECO18-R",1387,"AGAAGCATTGAGCTGTGGAC",,1,101,"F7"
+"ECO18-R",1504,"AGAAGCATTGAGCTGTGGAC",,1,103,"I8"
+"ECO1-R",1388,"CATTAGGTGTCTCTGGCACG",,1,101,"F8"
+"ECO1-R",1506,"CATTAGGTGTCTCTGGCACG",,1,103,"I10"
+"ECO2-R",1371,"GATAAGGAATGCACATCGCC",,1,101,"E1"
+"ECO2-R",1505,"GATAAGGAATGCACATCGCC",,1,103,"I9"
+"ECO-F",1372,"CGATGTTGAGCGCAAGGTTG",,1,101,"E2"
+"ECO-F",1496,"CGATGTTGAGCGCAAGGTTG",,1,103,"H10"
+"FH-Tail-Scr ",384,"GGTTGCATTTGATCCCCAAG",,,,
+"FH-Tail-Scr",383,"GTCGGATGGGACAACTAAAG",,,,
+"fimCF",1493,,,1,103,"H7"
+"fimCF",599,"GCCGATGGTGTAAAGGATGG",,,,
+"fimCR",1492,,,1,103,"H6"
+"fimCR",600,"GGGTAAGTGCGCCATAATCA",,,,
+"Frag3_CasSA_Rp",978,"TAATCCCCTGTATATTTTGCAAACTCTATGTCAAGTGAACAAAGTGAGAAACTAAAG",,,,
+"Frag3_CasSA_RP",1391,,,1,101,"G1"
+"Frag4_CasSA_Fp",1402,,,1,101,"H2"
+"Frag4_CasSA_Fp",981,"ATTGATTTGAGTCAGCTAGGAGGTGACTGAAATTTTGCTACAATTATATTGTTACTTG",,,,
+"F-Ssau-probe-T",168,"TGTGGGTAGCGTGTTTCTTCAGGT","Real time amplification of region from Salomnella gallinarum SSau gene",,22,"F4"
+"F-Ssau-probe-T",724,"TGTGGGTAGCGTGTTTCTTCAGGT",,,,
+"F-Unique_SG_Probe-T",721,"AGTTTCAGTGATGCCCTGCTGGAT",,,,
+"F-Unique_SG_Probe-T",165,"AGTTTCAGTGATGCCCTGCTGGAT","Real time amplification of Salomnella gallinarum unique region",,22,"F1"
+"fyuAF",1377,,,1,101,"E7"
+"fyuAF",607," ATGTGAAACTGCGTCTGGCG",,,,
+"fyuAR",1379,,,1,101,"E9"
+"fyuAR",608," CGCAGTAGGCACGATGTTGTA",,,,
+"glpKF",104419,,"for MLST of C.perfringens",,24,"G3"
+"glpKF",854,"TGGGTTGAGCATGATCCAATGG","for MLST of C.perfringens",1,24,"G3"
+"glpKR",104463,,"for MLST of C.perfringens",,24,"G4"
+"glpKR",855,"CACCTTTTGCTCCAAGGTTTGC","for MLST of C.perfringens",1,24,"G4"
+"gmKF",856,"TAAGGGAACTATTTGTAAAGCC","for MLST of C.perfringens",1,24,"H3"
+"gmkF",104420,,"for MLST of C.perfringens",,24,"H3"
+"gmkR",104464,,"for MLST of C.perfringens",,24,"H4"
+"gmKR",857,"TACTGCATCTTCTACATTATCG","for MLST of C.perfringens",1,24,"H4"
+"gRNA1_F",104440,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"H7"
+"gRNA1_F",984,"AAACTTATTCTATACCTGACACAGG",,,,
+"gRNA1_R",104484,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"H8"
+"gRNA1_R",985,"CTGTGTCAGGTATAGAATAACAAAA",,,,
+"gRNA1R",1365,,,1,101,"D5"
+"gRNA1R",577,"AAAACCCGTTACCGATAATTTCGCA",,,,
+"gRNA2_F",986,"AAACGCTAGATATGAATGGCAAAGG",,,,
+"gRNA2_F",104441,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"I7"
+"gRNA2_R",104485,,"for CRISPR/cas 9 based deletion of alpha toxin",,24,"I8"
+"gRNA2_R",987,"CTTTGCCATTCATATCTAGCCAAAA",,,,
+"gRNA2R",1366,,,1,101,"D6"
+"gRNA2R",579,"AAAACCGCCAATTGCTCGAAATAGT",,,,
+"gRNA-spvbCas9F",907,"GGTGCGGAGATGAAGCGTTATGCTAAGTAAATGGATAAGAAATACTCAATAGGCTT",,,,
+"gRNA-spvbCas9F",1430,,,1,101,"J10"
+"gRNA-spvbCas9R",908,"GCAAATCCCGCCAGTTCCACTATAATCGGTGTTCTGGGACCATTCAAAACAGCATAG",,,,
+"gRNA-spvbCas9R",1429,,,1,101,"J9"
+"gRNA-spvb-casst_Cas9-F",1408,,,1,101,"H8"
+"gRNA-spvb-casst_Cas9-F",927,"GGTGCGGAGATGAAGCGTTATGCTAAGTAAATGGATAAGAAATACTCAATAGGCTT",,,,
+"gRNA-spvb-casst_Cas9-R",1413,,,1,101,"I3"
+"gRNA-spvb-casst_Cas9-R",928,"GCAAATCCCGCCAGTTCCACTATAATCGGTGTTCTGGGACCATTCAAAACAGCATAG",,,,
+"HA1-F SSAU-Amp",775,"AGCGGTATCCTGTTGAATTATACc",,,,
+"HA1-F SSAU-Amp",50,"AGCGGTATCCTGTTGAATTATACc","homology arm 1 for ampicillin inssertion in sg18/sssau region",1,23,"E2"
+"HA1-R- SSAU-Amp",51,"gggttccgcgTTCTTTTCTGTAGGCTGTTC","homology arm 1 for ampicillin inssertion in sg18/sssau region",1,23,"E3"
+"HA1-R- SSAU-Amp",776,"gggttccgcgTTCTTTTCTGTAGGCTGTTC",,,,
+"HA1-Rp/HPs/1kb",829,"CTTGGTATCCGTATAATGTTTAAAATCCTCTATCTCGTTTCGTTAAAGTAA                      ",,,,
+"HA1-Rp/HPs/1kb",45,"CTTGGTATCCGTATAATGTTTAAAATCCTCTATCTCGTTTCGTTAAAGTAA                      ","homology arm for 1 kb HP deletion",1,23,"J5"
+"HA1-SGP13-Fp",764,"CGTGTAAGTTGTCTCTTGTAACttc",,,,
+"HA1-SGP13-Fp",76,"CGTGTAAGTTGTCTCTTGTAACttc","Homology arm sgp 13 for helysin insertion",1,23,"F4"
+"HA1-SGP13-Rp",77,"tacgtgccgatcaTTTTTCACCGAAAGCGGTC","homology arm 1 sgp13 for helysin insertion",1,23,"F5"
+"HA1-SGP13-Rp",765,"tacgtgccgatcaTTTTTCACCGAAAGCGGTC",,,,
+"HA2-Fp/HPs/1kb",830,"TTACTTTAACGAAACGAGATAGAGGATTTTAAACATTATACGGATACCAAG",,,,
+"HA2-Fp/HPs/1kb",46,"TTACTTTAACGAAACGAGATAGAGGATTTTAAACATTATACGGATACCAAG","homology arm for 1kbb HP deletion",1,23,"J6"
+"HA2-F-SSAU-Amp",54,"gcattggtaaGAGATAAAATTCCTGAAACGTTATTTGAACCCG","Homology arm 2 for ampiciilin insertion sg18/ssau",1,23,"E6"
+"HA2-F-SSAU-Amp",779,"gcattggtaaGAGATAAAATTCCTGAAACGTTATTTGAACCCG",,,,
+"HA2-Rp/HPs/1kb",831,"TTATGACTCGAGCGCCTTTCACGCAAATGTGACGAATT",,,,
+"HA2-Rp/HPs/1kb",47,"TTATGACTCGAGCGCCTTTCACGCAAATGTGACGAATT","homology arm for 1 kb HP deletion",1,23,"J7"
+"HA2-R-SSAU-Amp",55,"TGCTGCTcGCTGCGGTTTACCAGA","Homology arm 2 for ampiciilin insertion sg18/ssau",1,23,"E7"
+"HA2-R-SSAU-Amp",780,"TGCTGCTcGCTGCGGTTTACCAGA",,,,
+"HA2-SGP13-Fp",82,"ttgctgtggtagTGCGAGCACGATTGGGCC","homology arm 2 for helysin insertion in sgp13",1,23,"G2"
+"HA2-SGP13-Fp",770,"ttgctgtggtagTGCGAGCACGATTGGGCC",,,,
+"HA2-SGP13-Rp",83,"GCAATTGTTATAACCGAGCTTAACG","homology arm 2 for helysin insertion in sgp13",1,23,"G3"
+"HA2-SGP13-Rp",771,"GCAATTGTTATAACCGAGCTTAACG",,,,
+"HA2-SGPC-Fp",97,"TTTCACGCAAATGTGACGAATTGA","HA2 Homology arm 2-SGPC for cas9 insertion",1,104,"B2"
+"HA2-SGPC-Fp",693,"gacttcaggtGAATTTTAAATATTATACGGATACCAAGATTTAC",,,,
+"HElysin-SGP13-Fp",768,"taaggaagctaaaATGATGCTCGATACCGCC",,,,
+"HElysin-SGP13-Fp",80,"taaggaagctaaaATGATGCTCGATACCGCC","helysin cassette for insertion in sgp13",1,23,"F8"
+"hifi HelYSIN Fp-pet22",84,"GTTTAACTTTAAGAAGGAGATATACATATGCGTGTAAGTTGTCTCTTGTAACTTC","helysin cassette for insertion in sgp13 with hifi overlap of pet22b ",1,23,"G4"
+"hifi HelYSIN Fp-pet22",732,"GTTTAACTTTAAGAAGGAGATATACATATGCGTGTAAGTTGTCTCTTGTAACTTC",,,,
+"hifi HelYSIN Rp-pet22",85,"ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGGCAATTGTTATAACCGAGCTTAACG","helysin cassette for insertion in sgp13 with hifi overlap of pet22b",1,23,"G5"
+"hifi HelYSIN Rp-pet22",733,"ATCTCAGTGGTGGTGGTGGTGGTGCTCGAGGCAATTGTTATAACCGAGCTTAACG",,,,
+"Hifi-7kb-new-Rp",105,"AGTGGTGGTGGTGGTGGTGCTCGAGttaattagcgaggtgacgatgatt","Hifi 7kb new full cassette primer",1,104,
+"Hifi-7kb-new-Rp",598,"AGTGGTGGTGGTGGTGGTGCTCGAGttaattagcgaggtgacgatgatt",,,,
+"Hp_5_F_Xho1",1465,,,1,103,"E9"
+"Hp_5_F_Xho1",1452,,,1,103,"D6"
+"ibeAF",1485,,,1,103,"G9"
+"ibeAF",623,"TGGCAATAGCAGCGGCAGTC",,,,
+"ibeAR",624,"CTGCCTGTTCAAGCATTGCA",,,,
+"ibeAR",1482,,,1,103,"G6"
+"ibeBF",625," GTTCTCACTCAGCCAGAACG",,,,
+"ibeBF",1483,,,1,103,"G7"
+"ibeBR",626,"CATCCAGCACTTCCAGATAAC",,,,
+"ibeBR",1484,,,1,103,"G8"
+"iroNF",1487,,,1,103,"H1"
+"iroNF",627," CCTCCGACGATGATAATGACG",,,,
+"iroNR",628,"GATACCATTATGCGTAATGCC",,,,
+"iroNR",1486,,,1,103,"G10"
+"irp2F",1363,,,1,101,"D3"
+"irp2F",609," CTGATGAACTCACTCGCTATCC",,,,
+"irp2R",1380,,,1,101,"E10"
+"irp2R",610," AGCATCTCCTGGCTCTGCTC",,,,
+"issF",615," ATCACATAGGATTCTGCCG",,,,
+"issF",1503,,,1,103,"I7"
+"issR",1502,,,1,103,"I6"
+"issR",616," CAGCGGAGTATAGATGCCA",,,,
+"iucDF",611,"GAAGCATATGACACAATCCTG",,,,
+"iucDF",1499,,,1,103,"I3"
+"iucDR",1498,,,1,103,"I2"
+"iucDR",612,"CAGAGTGAAGTCATCACGCAC",,,,
+"JKP2-F",1514,,,1,103,"J8"
+"JKP2-F",651,"CGGAGATGATTAATATGGCG",,,,
+"JKP2-R",1515,,,1,103,"J9"
+"JKP2-R",652,"ACAGGCTCTTCCCG",,,,
+"lambda Rp",57,"cgctcatgtcCTGTCTGCTTACATAAACAG","lambda red Rp for construction of lambda without pcas9",1,23,"D4"
+"lambda Rp",782,"cgctcatgtcCTGTCTGCTTACATAAACAG",,,,
+"matF",1378,,,1,101,"E8"
+"matF",605," CGACCTGGTCAGCAACAGCC",,,,
+"matR",1376,,,1,101,"E6"
+"matR",606,"TCCACGCCCACATTCAGTGT",,,,
+"neuF",1495,,,1,103,"H9"
+"neuF",617,"GGTGGTACATTCCGGGATGTC",,,,
+"neuR",618,"CATGGTGGTGAAAAGACATTAGC",,,,
+"neuR",1494,,,1,103,"H8"
+"ompAF",619,"AGCTATCGCGATTGCAGTG",,,,
+"ompAF",1489,,,1,103,"H3"
+"ompAR",1488,,,1,103,"H2"
+"ompAR",620," GGTGTTGCCAGTAACCGG",,,,
+"papCF",1491,,,1,103,"H5"
+"papCF",601,"GCTGATATCACGCAGTCAGT",,,,
+"papCR",602,"GTCAACAAGAAGACGTGTTCC",,,,
+"papCR",1490,,,1,103,"H4"
+"Pho-E det-F",641,"ATTCAAGTAGTAACCAAACT",,,,
+"Pho-E det-F",177,"ATTCAAGTAGTAACCAAACT","Amplification of Pho-E signal peptide after insertion in SGP-9",,22,"G3"
+"Pho-E det-R",642,"CCCTTACCCTGATTAGTACC",,,,
+"Pho-E det-R",178,"CCCTTACCCTGATTAGTACC","Amplification of Pho-E signal peptide after insertion in SGP-9",,22,"G4"
+"PhoE_F",639,"attcaagtagtaaccaaacttttctttaaattaacataaggagattcaacATGAAGAAATCTACGTTGGCACTTGTCGTGATGGG",,,,
+"PhoE_F",175,"attcaagtagtaaccaaacttttctttaaattaacataaggagattcaacATGAAGAAATCTACGTTGGCACTTGTCGTGATGGG","Amplification of Pho-E signal peptide template with over hangs of SGP-9",,22,"G1"
+"PhoE_R",640,"cccttaccctgattagtaccaatttgctgtccgccttgaatgttagccatAGCCTGAACAGACGCACTTGCCACGATGCCCATCACG",,,,
+"PhoE_R",176,"cccttaccctgattagtaccaatttgctgtccgccttgaatgttagccatAGCCTGAACAGACGCACTTGCCACGATGCCCATCACG","Amplification of Pho-E signal peptide template with over hangs of SGP-9",,22,"G2"
+"plcF",104416,,"for MLST of C.perfringens",,24,"D3"
+"plcF",848,"ATATGAATGGCAAAGAGGAAAC","for MLST of C.perfringens",1,24,"D3"
+"plcR",104460,,"for MLST of C.perfringens",,24,"D4"
+"plcR",849,"AGTTTTTCCATCCTTTGTTTTG","for MLST of C.perfringens",1,24,"D4"
+"R5_sgpc",922,"ACCTTAAAGATACTTATTCGGAGATTGAATTTGGCGCTAGTAATCCACTATACCCG",,,,
+"R5_sgpc",1410,,,1,101,"H10"
+"RCDF3A_fwd ",816,"AATTAGCAGTTGCTTTAGCG ","amplifies fragment 3 with auto-cytolysin",1,24,"A3"
+"RCDF3A_fwd",104413,,"amplifies fragment 3 with out cytolysin",,24,"A3"
+"RCDF3A_rev ",817,"GCTATCCCAACAACCTTAAACCCTCCTAATCCATTC ","amplifies fragment 3 with auto-cytolysin",1,24,"A4"
+"RCDF3A_rev",104457,,"amplifies fragment 3 with out cytolysin",,24,"A4"
+"recAF",104421,,"for MLST of C.perfringens",,24,"I3"
+"recAF",858,"GCTATAGATGTTTTAGTTGTGG","for MLST of C.perfringens",1,24,"I3"
+"recAR",859,"CTCCATATGAGAACCAAGCTCC","for MLST of C.perfringens",1,24,"I4"
+"recAR",104465,,"for MLST of C.perfringens",,24,"I4"
+"RF4_fwd ",820,"GGCGGAACAGTTCCGTGAGGAGAGGAATACCTAAC","amplifies the fragment 4 of Cp1 phage",1,24,"C3"
+"RF4_fwd",104415,,"amplifies the fragment 4 of Cp1 phage",,24,"C3"
+"RF4_rev",104459,,"amplifies the fragment 4 of Cp1 phage",,24,"C4"
+"RF4_rev ",821,"CTTGCTTGTACAACGCCATATAAAC ","amplifies the fragment 4 of Cp1 phage",1,24,"C4"
+"RIDF3_fwd",104414,,"amplfies integarse from fragment 3 without  Integrase ",,24,"B3"
+"RIDF3_fwd ",818,"ATTAGGAGGGTTTAAGGTTGTTGGGATAGCTCAAC ","amplfies integarse from fragment 3 without  Integrase",1,24,"B3"
+"RIDF3_rev",104458,,"amplfies integarse from fragment 3 without  Integrase ",,24,"B4"
+"RIDF3_rev ",819,"GTATTCCTCTCCTCACGGAACTGTTCCGCCATCTTTTAAATAC ","amplfies integarse from fragment 3 without  Integrase",1,24,"B4"
+"RL-HP_11_F",1331,,,1,101,"A1"
+"RL-HP_11_F",1330,,,1,101,"A1"
+"RS63-11F",593,"ATGCCGTACAAAACCAGAGAAC",,,,
+"RS63-11F",1434,,,1,103,"B4"
+"RS63-11R",1432,,,1,103,"B2"
+"RS63-11R",594,"CTATTCCTCGTCCGCCCA",,,,
+"RT-r-gRNA-SGPC-F",529,"CCTGTATCCCCAAAGCTTAAC",,,,
+"RT-r-gRNA-SGPC-F",528,"AGCTTATCGATGATAAGCTGTCA",,,,
+"RzR",1508,,,1,103,"J2"
+"RzR",589,"ATGCTCGAGTCAATCAGTGGGTGTTCGA",,,,
+"SCr-CLO-F",288,"TCGCA GAATTC CACCCGCGATAGCGTTATTA",,,,
+"SCr-CLO-F",289,"TAGTCCTCGAG CACCGGCCTCAATGATACTAC",,,,
+"Screening-Fp/HPs/1kb",48,"GTTAAGGCTCACTGAAACCCGC","screening for 1kb Hp deletion",1,23,"J8"
+"Screening-Fp/HPs/1kb",832,"GTTAAGGCTCACTGAAACCCGC",,,,
+"Screening-Rp/HPs/1kb",49,"CTGGCCTTCTTTCACATCTGCG","screening for 1kb Hp deletion",1,23,"J9"
+"Screening-Rp/HPs/1kb",833,"CTGGCCTTCTTTCACATCTGCG",,,,
+"Seq-SGPC-Fp",812,"ATGATGCTTCGGCGGCTATGT",,,,
+"Seq-SGPC-Fp",109,,"sequencing of sgpc ",1,104,"A5"
+"Seq-SGPC-Rp",813,"CTCTTTAACAAACACCAGCGCT",,,,
+"Seq-SGPC-Rp",110,,"sequencing of sgpc ",1,104,"A6"
+"SGB2_Frag1_Fp",970,"ACGAGATTTTCTGGATCCCGAATTTTCAGGTACTGCGTAAGGTGGCATCAGGTA",,,,
+"SGB2_Frag1_Fp",1404,,,1,101,"H4"
+"SGB2_Frag1_Rp",971,"GTCAGCCGGTCTTCAAAACGCTTAAACTCATTCATCCCACTTGCTCACCAG",,,,
+"SGB2_Frag1_Rp",1401,,,1,101,"H1"
+"SGB2_Frag2_Fp",1403,,,1,101,"H3"
+"SGB2_Frag2_Fp",972,"TGCGAACTGGTGAGCAAGTGGGATGAATGAGTTTAAGCGTTTTGAAGACCGGCT",,,,
+"SGB2_Frag2_Rp",973,"TTTGCGCGGCATTGCCATCGGTCAGGCTCCTTAATTGCTGTTAACCGAGGTGA",,,,
+"SGB2_Frag2_Rp",1382,,,1,101,"F2"
+"SGB2_Frag3_Fp",1396,,,1,101,"G6"
+"SGB2_Frag3_Fp",974,"AATCTGGTCACCTCGGTTAACAGCAATTAAGGAGCCTGACCGATGGCAATGCCG",,,,
+"SGB2_Frag3_Rp",1405,,,1,101,"H5"
+"SGB2_Frag3_Rp",975,"CAAGTAACAATATAATTGTAGCAAAATTATGTCAAGTGAACAAAGTGAGAAACTAAAG",,,,
+"SGB2_Frag4_Fp",1409,,,1,101,"H9"
+"SGB2_Frag4_Fp",976,"CTTTAGTTTCTCACTTTGTTCACTTGACATAATTTTGCTACAATTATATTGTTACTTG",,,,
+"SGB2_Frag4_Rp",1397,,,1,101,"G7"
+"SGB2_Frag4_Rp",977,"GTTACGTGTTTTGCCTGAAAACGGTTTCGCGCGGCTCCTCTTTC",,,,
+"SGP-13-W-1-Cas1gRNA-r",151,"gttccatgttttagacagacccccgtatcaccaaag","Reverse primer of Fragment 1 along with overhang site of 1gRNA cassette",,22,"D7"
+"SGP-13-W-1-Cas1gRNA-r",809,"gttccatgttttagaCAGACCCCCGTATCACCAAAG",,,,
+"SGPC_Fg1_R",946,"TTCATAGCGTTTACAGCGAGGATTAGATAATGGCGTTACAACCATATAAGGGCG",,,,
+"SGPC_Fg1_R",1418,,,1,101,"I8"
+"SGPC_Fg2_F",947,"CGGTCATCGCGCCCTTATATGGTTGTAACGCCGTTATCTAATCCTCGCTGTAAATGC",,,,
+"SGPC_Fg2_F",1395,,,1,101,"G5"
+"SGPC_Fg2_R",1394,,,1,101,"G4"
+"SGPC_Fg2_R",948,"CCTATACGGACGCCTTTCGTTGGGTGGCTGTAATGTTGGGCAAACCGGAAGATACC",,,,
+"SGPC_Fg3_F",949,"ACCTCGGTATCTTCCGGTTTGCCCAACATTACAGCCACCCAACGTAAGGCGTC",,,,
+"SGPC_Fg3_F",1386,,,1,101,"F6"
+"SGPC_Fg3_R",950,"GGCACGCGCCGCGGAGAACTCGCACCTCTTGTTTCAGGGTGACAGGCCCATC",,,,
+"SGPC_Fg3_R",1385,,,1,101,"F5"
+"SGPC_Fg4_F",951,"GAATCGATGGGCCTGTCACCCTGAAACAAGAAGTGCGCGTTCTCCGCGGCGC",,,,
+"SGPC_Fg4_F",1416,,,1,101,"I6"
+"SGPC_Fg4_R",952,"GCAAATCCCGCCAGTTCCACTATAATCGGTTTACTTAGCATAACGCTTCATC",,,,
+"SGPC_Fg4_R",1415,,,1,101,"I5"
+"SGPc_Fg4-casset_R",1400,,,1,101,"G10"
+"SGPc_Fg4-casset_R",929,"ATCCAAGCCTATTGAGTATTTCTTATCCATTTACTTAGCATAACGCTTCATC",,,,
+"SGPc_Fg4CST-R",1411,,,1,101,"I1"
+"SGPc_Fg4CST-R",909,"ATCCAAGCCTATTGAGTATTTCTTATCCATTTACTTAGCATAACGCTTCATC",,,,
+"SGPC_Fg5_F",953,"GGTGCGGAGATGAAGCGTTATGCTAAGTAAACTGATTATAGCGGTACTGGCGGG",,,,
+"SGPC_Fg5_F",1426,,,1,101,"J6"
+"SGPc_Fg5-casset_F",930,"AGAGCTATGCTGTTTTGAATGGTCCCAAAACACTGATTATAGCGGTACTGGCGGG",,,,
+"SGPc_Fg5-casset_F",1428,,,1,101,"J8"
+"SGPc_Fg5CST-F",1417,,,1,101,"I7"
+"SGPc_Fg5CST-F",910,"AGAGCTATGCTGTTTTGAATGGTCCCAAAACACTGATTATAGCGGTACTGGCGGG",,,,
+"SGPC-HA1-Rp",93,"atgttttagaTCTCGTTTCGATAAAGTAATAG","SGPC Homology arm 1 for cas9 insertion",1,104,"A7"
+"SGPC-HA1-Rp",690,"atgttttagaTCTCGTTTCGATAAAGTAATAG",,1,99,"A7"
+"SGPC-W-1-R",118,"GGCCTTAGTTTCATTCTTCTAGATTACTCAGATATAACC","Amplification of Fragment 1 from SGP-C wild phage",,22,"A4"
+"SGPC-W-1-R",884,"ggccttagtttcattcttctagattactcagatataacc",,,,
+"SGPC-W-2-F",119,"CCGGTTATATCTGAGTAATCTAG","Amplification of Fragment 2 from SGP-C wild phage",,22,"A5"
+"SGPC-W-2-F",885,"ccggttatatctgagtaatctagaag",,,,
+"SGPC-W-2nd-gRNA-F",844,"ggggatttagagtaaATAAAGAATTATTGATTTTTATACCATATTATGAG",,,,
+"SGPC-W-2nd-gRNA-F",716,"ggggatttagagtaaATAAAGAATTATTGATTTTTATACCATATTATGAG",,,,
+"SGPC-W-2-R",886,"acctaagtaacgaaaggccc",,,,
+"SGPC-W-2-R",120,"ACCTAAGTAACGAAAGGCCC","Amplification of Fragment 2 from SGP-C wild phage",,22,"A6"
+"SGPC-W-3-F",887,"caaaattaaggccccttgaaggg",,,,
+"SGPC-W-3-F",121,"CAAAATTAAGGCCCCTTGAAGGG","Amplification of Fragment 3 from SGP-C wild phage",,22,"A7"
+"SGPC-W-3-R",122,"CCCGGGCCCGACAAGAATAA","Amplification of Fragment 3 from SGP-C wild phage",,22,"A8"
+"SGPC-W-3-R",888,"cccgggcccgacaagaataa",,,,
+"SGPC-W-4-Cas1gRNA-r",713,"gttccatgttttagaTTACTCTAAATCCCCTTCTG",,,,
+"SGPC-W-4-Cas1gRNA-r",841,"gttccatgttttagaTTACTCTAAATCCCCTTCTG",,,,
+"SGPC-W-4-Cas1gRNA-r",129,"GTTCCATGTTTTAGATTACTCTAAATCCCCTTCTG","Reverse primer of Fragment 4 along with overhang site of 1gRNA cassette ",,22,"B5"
+"SGPC-W-4-Cas2gRNA-r",712,"tcaataattctttatTTACTCTAAATCCCCTTCTG",,,,
+"SGPC-W-4-Cas2gRNA-r",840,"tcaataattctttatTTACTCTAAATCCCCTTCTG",,,,
+"SGPC-W-4-Cas2gRNA-r",131,"ACTCCATTCAACATTGCCGATTACTCTAAATCCCCTTCTG","Reverse primer of Fragment 4 along with overhang site of 2gRNAs cassette",,22,"B7"
+"SGPC-W-4-F",123,"TTTCTTCTTACCCCACATTC","Amplification of Fragment 4 from SGP-C wild phage",,22,"A9"
+"SGPC-W-4-F",889,"tttcttcttaccccacattc",,,,
+"SGPC-W-4-R",890,"ttactctaaatccccttctg",,,,
+"SGPC-W-4-R",124,"TTACTCTAAATCCCCTTCTG","Amplification of Fragment 4 from SGP-C wild phage",,22,"A10"
+"SGPC-W-5-Cas2gRNA-f",130,"GGGGCTGACTTCAGGCTAACGACAACATAAAGACAACAGAAG","Forward primer of Fragment 5 along with overhang site of cassette having gRNA (can be used for single as well as double gRNA insertion)",,22,"B6"
+"SGPC-W-5-Cas2gRNA-f",838,"ggggctgacttcaggCTAACGACAACATAAAGACAACAGAAG",,,,
+"SGPC-W-5-Cas2gRNA-f",710,"ggggctgacttcaggCTAACGACAACATAAAGACAACAGAAG",,,,
+"SGPC-W-5-F",125,"CTAACGACAACATAAAGACAACAGAAG","Amplification of Fragment 5 from SGP-C wild phage",,22,"B1"
+"SGPC-W-5-F",891,"ctaacgacaacataaagacaacagaag",,,,
+"SGPC-W-5-R",126,"TGCCTTGAACTCCCCGAAGTATATTTC","Amplification of Fragment 5 from SGP-C wild phage",,22,"B2"
+"SGPC-W-5-R",892,"tgccttgaactccccgaagtatatttc",,,,
+"SGPC-W-6-F",127,"ACCAAAGAGCCGCAGAAATATAC","Amplification of Fragment 6 from SGP-C wild phage",,22,"B3"
+"SGPC-W-6-F",893,"accaaagagccgcagaaatatac",,,,
+"SGPC-W-6-R",894,"cgaaggaatggttagccactg",,,,
+"SGPC-W-6-R",128,"CGAAGGAATGGTTAGCCACTG","Amplification of Fragment 6 from SGP-C wild phage",,22,"B4"
+"SGPC-W-Cas-1gRNA-f",715,"ggggatttagagtaaTCTAAAACATGGAACTCAACAAGTC",,,,
+"SGPC-W-Cas-1gRNA-f",843,"ggggatttagagtaaTCTAAAACATGGAACTCAACAAGTC",,,,
+"SGPC-W-Casette-r",839,"ttatgttgtcgttagCCTGAAGTCAGCCCCATAC",,,,
+"SGPC-W-Casette-r",711,"ttatgttgtcgttagCCTGAAGTCAGCCCCATAC",,,,
+"SNM-ssau-HA1-Fp",783,"CTTCTGCACTGCTGTTTCTGGGCG",,,,
+"SNM-ssau-HA1-Fp",58,"CTTCTGCACTGCTGTTTCTGGGCG","Single nucleotide modification Homology arm 1",1,23,"D5"
+"SNM-ssau-HA1-Rp",784,"gcgttccactTCAAAAAATAATGAGCGGG",,,,
+"SNM-ssau-HA1-Rp",59,"gcgttccactTCAAAAAATAATGAGCGGG","single nucleotide modification homology arm1",1,23,"D6"
+"SNM-ssau-HA2-Fp",60,"tattttttgaAGTGGAACGCTGAGATAAAATTCCTG","SNM Homology arm 2",1,23,"D7"
+"SNM-ssau-HA2-Fp",785,"tattttttgaAGTGGAACGCTGAGATAAAATTCCTG",,,,
+"SNM-ssau-HA2-Rp",61,"TGCTGCTCGCTGCGGTTTACCAGA","SNM Homology arm 2",1,23,"D8"
+"SNM-ssau-HA2-Rp",786,"TGCTGCTCGCTGCGGTTTACCAGA",,,,
+"sodF",860,"GATGCTTTAGAGCCATCAATAG","for MLST of C.perfringens",1,24,"J3"
+"sodF",104422,,"for MLST of C.perfringens",,24,"J3"
+"sodR",104466,,"for MLST of C.perfringens",,24,"J4"
+"sodR",861,"AATAATAAGCATGTTCCCAAAC","for MLST of C.perfringens",1,21,"J4"
+"SPVB-gRNA-2F",665,"AAACCTGAAATGGGACCACGCCAG",,,,
+"SPVB-gRNA-2F",1431,,,1,103,"B1"
+"SPVB-gRNA-2R",1433,,,1,103,"B3"
+"SPVB-gRNA-2R",666,"AAACCTGGCGTGGTCCCATTTCAG",,,,
+"SpvB-RT-F",170,"aagctgtgtcagtatcggattt","Real time amplification of region from Salomnella gallinarum SpvB gene",,22,"F6"
+"SpvB-RT-F",1324,"aagctgtgtcagtatcggattt","Real time amplification of region from Salomnella gallinarum SpvB gene",1,99,"I9"
+"SpV-plasm-conf-Rp",163,"CAGTGGTCAGGGCAGTGCTGC","Confirmation of SpVB gRNA cloned Cas9 plasmid",,22,"E9"
+"SpV-plasm-conf-Rp",682,"CAGTGGTCAGGGCAGTGCTGC",,,,
+"Ssau-Amp-Fp",777,"cagaaaagaaCGCGGAACCCCTATTTGTTTATTTTTC",,,,
+"Ssau-Amp-Fp",52,"cagaaaagaaCGCGGAACCCCTATTTGTTTATTTTTC","ampicillin insertion cassette primer hifi overlap",1,23,"E4"
+"Ssau-Amp-Rp",778,"attttatctcTTACCAATGCTTAATCAGTGAGG",,,,
+"Ssau-Amp-Rp",53,"attttatctcTTACCAATGCTTAATCAGTGAGG","ampicillin insertion cassette primer hifi overlap",1,23,"E5"
+"Ssau-RT-R",725,"TGGCCTTGCTGGCAATAA",,,,
+"Ssau-RT-R",169,"TGGCCTTGCTGGCAATAA","Real time amplification of region from Salomnella gallinarum SSau gene",,22,"F5"
+"ssau-seq-HF_F",1269,,,1,99,"I8"
+"ssau-seq-HF_F",1270,,,1,99,"I9"
+"T7-Fp",734,"CCCGCGAAATTAATACGACTCACT",,,,
+"T7-Fp",107,"GGGGTTATGCTAGTTATTGCTCAG","screening primer for pet plasmids",1,104,"c4"
+"TpeL-F",963,"CATTTGCCATTTATTTTCAG",,,,
+"TpeL-F",104438,,"primer for toxinotyping",,24,"F7"
+"TpeL-R",964,"TATTCATTTTGTTTGGGTTG",,,,
+"TpeL-R",104482,,"primer for toxinotyping",,24,"F8"
+"tpiF",104423,,"for MLST of C.perfringens",,24,"A5"
+"tpiF",862,"AAATGTGAAGTTGTTGTTTGCC","for MLST of C.perfringens",1,21,"A5"
+"tpiR",104467,,"for MLST of C.perfringens",,24,"A6"
+"tpiR",863,"CATTAGCTTGGTCTGAAGTAGC","for MLST of C.perfringens",1,24,"A6"
+"tshF",603," GTCTGTCAGACGTCTGTGTTTC",,,,
+"tshF",1501,,,1,103,"I5"
+"tshR",604," ATAGGATGACAGGCTACCGAC",,,,
+"tshR",1500,,,1,103,"I4"
+"Unique_SG_F",164,"CTTAGTGAGTGGGCTGATTTCT ","amplification of Salomnella gallinarum unique region for real-time PCR",,22,"E10"
+"Unique_SG_F",720,"CTTAGTGAGTGGGCTGATTTCT ","amplification of Salomnella gallinarum unique region",,,
+"Unique_SG_R",166,"CCGCTGCATCGATTTCTTTC ","amplification of Salomnella gallinarum unique region for real-time PCR",,22,"F2"
+"Unique_SG_R",722,"CCGCTGCATCGATTTCTTTC ","amplification of Salomnella gallinarum unique region",,,
+"vatF",621," TCCATGCTTCAACGTCTCAGAG",,,,
+"vatF",1361,,,1,101,"D1"
+"vatR",622," CTGTTGTCAGTGTCGTGAACG",,,,
+"vatR",1362,,,1,101,"D2"

@@ -1,0 +1,91 @@
+{
+  "enum_AntibioticSensitivities_interpretation": [
+    "Resistant",
+    "Intermediate",
+    "Sensitive"
+  ],
+  "enum_BiologicalAssets_sterility_status": [
+    "Pass",
+    "Fail",
+    "Pending"
+  ],
+  "enum_BiologicalAssets_type": [
+    "Strain",
+    "Phage",
+    "Plasmid",
+    "Primer"
+  ],
+  "enum_Chemicals_signal_word": [
+    "None",
+    "Warning",
+    "Danger"
+  ],
+  "enum_CustomForms_status": [
+    "Draft",
+    "Published",
+    "Archived"
+  ],
+  "enum_Experiments_protocol": [
+    "Enrichment",
+    "DLA",
+    "Spot Test",
+    "One-Step Growth",
+    "Other"
+  ],
+  "enum_PhageHostInteractions_sensitivity": [
+    "Clear",
+    "Turbid",
+    "None"
+  ],
+  "enum_PurchaseOrders_status": [
+    "Pending",
+    "Ordered",
+    "Received"
+  ],
+  "enum_SavedQueries_type": [
+    "static",
+    "dynamic"
+  ],
+  "enum_Sources_type": [
+    "Clinical",
+    "Environmental",
+    "Other"
+  ],
+  "enum_Users_role": [
+    "Admin",
+    "Manager",
+    "User"
+  ],
+  "enum_ext_equipment_logs_status": [
+    "Operational",
+    "Maintenance Due",
+    "Out of Order"
+  ],
+  "enum_ext_lab_projects_status": [
+    "Planning",
+    "Active",
+    "On Hold",
+    "Completed",
+    "Archived"
+  ],
+  "enum_ext_lab_tasks_priority": [
+    "Low",
+    "Medium",
+    "High",
+    "Critical"
+  ],
+  "enum_ext_lab_tasks_status": [
+    "Todo",
+    "In Progress",
+    "Review",
+    "Completed"
+  ],
+  "enum_phage_host_matrix_lysis_score": [
+    "+",
+    "++",
+    "+++",
+    "-",
+    "Clear",
+    "Turbid"
+  ]
+}
