@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: 'lims-backend',
-            script: './server/server.js',
+            script: 'server.js',
             cwd: './server',
             args: '5002',
             env: {
@@ -16,7 +16,7 @@ module.exports = {
         },
         {
             name: 'lims-frontend',
-            script: './client/node_modules/vite/bin/vite.js',
+            script: './node_modules/vite/bin/vite.js',
             args: ['--port', '5174', '--strictPort'],
             cwd: './client',
             interpreter: 'node',
