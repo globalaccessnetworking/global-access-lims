@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { BiologicalAsset, Project, InventoryStock, sequelize } = require('../models');
+const { BiologicalAsset, Project, LabTask, sequelize } = require('../models');
+const { auth } = require('../middleware/auth');
+const { Op, QueryTypes } = require('sequelize');
 
 router.get('/stats', async (req, res) => {
     try {
@@ -55,20 +57,10 @@ router.get('/stats', async (req, res) => {
 // @access  Private
 router.get('/user-tasks', auth, async (req, res) => {
     try {
-        const userId = req.user.id;
-        const userRole = req.user.role;
-
-        // This is the EXACT query that worked during diagnostics
-        const query = `
-            SELECT t.*, p.name as project_name 
-            FROM "ext_lab_tasks" t
-            LEFT JOIN "ext_lab_projects" p ON t.project_id = p.id
-            ORDER BY t.created_at DESC
-            LIMIT 20
-        `;
-
-        const tasks = await sequelize.query(query, {
-            type: QueryTypes.SELECT
+        const tasks = await LabTask.findAll({
+            include: [{ model: Project, attributes: ['name'] }],
+            order: [['createdAt', 'DESC']],
+            limit: 20
         });
 
         res.json(tasks);
@@ -77,5 +69,6 @@ router.get('/user-tasks', auth, async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch user tasks' });
     }
 });
+
 
 module.exports = router;
