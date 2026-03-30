@@ -70,6 +70,7 @@ app.use('/api/import', require('./routes/import'));
 app.use('/api/attachments', require('./routes/attachments'));
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/templates', require('./routes/templates'));
+app.use('/api/metadata', require('./routes/metadata'));
 
 
 

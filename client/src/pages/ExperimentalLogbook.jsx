@@ -3,6 +3,8 @@ import api from '../api/axios';
 import { BookOpen, Plus, Calendar, FlaskConical, User, MessageSquare, FileText } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import AttachmentGallery from '../components/AttachmentGallery';
+import SmartLookup from '../components/SmartLookup';
+
 
 const ExperimentalLogbook = ({ initialShowForm = false }) => {
     const [experiments, setExperiments] = useState([]);
@@ -85,34 +87,31 @@ const ExperimentalLogbook = ({ initialShowForm = false }) => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Protocol Type</label>
-                                <select
-                                    className="w-full rounded-lg border-slate-200"
-                                    value={formData.protocol}
-                                    onChange={e => setFormData({ ...formData, protocol: e.target.value })}
-                                >
-                                    <option>Enrichment</option>
-                                    <option>DLA</option>
-                                    <option>Spot Test</option>
-                                    <option>One-Step Growth</option>
-                                    <option>Other</option>
-                                </select>
+                                <SmartLookup 
+                                    label="Protocol Type" 
+                                    module="experiments" 
+                                    field="protocol" 
+                                    value={formData.protocol} 
+                                    onChange={v => setFormData({ ...formData, protocol: v })} 
+                                />
                             </div>
+ stories:
                         </div>
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Linked Asset (Optional)</label>
-                                <select
-                                    className="w-full rounded-lg border-slate-200"
-                                    value={formData.asset_id}
-                                    onChange={e => setFormData({ ...formData, asset_id: e.target.value })}
-                                >
-                                    <option value="">-- Select Asset --</option>
-                                    {assets.map(a => (
-                                        <option key={a.id} value={a.id}>{a.strain_number} - {a.type}</option>
-                                    ))}
-                                </select>
+                                <SmartLookup 
+                                    label="Linked Asset (Optional)" 
+                                    module="assets" 
+                                    field="strain_number" 
+                                    value={assets.find(a => a.id.toString() === formData.asset_id.toString())?.strain_number || ''} 
+                                    onChange={val => {
+                                        const asset = assets.find(a => a.strain_number === val);
+                                        if (asset) setFormData({ ...formData, asset_id: asset.id });
+                                    }} 
+                                    placeholder="Search Asset..."
+                                />
                             </div>
+ stories:
                             <div>
                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
                                 <input

@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectMemberManager from '../components/ProjectMemberManager';
+import SmartLookup from '../components/SmartLookup';
+
 
 const LabProjectManager = () => {
     const [projects, setProjects] = useState([]);
@@ -278,9 +280,15 @@ const LabProjectManager = () => {
                             </div>
                             <form onSubmit={handleCreateProject} className="p-6 space-y-4">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Project Name</label>
-                                    <input required type="text" value={newProject.name} onChange={e => setNewProject({ ...newProject, name: e.target.value })} className="w-full bg-slate-800 border border-white/5 rounded-xl p-3 text-white outline-none focus:border-emerald-500" />
+                                    <SmartLookup 
+                                        label="Project Status" 
+                                        module="projects" 
+                                        field="status" 
+                                        value={newProject.status} 
+                                        onChange={v => setNewProject({ ...newProject, status: v })} 
+                                    />
                                 </div>
+
                                 <div>
                                     <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Description</label>
                                     <textarea rows={3} value={newProject.description} onChange={e => setNewProject({ ...newProject, description: e.target.value })} className="w-full bg-slate-800 border border-white/5 rounded-xl p-3 text-white outline-none focus:border-emerald-500" />
@@ -308,23 +316,34 @@ const LabProjectManager = () => {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Priority</label>
-                                        <select value={newTask.priority} onChange={e => setNewTask({ ...newTask, priority: e.target.value })} className="w-full bg-slate-800 border border-white/5 rounded-xl p-3 text-white outline-none">
-                                            <option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
-                                        </select>
+                                        <SmartLookup 
+                                            label="Priority" 
+                                            module="tasks" 
+                                            field="priority" 
+                                            value={newTask.priority} 
+                                            onChange={v => setNewTask({ ...newTask, priority: v })} 
+                                        />
                                     </div>
+
                                     <div>
                                         <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Due Date</label>
                                         <input type="date" value={newTask.due_date} onChange={e => setNewTask({ ...newTask, due_date: e.target.value })} className="w-full bg-slate-800 border border-white/5 rounded-xl p-3 text-white outline-none" />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Assign To</label>
-                                    <select required value={newTask.assigned_to_id} onChange={e => setNewTask({ ...newTask, assigned_to_id: e.target.value })} className="w-full bg-slate-800 border border-white/5 rounded-xl p-3 text-white outline-none">
-                                        <option value="">Select Researcher...</option>
-                                        {users.map(u => <option key={u.id} value={u.id}>{u.username}</option>)}
-                                    </select>
+                                    <SmartLookup 
+                                        label="Assign To (Researcher)" 
+                                        module="users" 
+                                        field="username" 
+                                        value={users.find(u => u.id === newTask.assigned_to_id)?.username || ''} 
+                                        onChange={val => {
+                                            const user = users.find(u => u.username === val);
+                                            if (user) setNewTask({ ...newTask, assigned_to_id: user.id });
+                                        }} 
+                                        placeholder="Search Researcher..."
+                                    />
                                 </div>
+
                                 <div className="flex justify-end gap-3 pt-4">
                                     <button type="button" onClick={() => setIsNewTaskModalOpen(false)} className="px-6 py-3 text-slate-400 font-bold">Cancel</button>
                                     <button type="submit" className="px-8 py-3 bg-emerald-600 rounded-xl text-white font-bold hover:shadow-lg shadow-emerald-500/20 transition-all">Create Task</button>

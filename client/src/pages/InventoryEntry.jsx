@@ -3,6 +3,8 @@ import api from '../api/axios';
 import { Package, Save, ArrowLeft, CheckCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import SmartLookup from '../components/SmartLookup';
+
 
 const InventoryEntry = () => {
     const navigate = useNavigate();
@@ -17,25 +19,8 @@ const InventoryEntry = () => {
         location_details: ''
     });
 
-    const [manufacturers, setManufacturers] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [locations, setLocations] = useState([]);
-    const [showSuccess, setShowSuccess] = useState(false);
+    // Metadata fetches are now handled handled by the SmartLookup component internally per field.
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await api.get('/inventory/stocks');
-                const stocks = res.data;
-                setManufacturers([...new Set(stocks.map(s => s.manufacturer).filter(Boolean))].sort());
-                setCategories([...new Set(stocks.map(s => s.category).filter(Boolean))].sort());
-                setLocations([...new Set(stocks.map(s => s.location_area).filter(Boolean))].sort());
-            } catch (err) {
-                console.error("Failed to fetch inventory data:", err);
-            }
-        };
-        fetchData();
-    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -132,36 +117,28 @@ const InventoryEntry = () => {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Manufacturer</label>
-                            <input
-                                type="text"
-                                name="manufacturer"
-                                value={formData.manufacturer}
-                                onChange={handleChange}
-                                list="manufacturer-list"
-                                className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none transition-all"
+                            <SmartLookup 
+                                label="Manufacturer" 
+                                module="inventory" 
+                                field="manufacturer" 
+                                value={formData.manufacturer} 
+                                onChange={v => setFormData(prev => ({ ...prev, manufacturer: v }))} 
                                 placeholder="Search or Type..."
                             />
-                            <datalist id="manufacturer-list">
-                                {manufacturers.map((m, i) => <option key={i} value={m} />)}
-                            </datalist>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Category</label>
-                            <input
-                                type="text"
-                                name="category"
-                                value={formData.category}
-                                onChange={handleChange}
-                                list="category-list"
-                                className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none transition-all"
+                            <SmartLookup 
+                                label="Category" 
+                                module="inventory" 
+                                field="category" 
+                                value={formData.category} 
+                                onChange={v => setFormData(prev => ({ ...prev, category: v }))} 
                                 placeholder="Search or Type..."
                             />
-                            <datalist id="category-list">
-                                {categories.map((c, i) => <option key={i} value={c} />)}
-                            </datalist>
                         </div>
+
+
 
                         <div>
                             <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Pack Size</label>
@@ -188,20 +165,17 @@ const InventoryEntry = () => {
                         </div>
 
                         <div className="col-span-2">
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Storage Location (Area)</label>
-                            <input
-                                type="text"
-                                name="location_area"
-                                value={formData.location_area}
-                                onChange={handleChange}
-                                list="location-list"
-                                className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-white focus:border-emerald-500 outline-none transition-all"
+                            <SmartLookup 
+                                label="Storage Location (Area)" 
+                                module="inventory" 
+                                field="location_area" 
+                                value={formData.location_area} 
+                                onChange={v => setFormData(prev => ({ ...prev, location_area: v }))} 
                                 placeholder="e.g. Chemical Store, Shelf A"
                             />
-                            <datalist id="location-list">
-                                {locations.map((l, i) => <option key={i} value={l} />)}
-                            </datalist>
                         </div>
+ stories:
+
 
                         <div className="col-span-2">
                             <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Specific Details / Shelf</label>

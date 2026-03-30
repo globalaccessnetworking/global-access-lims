@@ -7,6 +7,8 @@ import {
     Activity, ArrowLeft, LayoutGrid, Database, Trash2, Plus
 } from 'lucide-react';
 import SearchableSelect from '../components/SearchableSelect';
+import SmartLookup from '../components/SmartLookup';
+
 
 const AddData = () => {
     const navigate = useNavigate();
@@ -617,26 +619,27 @@ const AddData = () => {
                     )}
 
                     {/* DATALISTS */}
-                    <datalist id="species-list">{speciesOptions.map((s, i) => <option key={i} value={s} />)}</datalist>
-                    <datalist id="antibiotics-list">{antibioticOptions.map((a, i) => <option key={i} value={a} />)}</datalist>
+                    {/* Metadata is now fetched per-field by SmartLookup */}
+
 
                     {/* FORM LOGIC SWITCHER */}
                     {activeTab === 'Antibiotics Discs' ? (
                         /* --- ANTIBIOTICS FORM --- */
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
                             <div>
-                                <label className="block text-xs font-bold text-emerald-400 uppercase mb-2 ml-1">Antibiotic Name</label>
-                                <SearchableSelect
-                                    options={antibioticOptions.map(a => ({ label: a, value: a }))}
-                                    value={formData.antibiotic_name}
+                                <SmartLookup 
+                                    label="Antibiotic Name" 
+                                    module="antibiotics" 
+                                    field="name" 
+                                    value={formData.antibiotic_name} 
                                     onChange={(val) => {
                                         setFormData(prev => ({ ...prev, antibiotic_name: val }));
                                         setTimeout(() => document.getElementById('antibiotic-qty').focus(), 100);
-                                    }}
+                                    }} 
                                     placeholder="Search Antibiotic..."
-                                    className="w-full"
                                 />
                             </div>
+ stories:
                             <div>
                                 <label className="block text-xs font-bold text-emerald-400 uppercase mb-2 ml-1">Quantity Added</label>
                                 <div className="relative">
@@ -745,14 +748,16 @@ const AddData = () => {
                         <div className="space-y-8 animate-fade-in">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div>
-                                    <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">
-                                        {activeTab === 'Primer' ? 'Primer Name' : activeTab === 'Plasmid' ? 'Plasmid Name' : 'Name'}
-                                    </label>
-                                    <input type="text" name="species" required list="species-list"
-                                        value={formData.species} onChange={handleChange} onBlur={handleBlur}
-                                        className="w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-bold text-lg"
+                                    <SmartLookup 
+                                        label={activeTab === 'Primer' ? 'Primer Name' : activeTab === 'Plasmid' ? 'Plasmid Name' : 'Name'} 
+                                        module="assets" 
+                                        field="species" 
+                                        value={formData.species} 
+                                        onChange={val => setFormData({ ...formData, species: val })} 
+                                        placeholder="Select or Type..."
                                     />
                                 </div>
+ stories:
                                 <div>
                                     <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">
                                         {activeTab === 'Primer' ? 'Unique ID' : 'Catalog / ID No.'}

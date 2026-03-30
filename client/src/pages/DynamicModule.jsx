@@ -8,6 +8,8 @@ import {
     List, MoreHorizontal, Database, AlertTriangle, X, Edit, Trash2, Check, Clock, Calendar
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import SmartLookup from '../components/SmartLookup';
+
 
 const DynamicModule = ({ type: propsType }) => {
     const { type: paramsType } = useParams();
@@ -316,30 +318,17 @@ const DynamicModule = ({ type: propsType }) => {
                                 ) : (
                                     moduleData.schema.filter(c => !['id', 'created_at', 'updated_at', 'createdAt', 'updatedAt'].includes(c.key.toLowerCase())).map(col => (
                                         <div key={col.key}>
-                                            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{col.label}</label>
-                                            {col.type === 'select' ? (
-                                                <select
-                                                    className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none"
-                                                    value={formData[col.key] || ''}
-                                                    onChange={e => setFormData({ ...formData, [col.key]: e.target.value })}
-                                                >
-                                                    <option value="">Select {col.label}</option>
-                                                    {col.options?.map((opt, idx) => {
-                                                        const val = typeof opt === 'object' ? opt.value : opt;
-                                                        const lab = typeof opt === 'object' ? opt.label : opt;
-                                                        return <option key={idx} value={val}>{lab}</option>;
-                                                    })}
-                                                </select>
-                                            ) : (
-                                                <input
-                                                    type={col.key.toLowerCase().includes('date') ? 'date' : (col.type === 'number' ? 'number' : 'text')}
-                                                    className="w-full bg-slate-950/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none"
-                                                    value={formData[col.key] || ''}
-                                                    onChange={e => setFormData({ ...formData, [col.key]: e.target.value })}
-                                                />
-                                            )}
+                                            <SmartLookup 
+                                                label={col.label} 
+                                                module={type} 
+                                                field={col.key} 
+                                                value={formData[col.key] || ''} 
+                                                onChange={val => setFormData({ ...formData, [col.key]: val })} 
+                                                placeholder={`Select or type ${col.label}...`}
+                                            />
                                         </div>
                                     ))
+
                                 )}
                                 <div className="pt-4 flex justify-end gap-3">
                                     <button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-2.5 text-slate-400 font-bold">Cancel</button>

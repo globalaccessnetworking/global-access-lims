@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import { Save, Beaker, Dna, Activity, Search, AlertTriangle, CheckCircle, Plus, Trash2, Microscope, Thermometer, MapPin } from 'lucide-react';
 import SearchableSelect from '../components/SearchableSelect';
+import SmartLookup from '../components/SmartLookup';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const StrainEntry = () => {
@@ -247,22 +248,16 @@ const StrainEntry = () => {
                                 />
                             </div>
                             <div className="col-span-2">
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Species Name</label>
-                                <SearchableSelect
-                                    options={[
-                                        { label: 'Staphylococcus aureus', value: 'Staphylococcus aureus' },
-                                        { label: 'Pseudomonas aeruginosa', value: 'Pseudomonas aeruginosa' },
-                                        { label: 'Escherichia coli', value: 'Escherichia coli' },
-                                        { label: 'Klebsiella pneumoniae', value: 'Klebsiella pneumoniae' },
-                                        { label: 'Acinetobacter baumannii', value: 'Acinetobacter baumannii' },
-                                        { label: 'Salmonella enterica', value: 'Salmonella enterica' }
-                                    ]}
-                                    value={formData.species}
-                                    onChange={val => setFormData({ ...formData, species: val })}
+                                <SmartLookup 
+                                    label="Species Name" 
+                                    module="assets" 
+                                    field="species" 
+                                    value={formData.species} 
+                                    onChange={val => setFormData({ ...formData, species: val })} 
                                     placeholder="Select or Type Species..."
-                                    className="w-full"
                                 />
                             </div>
+
                             <div>
                                 <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Sub-species / Serotype</label>
                                 <input
@@ -274,17 +269,16 @@ const StrainEntry = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Clinical Source</label>
-                                <select
-                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
-                                    value={formData.source_id}
-                                    onChange={e => setFormData({ ...formData, source_id: e.target.value })}
-                                >
-                                    <option value="">Select Source...</option>
-                                    {sources.map(s => <option key={s.id} value={s.id}>{s.name} ({s.type})</option>)}
-                                    <option value="new">+ Add New Source (N/A)</option>
-                                </select>
+                                <SmartLookup 
+                                    label="Clinical Source" 
+                                    module="assets" 
+                                    field="source" 
+                                    value={formData.source} 
+                                    onChange={val => setFormData({ ...formData, source: val })} 
+                                    placeholder="Select Source..."
+                                />
                             </div>
+
                         </div>
                     </div>
 

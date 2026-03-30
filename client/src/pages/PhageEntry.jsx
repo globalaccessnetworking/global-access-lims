@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import { Save, Bug, Activity, MapPin, CheckCircle, Upload, ZoomIn, FileText, FlaskConical, Dna } from 'lucide-react';
 import SearchableSelect from '../components/SearchableSelect';
+import SmartLookup from '../components/SmartLookup';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PhageEntry = () => {
@@ -197,23 +198,16 @@ const PhageEntry = () => {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="col-span-2">
-                                <label className="block text-xs font-bold text-emerald-400 uppercase mb-2 flex justify-between">
-                                    Host Bacteria
-                                    <button type="button" className="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded hover:bg-emerald-500 hover:text-white transition-colors">
-                                        + New Host Strain
-                                    </button>
-                                </label>
-                                <SearchableSelect
-                                    options={hosts.map(h => ({
-                                        label: `${h.strain_number} - ${h.species} (${h.source || 'N/A'})`,
-                                        value: h.strain_number
-                                    }))}
-                                    value={formData.host_strain}
-                                    onChange={val => setFormData({ ...formData, host_strain: val })}
+                                <SmartLookup 
+                                    label="Host Bacteria" 
+                                    module="assets" 
+                                    field="host_strain" 
+                                    value={formData.host_strain} 
+                                    onChange={val => setFormData({ ...formData, host_strain: val })} 
                                     placeholder="Search Host Strain (e.g. ST-1210)..."
-                                    className="w-full"
                                 />
                             </div>
+
                             <div>
                                 <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Lifecycle</label>
                                 <select
@@ -240,25 +234,26 @@ const PhageEntry = () => {
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Plaque Morphology</label>
-                                <input
-                                    type="text"
-                                    value={formData.plaque_morphology}
-                                    onChange={e => setFormData({ ...formData, plaque_morphology: e.target.value })}
+                                <SmartLookup 
+                                    label="Plaque Morphology" 
+                                    module="assets" 
+                                    field="plaque_morphology" 
+                                    value={formData.plaque_morphology} 
+                                    onChange={val => setFormData({ ...formData, plaque_morphology: val })} 
                                     placeholder="e.g. Clear, 2mm, halo"
-                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Virion Morphology</label>
-                                <input
-                                    type="text"
-                                    value={formData.morphology}
-                                    onChange={e => setFormData({ ...formData, morphology: e.target.value })}
+                                <SmartLookup 
+                                    label="Virion Morphology" 
+                                    module="assets" 
+                                    field="morphology" 
+                                    value={formData.morphology} 
+                                    onChange={val => setFormData({ ...formData, morphology: val })} 
                                     placeholder="e.g. Myoviridae, long tail"
-                                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none"
                                 />
                             </div>
+
                         </div>
                     </div>
 

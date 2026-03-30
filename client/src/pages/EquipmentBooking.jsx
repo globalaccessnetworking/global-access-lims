@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, Plus, X, AlertCircle, CheckCircle2 } from 'lucide-react';
 import api from '../api/axios';
+import SmartLookup from '../components/SmartLookup';
+
 
 const EquipmentBooking = () => {
     const [equipment, setEquipment] = useState([]);
@@ -96,17 +98,19 @@ const EquipmentBooking = () => {
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Equipment</label>
-                        <select
-                            value={selectedEquipment || ''}
-                            onChange={(e) => setSelectedEquipment(parseInt(e.target.value))}
-                            className="w-full rounded-lg border-slate-200"
-                        >
-                            {equipment.map(eq => (
-                                <option key={eq.id} value={eq.id}>{eq.equipment_name}</option>
-                            ))}
-                        </select>
+                        <SmartLookup 
+                            label="Equipment" 
+                            module="equipment" 
+                            field="equipment_name" 
+                            value={equipment.find(e => e.id === selectedEquipment)?.equipment_name || ''} 
+                            onChange={val => {
+                                const eq = equipment.find(e => e.equipment_name === val);
+                                if (eq) setSelectedEquipment(eq.id);
+                            }} 
+                            placeholder="Select Equipment..."
+                        />
                     </div>
+ stories:
                     <div>
                         <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Date</label>
                         <input

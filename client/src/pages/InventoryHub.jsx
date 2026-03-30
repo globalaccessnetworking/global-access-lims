@@ -4,6 +4,7 @@ import { Package, Plus, FileDown, Search, Edit, Trash2, X, Save, AlertTriangle, 
 import { motion, AnimatePresence } from 'framer-motion';
 import { exportToPDF, exportToExcel } from '../utils/exportUtils';
 import { useTheme } from '../context/ThemeContext';
+import SmartLookup from '../components/SmartLookup';
 
 const InventoryHub = () => {
     const { theme } = useTheme();
@@ -171,14 +172,33 @@ const InventoryHub = () => {
                             <form onSubmit={handleSaveItem} className="p-6 space-y-4">
                                 <FormInput label="Item Name" value={currentItem.item_name} onChange={v => setCurrentItem({ ...currentItem, item_name: v })} required />
                                 <div className="grid grid-cols-2 gap-4">
-                                    <FormInput label="Manufacturer" value={currentItem.manufacturer} onChange={v => setCurrentItem({ ...currentItem, manufacturer: v })} />
+                                    <SmartLookup 
+                                        label="Manufacturer" 
+                                        module="inventory" 
+                                        field="manufacturer" 
+                                        value={currentItem.manufacturer} 
+                                        onChange={v => setCurrentItem({ ...currentItem, manufacturer: v })} 
+                                    />
                                     <FormInput label="Pack Size" value={currentItem.pack_size} onChange={v => setCurrentItem({ ...currentItem, pack_size: v })} />
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <FormInput label="Category" value={currentItem.category} onChange={v => setCurrentItem({ ...currentItem, category: v })} />
+                                    <SmartLookup 
+                                        label="Category" 
+                                        module="inventory" 
+                                        field="category" 
+                                        value={currentItem.category} 
+                                        onChange={v => setCurrentItem({ ...currentItem, category: v })} 
+                                    />
                                     <FormInput label="Quantity" type="number" value={currentItem.available_quantity} onChange={v => setCurrentItem({ ...currentItem, available_quantity: parseInt(v) || 0 })} />
                                 </div>
-                                <FormInput label="Location" value={currentItem.physical_location} onChange={v => setCurrentItem({ ...currentItem, physical_location: v })} />
+                                <SmartLookup 
+                                    label="Location" 
+                                    module="inventory" 
+                                    field="physical_location" 
+                                    value={currentItem.physical_location} 
+                                    onChange={v => setCurrentItem({ ...currentItem, physical_location: v })} 
+                                />
+
                                 <div className="flex justify-end gap-3 pt-4">
                                     <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-lg text-[var(--text-secondary)] hover:bg-[var(--bg-secondary)]">Cancel</button>
                                     <button type="submit" className="bg-[var(--accent-primary)] hover:bg-[var(--accent-secondary)] text-white px-6 py-2 rounded-lg font-bold shadow-lg">Save</button>
