@@ -13,16 +13,6 @@ module.exports = {
                 DB_PASSWORD: 'phagelabdrshafiq',
                 DB_NAME: 'bacteriophage_lims'
             }
-        },
-        {
-            name: 'lims-frontend',
-            script: './node_modules/vite/bin/vite.js',
-            args: ['--port', '5174', '--strictPort', '--host', '127.0.0.1'],
-            cwd: './client',
-            interpreter: 'node',
-            env: {
-                NODE_ENV: 'development'
-            }
         }
     ]
 };
