@@ -1,63 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const { sequelize } = require('../models');
-const { QueryTypes } = require('sequelize');
-const { auth } = require('../middleware/auth');
+const { BiologicalAsset, Project, InventoryStock, sequelize } = require('../models');
 
 router.get('/stats', async (req, res) => {
     try {
-        // 1. Bacterial Strains Count
-        const strainResult = await sequelize.query(
-            `SELECT COUNT(*) as count FROM "ext_bacterial_strains"`,
-            { type: QueryTypes.SELECT }
-        );
-        const strainCount = parseInt(strainResult[0]?.count || 0, 10);
+        // 1. Counts using Sequelize Models
+        const strainCount = await BiologicalAsset.count({ where: { type: 'Strain' } });
+        const phageCount = await BiologicalAsset.count({ where: { type: 'Phage' } });
+        const inventoryCount = await InventoryStock.count();
+        const projectCount = await Project.count({ where: { status: 'Active' } });
+        
+        // 2. Low Stock (Placeholder logic for now)
+        const lowStockCount = await InventoryStock.count({
+            where: {
+                available_quantity: { [require('sequelize').Op.lt]: 5 }
+            }
+        });
 
-        // 2. Phage Library Count
-        const phageResult = await sequelize.query(
-            `SELECT COUNT(*) as count FROM "ext_bacteriophages"`,
-            { type: QueryTypes.SELECT }
-        );
-        const phageCount = parseInt(phageResult[0]?.count || 0, 10);
-
-        // 3. Inventory Items
-        const inventoryResult = await sequelize.query(
-            `SELECT COUNT(*) as count FROM "ext_lab_stock"`,
-            { type: QueryTypes.SELECT }
-        );
-        const inventoryCount = parseInt(inventoryResult[0]?.count || 0, 10);
-
-        // 4. Low Stock
-        let lowStockCount = 0;
-        try {
-            const lowStockResult = await sequelize.query(
-                `SELECT COUNT(*) as count FROM "ext_lab_stock" WHERE "Available_Quantity"::numeric < 5`,
-                { type: QueryTypes.SELECT }
-            );
-            lowStockCount = parseInt(lowStockResult[0]?.count || 0, 10);
-        } catch (e) {
-            console.warn("Low stock query failed:", e.message);
-        }
-
-        // 5. Active Projects Count (Planning, Active, Review, etc.)
-        let projectCount = 0;
-        try {
-            const projectResult = await sequelize.query(
-                `SELECT COUNT(*) as count FROM "ext_lab_projects" WHERE status NOT IN ('Completed', 'Finished', 'Archived')`,
-                { type: QueryTypes.SELECT }
-            );
-            projectCount = parseInt(projectResult[0]?.count || 0, 10);
-        } catch (e) { }
-
-        // 6. Top 5 Bacterial Species
-        const topSpecies = await sequelize.query(
-            `SELECT "Specie" as species, COUNT(*) as count 
-             FROM "ext_bacterial_strains" 
-             GROUP BY "Specie" 
-             ORDER BY count DESC 
-             LIMIT 5`,
-            { type: QueryTypes.SELECT }
-        );
+        // 3. Top 5 Bacterial Species (Aggregation)
+        const topSpecies = await BiologicalAsset.findAll({
+            attributes: [
+                'species',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            where: { type: 'Strain' },
+            group: ['species'],
+            order: [[sequelize.literal('count'), 'DESC']],
+            limit: 5
+        });
 
         res.json({
             metrics: {
@@ -67,7 +37,10 @@ router.get('/stats', async (req, res) => {
                 lowStock: lowStockCount,
                 activeProjects: projectCount
             },
-            topSpecies: topSpecies
+            topSpecies: topSpecies.map(s => ({
+                species: s.species || 'Unknown',
+                count: parseInt(s.get('count'))
+            }))
         });
 
     } catch (error) {
@@ -75,6 +48,7 @@ router.get('/stats', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch dashboard stats' });
     }
 });
+
 
 // @route   GET api/dashboard/user-tasks
 // @desc    Get pending tasks for logged in user
