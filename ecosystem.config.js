@@ -2,8 +2,8 @@ module.exports = {
     apps: [
         {
             name: 'lims-backend',
-            script: 'D:/Bacteriophage_LIMS/server/server.js',
-            cwd: 'D:/Bacteriophage_LIMS/server',
+            script: './server/server.js',
+            cwd: './server',
             args: '5002',
             env: {
                 NODE_ENV: 'production',
@@ -16,9 +16,9 @@ module.exports = {
         },
         {
             name: 'lims-frontend',
-            script: 'D:/Bacteriophage_LIMS/client/node_modules/vite/bin/vite.js',
+            script: './client/node_modules/vite/bin/vite.js',
             args: ['--port', '5174', '--strictPort'],
-            cwd: 'D:/Bacteriophage_LIMS/client',
+            cwd: './client',
             interpreter: 'node',
             env: {
                 NODE_ENV: 'development'

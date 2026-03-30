@@ -1,0 +1,37 @@
+# Bacteriophage LIMS - Requirements & Dependencies
+
+This file lists the high-level system and software dependencies required for the Bacteriophage LIMS.
+Note: For Node.js projects, dependencies are primarily managed via 'package.json'. 
+Use 'npm install' in the root, /server, and /client directories to install all JS libraries.
+
+## 1. System Requirements (Linux VPS)
+- OS: Ubuntu 22.04 LTS or 24.04 LTS (Recommended)
+- Node.js: v18.x or higher
+- NPM: v9.x or higher
+- PostgreSQL: v14 or higher
+- Git: For repository management
+- PM2: For process management
+- Nginx: Recommended as a reverse proxy
+
+## 2. Core Backend Dependencies (Node.js)
+- express: Web framework
+- sequelize: ORM for PostgreSQL
+- pg: PostgreSQL client
+- bcryptjs: Password hashing
+- jsonwebtoken: Authentication (JWT)
+- exceljs & pdfkit: Reporting and exports
+- node-cron: Scheduled tasks/backups
+- sharp: Image processing
+
+## 3. Core Frontend Dependencies (React)
+- react & react-dom: Frontend library
+- vite: Build tool
+- lucide-react: Icons
+- recharts: Analytics charts
+- tailwindcss: Styling
+- axios: API communication
+- framer-motion: Animations
+
+## 4. Database Setup
+- PostgreSQL Database
+- PostGIS (Optional, if mapping features are used)
