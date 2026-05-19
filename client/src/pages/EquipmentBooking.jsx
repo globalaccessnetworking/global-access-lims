@@ -110,7 +110,7 @@ const EquipmentBooking = () => {
                             placeholder="Select Equipment..."
                         />
                     </div>
- stories:
+
                     <div>
                         <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Date</label>
                         <input

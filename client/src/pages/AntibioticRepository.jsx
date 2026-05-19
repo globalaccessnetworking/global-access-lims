@@ -1,7 +1,7 @@
 import DynamicModule from './DynamicModule';
 
 const AntibioticRepository = () => {
-    return <DynamicModule type="ext_antibiotics" />;
+    return <DynamicModule type="antibiotics" />;
 };
 
 export default AntibioticRepository;

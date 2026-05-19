@@ -8,6 +8,7 @@ import SmartLookup from '../components/SmartLookup';
 
 const InventoryEntry = () => {
     const navigate = useNavigate();
+    const [showSuccess, setShowSuccess] = useState(false);
     const [formData, setFormData] = useState({
         item_name: '',
         manufacturer: '',
@@ -174,7 +175,7 @@ const InventoryEntry = () => {
                                 placeholder="e.g. Chemical Store, Shelf A"
                             />
                         </div>
- stories:
+
 
 
                         <div className="col-span-2">

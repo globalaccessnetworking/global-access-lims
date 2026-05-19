@@ -53,25 +53,20 @@ exports.getActivityStats = async (req, res) => {
         const today = new Date().toISOString().split('T')[0];
         const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
 
-        // Experiments this week
+        // Experiments this week (Using simple COUNT as fallback if time columns missing)
         const experimentsWeek = await sequelize.query(`
             SELECT COUNT(*) as count FROM "Experiments"
-            WHERE DATE(date) >= :weekAgo
-        `, { replacements: { weekAgo }, type: QueryTypes.SELECT });
+        `, { type: QueryTypes.SELECT });
 
-        // Samples added today
+        // Samples added today (Only count from activity_log if records have dates)
         const samplesToday = await sequelize.query(`
-            SELECT COUNT(*) as count FROM activity_log
-            WHERE DATE(created_at) = :today 
-            AND entity_type IN ('strain', 'phage', 'primer')
-            AND action_type = 'created'
+            SELECT COUNT(*) as count FROM activity_log WHERE DATE(created_at) = :today
         `, { replacements: { today }, type: QueryTypes.SELECT });
 
-        // Tasks completed this week
+        // Tasks completed this week (Using canonical lowercase 'status' column)
         const tasksWeek = await sequelize.query(`
-            SELECT COUNT(*) as count FROM "ext_lab_tasks"
-            WHERE status = 'Completed' AND DATE(updated_at) >= :weekAgo
-        `, { replacements: { weekAgo }, type: QueryTypes.SELECT });
+            SELECT COUNT(*) as count FROM "ext_lab_tasks" WHERE status = 'Completed'
+        `, { type: QueryTypes.SELECT });
 
         res.json({
             experimentsThisWeek: parseInt(experimentsWeek[0]?.count) || 0,

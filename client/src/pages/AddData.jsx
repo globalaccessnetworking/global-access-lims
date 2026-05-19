@@ -70,12 +70,6 @@ const AddData = () => {
         // Lab Stock
         barcode: '',
         chemical_name: '',
-        current_volume: '',
-        threshold_limit: '',
-        unit: 'mL',
-        ghs_hazards: [],
-        signal_word: 'None',
-        sds_url: ''
     };
 
     const [formData, setFormData] = useState(initialForm);
@@ -358,14 +352,29 @@ const AddData = () => {
             return;
         }
 
+        if (type === 'Chemical') {
+            navigate('/lab-stock-entry');
+            return;
+        }
+
         if (type === 'Strain') {
             navigate('/strain-entry');
         } else if (type === 'Phage') {
             navigate('/phage-entry');
+        } else if (type === 'Plasmid') {
+            navigate('/plasmid-entry');
+        } else if (type === 'Primer') {
+            navigate('/primer-entry');
+        } else if (type === 'Antibiotic') {
+            navigate('/antibiotics-discs-entry');
         } else {
             // Simplify logic: Mapping Type to Tab Name
             let tabName = type;
             if (type === 'Chemical') tabName = 'Lab-Stock';
+            else if (type === 'Chemical') {
+                navigate('/lab-stock-entry');
+                return;
+            }
             else if (type === 'Antibiotic') tabName = 'Antibiotics Discs';
 
             setActiveTab(tabName);
@@ -639,7 +648,7 @@ const AddData = () => {
                                     placeholder="Search Antibiotic..."
                                 />
                             </div>
- stories:
+
                             <div>
                                 <label className="block text-xs font-bold text-emerald-400 uppercase mb-2 ml-1">Quantity Added</label>
                                 <div className="relative">
@@ -660,87 +669,16 @@ const AddData = () => {
 
                     ) : activeTab === 'Lab-Stock' ? (
                         /* --- LAB STOCK FORM --- */
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in">
-                            {/* Barcode Scanner */}
-                            <div className="col-span-2">
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">Barcode / ID</label>
-                                <div className="relative">
-                                    <input type="text" name="barcode" required autoFocus
-                                        value={formData.barcode} onChange={handleChange} onBlur={handleBlur}
-                                        placeholder="Scan barcode here..."
-                                        className="w-full pl-12 pr-4 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-mono text-xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 placeholder-slate-600"
-                                    />
-                                    <Activity className="absolute left-4 top-4.5 text-purple-500 w-6 h-6 animate-pulse" />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">Chemical Name</label>
-                                <input type="text" name="chemical_name" required
-                                    value={formData.chemical_name} onChange={handleChange}
-                                    className="w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-medium"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">Current Volume</label>
-                                <div className="flex gap-2">
-                                    <input type="number" name="current_volume" required
-                                        value={formData.current_volume} onChange={handleChange}
-                                        className={`w-full px-5 py-4 bg-slate-800 border rounded-2xl text-white font-mono text-xl focus:ring-2 focus:ring-emerald-500 ${isLowStock ? 'border-rose-500 ring-1 ring-rose-500' : 'border-slate-700'}`}
-                                    />
-                                    <select name="unit" value={formData.unit} onChange={handleChange} className="w-24 bg-slate-800 border border-slate-700 rounded-2xl text-white px-3 font-bold">
-                                        <option>mL</option><option>L</option><option>g</option><option>kg</option>
-                                    </select>
-                                </div>
-                                {isLowStock && <p className="text-rose-500 text-xs font-bold mt-2 animate-pulse flex items-center gap-1"><AlertTriangle className="w-3 h-3" /> LOW STOCK WARNING</p>}
-                            </div>
-
-                            <div>
-                                <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">Low Stock Threshold</label>
-                                <input type="number" name="threshold_limit" required
-                                    value={formData.threshold_limit} onChange={handleChange}
-                                    className="w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white font-mono text-lg focus:ring-2 focus:ring-emerald-500"
-                                />
-                            </div>
-
-                            <div className="col-span-2 space-y-4">
-                                <h3 className="text-sm font-bold text-blue-400 uppercase tracking-wider pb-2 border-b border-slate-800">Chemical Safety (GHS)</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">Signal Word</label>
-                                        <select name="signal_word" value={formData.signal_word} onChange={handleChange} className="w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500">
-                                            <option value="None">None</option>
-                                            <option value="Warning">Warning</option>
-                                            <option value="Danger">Danger</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">SDS URL</label>
-                                        <input type="url" name="sds_url" value={formData.sds_url} onChange={handleChange} placeholder="https://..." className="w-full px-5 py-4 bg-slate-800 border border-slate-700 rounded-2xl text-white focus:ring-2 focus:ring-blue-500" />
-                                    </div>
-                                    <div className="col-span-2">
-                                        <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">Hazard Pictograms (GHS Codes)</label>
-                                        <div className="flex flex-wrap gap-2 p-4 bg-slate-800/50 rounded-2xl border border-slate-700">
-                                            {['GHS01', 'GHS02', 'GHS03', 'GHS04', 'GHS05', 'GHS06', 'GHS07', 'GHS08', 'GHS09'].map(code => (
-                                                <button
-                                                    key={code}
-                                                    type="button"
-                                                    onClick={() => {
-                                                        const current = formData.ghs_hazards || [];
-                                                        const next = current.includes(code) ? current.filter(c => c !== code) : [...current, code];
-                                                        setFormData({ ...formData, ghs_hazards: next });
-                                                    }}
-                                                    className={`px-3 py-2 rounded-lg border font-mono text-xs transition-all ${formData.ghs_hazards?.includes(code) ? 'bg-blue-600 border-blue-400 text-white shadow-lg shadow-blue-900/40' : 'bg-slate-900 border-slate-700 text-slate-500 hover:border-slate-500'}`}
-                                                >
-                                                    {code}
-                                                </button>
-                                            ))}
-                                        </div>
-                                        <p className="text-[10px] text-slate-500 mt-2 ml-1 italic text-right">* GHS01: Explosive, GHS02: Flammable, GHS05: Corrosive, GHS06: Toxic, etc.</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="flex flex-col items-center justify-center p-20 text-center space-y-4">
+                            <Package className="w-16 h-16 text-slate-700 animate-pulse" />
+                            <h3 className="text-xl font-bold text-slate-400 uppercase tracking-widest">Redirecting to High-Fidelity Entry...</h3>
+                            <p className="text-slate-500 max-w-xs mx-auto">Please use the dedicated Lab-Stock form for 1:1 MS Access database parity.</p>
+                            <button 
+                                onClick={() => navigate('/lab-stock-entry')}
+                                className="px-8 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-500 transition-all mt-4"
+                            >
+                                Open Dedicated Form
+                            </button>
                         </div>
 
                     ) : (
@@ -757,7 +695,7 @@ const AddData = () => {
                                         placeholder="Select or Type..."
                                     />
                                 </div>
- stories:
+
                                 <div>
                                     <label className="block text-xs font-bold text-slate-400 uppercase mb-2 ml-1">
                                         {activeTab === 'Primer' ? 'Unique ID' : 'Catalog / ID No.'}

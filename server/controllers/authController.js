@@ -137,7 +137,7 @@ exports.deleteUser = async (req, res) => {
 
 exports.updateUserPermissions = async (req, res) => {
     try {
-        const { role, permissions } = req.body;
+        const { role, permissions, security_question_1, security_answer_1, security_question_2, security_answer_2 } = req.body;
         const user = await User.findByPk(req.params.id);
 
         if (!user) {
@@ -151,11 +151,78 @@ exports.updateUserPermissions = async (req, res) => {
         }
 
         if (permissions) user.permissions = permissions;
+        if (security_question_1) user.security_question_1 = security_question_1;
+        if (security_answer_1)   user.security_answer_1   = security_answer_1.trim().toLowerCase();
+        if (security_question_2) user.security_question_2 = security_question_2;
+        if (security_answer_2)   user.security_answer_2   = security_answer_2.trim().toLowerCase();
 
         await user.save();
         res.json(user);
     } catch (err) {
         console.error("Update User Error:", err.message);
         res.status(500).json({ msg: 'Server Error: ' + err.message });
+    }
+};
+
+// ─── FORGOT PASSWORD: STEP 1 — Return questions for username ─────────────────
+exports.forgotPasswordStep1 = async (req, res) => {
+    const { username } = req.body;
+    if (!username) return res.status(400).json({ message: 'Username is required' });
+
+    try {
+        const user = await User.findOne({ where: { username: username.trim() } });
+        if (!user) {
+            // Vague message intentionally to prevent username enumeration
+            return res.status(404).json({ message: 'No account found with that username.' });
+        }
+        if (!user.security_question_1 || !user.security_question_2) {
+            return res.status(403).json({ message: 'This account has no security questions set up. Please contact your administrator.' });
+        }
+        res.json({
+            success: true,
+            question1: user.security_question_1,
+            question2: user.security_question_2
+        });
+    } catch (err) {
+        console.error('ForgotPassword Step1 Error:', err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// ─── FORGOT PASSWORD: STEP 2 — Verify answers and reset password ─────────────
+exports.forgotPasswordStep2 = async (req, res) => {
+    const { username, answer1, answer2, newPassword } = req.body;
+
+    if (!username || !answer1 || !answer2 || !newPassword) {
+        return res.status(400).json({ message: 'All fields are required.' });
+    }
+    if (newPassword.length < 6) {
+        return res.status(400).json({ message: 'New password must be at least 6 characters.' });
+    }
+
+    try {
+        const user = await User.findOne({ where: { username: username.trim() } });
+        if (!user || !user.security_answer_1 || !user.security_answer_2) {
+            return res.status(404).json({ message: 'Account not found or security questions not configured.' });
+        }
+
+        // Case-insensitive, whitespace-trimmed comparison
+        const a1Match = answer1.trim().toLowerCase() === user.security_answer_1;
+        const a2Match = answer2.trim().toLowerCase() === user.security_answer_2;
+
+        if (!a1Match || !a2Match) {
+            return res.status(401).json({ message: 'One or more answers are incorrect. Please try again.' });
+        }
+
+        // Reset the password
+        const salt = await bcrypt.genSalt(10);
+        const password_hash = await bcrypt.hash(newPassword, salt);
+        user.password_hash = password_hash;
+        await user.save();
+
+        res.json({ success: true, message: 'Password reset successful! You may now log in.' });
+    } catch (err) {
+        console.error('ForgotPassword Step2 Error:', err.message);
+        res.status(500).json({ message: 'Server error' });
     }
 };

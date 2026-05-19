@@ -31,6 +31,22 @@ const User = sequelize.define('User', {
     },
     last_login: {
         type: DataTypes.DATE
+    },
+    security_question_1: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    security_answer_1: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    security_question_2: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    security_answer_2: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 });
 

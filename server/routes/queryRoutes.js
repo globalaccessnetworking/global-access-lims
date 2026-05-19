@@ -84,6 +84,32 @@ router.get('/:id/execute', async (req, res) => {
     }
 });
 
+// POST /api/queries/run-adhoc - Universal Multi-Join Reporting Engine
+router.post('/run-adhoc', async (req, res) => {
+    try {
+        const { executeComplexQuery } = require('../utils/reportEngine');
+        const results = await executeComplexQuery(req.body);
+
+        // Audit the data extraction
+        const { SystemAuditLog } = require('../models');
+        await SystemAuditLog.create({
+            user_id: req.user?.id || null,
+            action: 'REPORT_EXPORT',
+            table_name: req.body.primaryTable,
+            details: { 
+                joins: req.body.joins?.length || 0, 
+                filters: req.body.filters?.conditions?.length || 0,
+                rowCount: results.length
+            }
+        });
+
+        res.json(results);
+    } catch (err) {
+        console.error("Ad-Hoc Query Failed:", err);
+        res.status(500).json({ error: err.message || "Failed to execute complex query" });
+    }
+});
+
 // DELETE /api/queries/:id
 router.delete('/:id', async (req, res) => {
     try {

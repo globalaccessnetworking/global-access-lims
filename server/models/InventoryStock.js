@@ -81,7 +81,11 @@ InventoryStock.init({
     source: {
         type: DataTypes.STRING,
         defaultValue: 'Lab-Stock.csv'
-    }
+    },
+    // Relational IDs
+    manufacturer_id: { type: DataTypes.INTEGER },
+    stock_category_id: { type: DataTypes.INTEGER },
+    storage_area_id: { type: DataTypes.INTEGER }
 }, {
     sequelize,
     modelName: 'InventoryStock',

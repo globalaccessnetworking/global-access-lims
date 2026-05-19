@@ -1,7 +1,7 @@
 import DynamicModule from './DynamicModule';
 
 const StrainRepository = () => {
-    return <DynamicModule type="ext_bacterial_strains" />;
+    return <DynamicModule type="BiologicalAssets" filter="Strain" />;
 };
 
 export default StrainRepository;

@@ -20,8 +20,10 @@ import MaintenanceLog from './pages/MaintenanceLog';
 import EquipmentTracker from './pages/EquipmentTracker';
 import AuditTrail from './pages/AuditTrail';
 import HostRangeMatrix from './pages/HostRangeMatrix';
+import BoxMatrix from './pages/BoxMatrix';
 import StrainEntry from './pages/StrainEntry';
 import StrainRepository from './pages/StrainRepository';
+import HostBacteriaEntry from './pages/HostBacteriaEntry';
 import PhageRepository from './pages/PhageRepository';
 import AntibioticRepository from './pages/AntibioticRepository';
 import PlasmidRepository from './pages/PlasmidRepository';
@@ -29,6 +31,8 @@ import PrimerRepository from './pages/PrimerRepository';
 import DynamicModule from './pages/DynamicModule';
 import InventoryEntry from './pages/InventoryEntry';
 import PhageEntry from './pages/PhageEntry';
+import PlasmidEntry from './pages/PlasmidEntry';
+import PrimerEntry from './pages/PrimerEntry';
 import Storage3D from './pages/Storage3D';
 import SequenceWorkbench from './pages/SequenceWorkbench';
 import ExperimentalLogbook from './pages/ExperimentalLogbook';
@@ -38,6 +42,7 @@ import AlertCenter from './pages/AlertCenter';
 import PublicCatalog from './pages/PublicCatalog';
 import TreatmentDesigner from './pages/TreatmentDesigner';
 import FormBuilder from './pages/Admin/FormBuilder';
+import FormExecutor from './pages/Admin/FormExecutor';
 import QRGenerator from './pages/QRGenerator';
 import QRReader from './pages/QRReader';
 import BulkImport from './pages/BulkImport';
@@ -47,6 +52,8 @@ import ExperimentTemplates from './pages/ExperimentTemplates';
 import SuccessRateAnalytics from './pages/SuccessRateAnalytics';
 import AuditTrailViewer from './pages/AuditTrailViewer';
 import ProtocolLibrary from './pages/ProtocolLibrary';
+import AntibioticsDiscsEntry from './pages/AntibioticsDiscsEntry';
+import LabStockEntry from './pages/LabStockEntry';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -99,7 +106,9 @@ const AppContent = () => {
         <Route path="/audit" element={<PrivateRoute><Layout><AuditTrail /></Layout></PrivateRoute>} />
         <Route path="/phage-matrix" element={<PrivateRoute><Layout><HostRangeMatrix /></Layout></PrivateRoute>} />
         <Route path="/matrix" element={<PrivateRoute><Layout><HostRangeMatrix /></Layout></PrivateRoute>} />
+        <Route path="/box-matrix" element={<PrivateRoute><Layout><BoxMatrix /></Layout></PrivateRoute>} />
         <Route path="/strain-entry" element={<PrivateRoute><Layout><StrainEntry /></Layout></PrivateRoute>} />
+        <Route path="/host-bacteria-entry" element={<PrivateRoute><Layout><HostBacteriaEntry /></Layout></PrivateRoute>} />
         <Route path="/strains" element={<PrivateRoute><Layout><StrainRepository /></Layout></PrivateRoute>} />
         <Route path="/strain-repository" element={<PrivateRoute><Layout><StrainRepository /></Layout></PrivateRoute>} />
         <Route path="/phages" element={<PrivateRoute><Layout><PhageRepository /></Layout></PrivateRoute>} />
@@ -111,8 +120,13 @@ const AppContent = () => {
         <Route path="/primers" element={<PrivateRoute><Layout><PrimerRepository /></Layout></PrivateRoute>} />
         <Route path="/primer-repository" element={<PrivateRoute><Layout><PrimerRepository /></Layout></PrivateRoute>} />
         <Route path="/dynamic/:type" element={<PrivateRoute><Layout><DynamicModule /></Layout></PrivateRoute>} />
+        <Route path="/dashboard/system/:type" element={<PrivateRoute><Layout><DynamicModule /></Layout></PrivateRoute>} />
         <Route path="/inventory-entry" element={<PrivateRoute><Layout><InventoryEntry /></Layout></PrivateRoute>} />
         <Route path="/phage-entry" element={<PrivateRoute><Layout><PhageEntry /></Layout></PrivateRoute>} />
+        <Route path="/antibiotics-discs-entry" element={<PrivateRoute><Layout><AntibioticsDiscsEntry /></Layout></PrivateRoute>} />
+        <Route path="/lab-stock-entry" element={<PrivateRoute><Layout><LabStockEntry /></Layout></PrivateRoute>} />
+        <Route path="/plasmid-entry" element={<PrivateRoute><Layout><PlasmidEntry /></Layout></PrivateRoute>} />
+        <Route path="/primer-entry" element={<PrivateRoute><Layout><PrimerEntry /></Layout></PrivateRoute>} />
         <Route path="/storage-3d" element={<PrivateRoute><Layout><Storage3D /></Layout></PrivateRoute>} />
         <Route path="/sequence-workbench" element={<PrivateRoute><Layout><SequenceWorkbench /></Layout></PrivateRoute>} />
         <Route path="/experiments" element={<PrivateRoute><Layout><ExperimentalLogbook /></Layout></PrivateRoute>} />
@@ -126,6 +140,7 @@ const AppContent = () => {
         <Route path="/treatment-designer" element={<PrivateRoute><Layout><TreatmentDesigner /></Layout></PrivateRoute>} />
         <Route path="/treatment" element={<PrivateRoute><Layout><TreatmentDesigner /></Layout></PrivateRoute>} />
         <Route path="/admin/form-builder" element={<PrivateRoute><Layout><FormBuilder /></Layout></PrivateRoute>} />
+        <Route path="/forms/:formId/entry" element={<PrivateRoute><Layout><FormExecutor /></Layout></PrivateRoute>} />
         <Route path="/qr-generator" element={<PrivateRoute><Layout><QRGenerator /></Layout></PrivateRoute>} />
         <Route path="/qr-reader" element={<PrivateRoute><Layout><QRReader /></Layout></PrivateRoute>} />
         <Route path="/bulk-import" element={<PrivateRoute><Layout><BulkImport /></Layout></PrivateRoute>} />

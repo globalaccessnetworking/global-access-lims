@@ -11,6 +11,10 @@ const CustomForm = sequelize.define('CustomForm', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    table_name: {
+        type: DataTypes.STRING,
+        allowNull: true // Assigned upon publication
+    },
     description: {
         type: DataTypes.STRING,
         allowNull: true

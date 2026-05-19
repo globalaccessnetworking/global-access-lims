@@ -26,7 +26,9 @@ import {
     ChevronRight,
     Beaker,
     QrCode,
-    Scan
+    Scan,
+    Zap,
+    Package
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
@@ -123,15 +125,14 @@ const Sidebar = () => {
         {
             title: "LAB OPS (CORE)",
             items: [
-                { path: "/inventory-hub", label: "Inventory Hub", icon: Archive },
-                { path: "/chemical-inventory", label: "Chemical Inventory", icon: Beaker },
-                { path: "/storage", label: "Storage Hub", icon: Archive },
-                { path: "/equipment-booking", label: "Equipment Booking", icon: ClipboardList },
-                { path: "/strain-repository", label: "Bacterial Strains", icon: Dna },
-                { path: "/phage-repository", label: "Bacteriophages", icon: Bug },
-                { path: "/plasmid-repository", label: "Plasmids", icon: FileCode },
-                { path: "/primer-repository", label: "Primers", icon: AlignLeft },
-                { path: "/antibiotic-repository", label: "Antibiotics", icon: Disc },
+                { path: "/phage-entry", label: "Bacteriophages", icon: Bug },
+                { path: "/strain-entry", label: "Bacterial Strains", icon: Disc },
+                { path: "/host-bacteria-entry", label: "Host Bacteria", icon: Dna },
+                { path: "/plasmid-entry", label: "Plasmids", icon: Zap },
+                { path: "/primer-entry", label: "Primers", icon: Activity },
+                { path: "/box-matrix", label: "Freezer Boxes", icon: Archive },
+                { path: "/lab-stock-entry", label: "Lab Stock (Inventory)", icon: Package },
+                { path: "/antibiotics-discs-entry", label: "Antibiotics Discs", icon: Disc },
                 { path: "/experiment-templates", label: "Experiment Templates", icon: FileText },
                 { path: "/success-analytics", label: "Success Analytics", icon: LayoutGrid },
                 { path: "/audit-trail", label: "Audit Trail", icon: Archive },
@@ -242,7 +243,7 @@ const Sidebar = () => {
             </div>
 
             {/* Navigation */}
-            <div className="flex-1 overflow-y-auto py-6 space-y-6 scrollbar-hide">
+            <div className="flex-1 overflow-y-auto py-6 space-y-6 custom-scrollbar">
                 {filteredMenuGroups.map((group, idx) => {
                     const isExtendedGroup = group.title === "Scientific Data Explorer";
                     if (isExtendedGroup && !dynamicModules.length) return null;
@@ -279,7 +280,7 @@ const Sidebar = () => {
                                             </div>
 
                                             {isOpen && (
-                                                <span className="font-medium text-sm tracking-wide truncate">
+                                                <span className="font-medium text-sm tracking-wide break-words whitespace-normal py-1">
                                                     {item.label}
                                                 </span>
                                             )}

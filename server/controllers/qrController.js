@@ -94,3 +94,24 @@ exports.lookupAsset = async (req, res) => {
         res.status(500).json({ success: false, error: 'Identification system error' });
     }
 };
+
+exports.getAssets = async (req, res) => {
+    try {
+        const query = `
+            SELECT id, "Bacteriophage_Name" AS name, 'Phage' AS "assetType", 'BIO' AS prefix, 'LIMS-PHG-' || id AS uid FROM ext_bacteriophages
+            UNION ALL
+            SELECT id, "Strain_No" AS name, 'Bacteria' AS "assetType", 'BIO' AS prefix, 'LIMS-STR-' || id AS uid FROM ext_bacterial_strains
+            UNION ALL
+            SELECT id, "Plasmid_Name" AS name, 'Plasmid' AS "assetType", 'BIO' AS prefix, 'LIMS-PLAS-' || id AS uid FROM ext_plasmids
+            UNION ALL
+            SELECT id, "Primer_Name" AS name, 'Primer' AS "assetType", 'BIO' AS prefix, 'LIMS-PRM-' || id AS uid FROM ext_primers_details
+            UNION ALL
+            SELECT id, "Item_Name" AS name, 'Inventory' AS "assetType", 'INV' AS prefix, 'LIMS-INV-' || id AS uid FROM ext_lab_stock
+        `;
+        const assets = await sequelize.query(query, { type: QueryTypes.SELECT });
+        res.json({ success: true, assets });
+    } catch (err) {
+        console.error('Error fetching QR assets:', err.message);
+        res.status(500).json({ success: false, error: 'Failed to fetch assets for QR generation' });
+    }
+};

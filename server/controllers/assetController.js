@@ -107,12 +107,21 @@ exports.getBacteriophages = async (req, res) => {
 };
 
 exports.addAsset = async (req, res) => {
-    const { species, strain_number, type, characteristics, StorageLocation: locationData, source_id, antibiotic_sensitivity, morphology } = req.body;
+    const { 
+        species, strain_number, type, characteristics, StorageLocation: locationData, 
+        source_id, antibiotic_sensitivity, morphology,
+        species_id, wild_type_id, stock_category_id, 
+        phage_name_id, host_strain_id, lytic_type_id, against_species_id,
+        plasmid_vector_id, gene_source_id, cloning_method_id, antibiotic_marker_id,
+        target_phage_id, target_plasmid_id,
+        manufacturer_id, notes
+    } = req.body;
+    
     const { Source, AntibioticSensitivity, StorageLocation: StorageModel, PhageHostInteraction, BiologicalAsset: AssetModel } = require('../models');
 
     try {
         // DUPLICATE GUARD: Check if ID already exists
-        const existing = await BiologicalAsset.findOne({ where: { strain_number } });
+        const existing = await AssetModel.findOne({ where: { strain_number } });
         if (existing) {
             return res.status(400).json({ msg: `Duplicate Error: ID '${strain_number}' already exists.` });
         }
@@ -122,52 +131,42 @@ exports.addAsset = async (req, res) => {
         if (locationData) {
             const [loc] = await StorageModel.findOrCreate({
                 where: {
-                    freezer_name: locationData.freezer_name,
-                    box: locationData.box,
-                    position: locationData.position
+                    freezer_name: locationData.freezer_name || '',
+                    box: locationData.box || '',
+                    position: locationData.position || '',
+                    freezer_id: locationData.freezer_id || null,
+                    rack_id: locationData.rack_id || null,
+                    box_id: locationData.box_id || null
                 }
             });
             storage_location_id = loc.id;
         }
 
-        const newAsset = await BiologicalAsset.create({
+        const newAsset = await AssetModel.create({
             species,
-            strain_number, // This corresponds to 'Phage_ID' for Phages
+            strain_number,
             type: type || 'Strain',
             characteristics,
             storage_location_id,
             source_id: source_id || null,
-            morphology: morphology || null, // Capture JSON details
+            species_id: species_id || null,
+            wild_type_id: wild_type_id || null,
+            stock_category_id: stock_category_id || null,
+            phage_name_id: phage_name_id || null,
+            host_strain_id: host_strain_id || null,
+            lytic_type_id: lytic_type_id || null,
+            against_species_id: against_species_id || null,
+            plasmid_vector_id: plasmid_vector_id || null,
+            gene_source_id: gene_source_id || null,
+            cloning_method_id: cloning_method_id || null,
+            antibiotic_marker_id: antibiotic_marker_id || null,
+            target_phage_id: target_phage_id || null,
+            target_plasmid_id: target_plasmid_id || null,
+            manufacturer_id: manufacturer_id || null,
+            morphology: morphology || null,
+            notes: notes || null,
             source: 'Manual Entry'
         });
-
-        // Create Phage-Host Interaction if Host is provided in morphology/characteristics metadata
-        // Assuming frontend sends 'host_strain' in the payload or we parse it.
-        // For robustness, let's look for host_strain in body or inside morphology
-        let hostStrainID = req.body.host_strain || (morphology && morphology.host_strain);
-
-        if (type === 'Phage' && hostStrainID) {
-            // Find the Host Asset by its strain_number
-            const hostAsset = await BiologicalAsset.findOne({ where: { strain_number: hostStrainID } });
-            if (hostAsset) {
-                await PhageHostInteraction.create({
-                    phage_id: newAsset.id,
-                    host_id: hostAsset.id,
-                    interaction_type: 'Lytic' // Default
-                });
-            }
-        }
-
-        // Handle Antibiotic Sensitivity
-        if (antibiotic_sensitivity && Array.isArray(antibiotic_sensitivity)) {
-            const sensitivities = antibiotic_sensitivity.map(s => ({
-                asset_id: newAsset.id,
-                antibiotic_id: s.antibiotic_id,
-                zone_size: s.zone_size,
-                interpretation: s.interpretation
-            }));
-            await AntibioticSensitivity.bulkCreate(sensitivities);
-        }
 
         // Audit Log
         await AuditLog.create({
@@ -176,10 +175,10 @@ exports.addAsset = async (req, res) => {
             description: `Added new ${type} ${strain_number}`
         });
 
-        res.json(newAsset);
+        res.status(201).json(newAsset);
     } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Server Error');
+        console.error('addAsset Error:', err.message);
+        res.status(500).json({ error: err.message });
     }
 };
 

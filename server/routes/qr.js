@@ -8,4 +8,9 @@ const { auth } = require('../middleware/auth');
 // @access  Private
 router.get('/lookup', auth, qrController.lookupAsset);
 
+// @route   GET api/qr/assets
+// @desc    Get all assets for QR generation
+// @access  Private
+router.get('/assets', auth, qrController.getAssets);
+
 module.exports = router;

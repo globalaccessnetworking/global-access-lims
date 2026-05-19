@@ -10,6 +10,8 @@ const AvailableAntibiotic = require('./AvailableAntibiotic');
 const PhageHostInteraction = require('./PhageHostInteraction');
 const Experiment = require('./Experiment');
 const SystemAuditLog = require('./SystemAuditLog');
+const CustomForm = require('./CustomForm');
+const SavedQuery = require('./SavedQuery');
 const PhageHostMatrix = require('./PhageHostMatrix');
 const EquipmentLog = require('./EquipmentLog');
 const Project = require('./Project');
@@ -58,7 +60,6 @@ Source.hasMany(BiologicalAsset, { foreignKey: 'source_id' });
 const AntibioticSensitivity = require('./AntibioticSensitivity');
 const InventoryStock = require('./InventoryStock');
 const GenericRecord = require('./GenericRecord');
-const CustomForm = require('./CustomForm');
 
 BiologicalAsset.hasMany(AntibioticSensitivity, { foreignKey: 'asset_id' });
 AntibioticSensitivity.belongsTo(BiologicalAsset, { foreignKey: 'asset_id' });
@@ -101,10 +102,11 @@ module.exports = {
     Source,
     AntibioticSensitivity,
     InventoryStock,
+    InventoryStock,
     CustomForm,
-    SavedQuery: require('./SavedQuery'),
-    SystemAuditLog: require('./SystemAuditLog'),
-    PhageHostMatrix: require('./PhageHostMatrix'),
+    SavedQuery,
+    SystemAuditLog,
+    PhageHostMatrix,
     EquipmentLog: require('./EquipmentLog'),
     Project,
     LabTask,

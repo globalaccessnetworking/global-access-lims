@@ -14,14 +14,16 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import * as XLSX from 'xlsx';
 import api from '../api/axios';
+import QuickEditModal from '../components/QuickEditModal';
 
 const BioLibrary = () => {
     const [assets, setAssets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [search, setSearch] = useState('');
-    const [stats, setStats] = useState({ total: 0, phages: 0, strains: 0, primers: 0 });
-    const [activeFilter, setActiveFilter] = useState('all'); // 'all', 'phage', 'strain', 'primer'
+    const [stats, setStats] = useState({ total: 0, phages: 0, strains: 0, primers: 0, plasmids: 0 });
+    const [activeFilter, setActiveFilter] = useState('ALL'); // 'ALL', 'PHAGE', 'STRAIN', 'PRIMER', 'PLASMID'
+    const [selectedAsset, setSelectedAsset] = useState(null);
 
     useEffect(() => {
         const fetchBio = async () => {
@@ -29,21 +31,23 @@ const BioLibrary = () => {
             setError(null);
             try {
                 const res = await api.get(`/bio?search=${encodeURIComponent(search)}`);
-                const fetchedAssets = res.data.assets || [];
-                setAssets(fetchedAssets);
+                
+                // [PHASE 138] Payload Extraction Alignment
+                if (res.data && res.data.success) {
+                    const fetchedAssets = res.data.assets || [];
+                    setAssets(fetchedAssets);
 
-                // Calculate stats based on full library if search is empty
-                if (!search) {
-                    setStats({
-                        total: fetchedAssets.length,
-                        phages: fetchedAssets.filter(a => a.type === 'phage').length,
-                        strains: fetchedAssets.filter(a => a.type === 'strain').length,
-                        primers: fetchedAssets.filter(a => a.type === 'primer').length
-                    });
+                    // Hydrate Stats from Server (Avoids client-side lag)
+                    if (res.data.stats) {
+                        setStats(res.data.stats);
+                    }
+                } else {
+                    console.error("API returned failure status", res.data);
+                    setError(res.data?.error || "Endpoint reported a data sync failure.");
                 }
             } catch (err) {
                 console.error("Failed to fetch bio library", err);
-                setError("Library Sync Failed. Please check backend connection.");
+                setError(err.response?.data?.error || "Library Sync Failed. Please check backend connection.");
             } finally {
                 setLoading(false);
             }
@@ -55,18 +59,19 @@ const BioLibrary = () => {
 
     // Local filtering based on active card with toggle logic
     const handleCardFilter = (type) => {
-        setActiveFilter(prev => prev === type ? 'all' : type);
+        setActiveFilter(prev => prev === type ? 'ALL' : type);
     };
 
-    const filteredAssets = activeFilter === 'all'
+    const filteredAssets = activeFilter === 'ALL'
         ? assets
         : assets.filter(a => a.type === activeFilter);
 
     const getTypeIcon = (type) => {
         switch (type) {
-            case 'phage': return <Bug size={16} className="text-blue-400" />;
-            case 'strain': return <Dna size={16} className="text-emerald-400" />;
-            case 'primer': return <FileCode size={16} className="text-purple-400" />;
+            case 'PHAGE': return <Bug size={16} className="text-blue-400" />;
+            case 'STRAIN': return <Dna size={16} className="text-emerald-400" />;
+            case 'PRIMER': return <FileCode size={16} className="text-purple-400" />;
+            case 'PLASMID': return <FlaskConical size={16} className="text-amber-400" />;
             default: return <FlaskConical size={16} className="text-slate-400" />;
         }
     };
@@ -74,9 +79,10 @@ const BioLibrary = () => {
     const getTypeBadge = (type) => {
         const base = "px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 border";
         switch (type) {
-            case 'phage': return `${base} bg-blue-500/10 border-blue-500/20 text-blue-400`;
-            case 'strain': return `${base} bg-emerald-500/10 border-emerald-500/20 text-emerald-400`;
-            case 'primer': return `${base} bg-purple-500/10 border-purple-500/20 text-purple-400`;
+            case 'PHAGE': return `${base} bg-blue-500/10 border-blue-500/20 text-blue-400`;
+            case 'STRAIN': return `${base} bg-emerald-500/10 border-emerald-500/20 text-emerald-400`;
+            case 'PRIMER': return `${base} bg-purple-500/10 border-purple-500/20 text-purple-400`;
+            case 'PLASMID': return `${base} bg-amber-500/10 border-amber-500/20 text-amber-400`;
             default: return `${base} bg-slate-500/10 border-slate-500/20 text-slate-400`;
         }
     };
@@ -111,7 +117,7 @@ const BioLibrary = () => {
                         <Database className="text-emerald-400" size={40} />
                         Bio Library
                     </h1>
-                    <p className="text-slate-400 mt-2 text-lg font-medium">Central Repository for all Biological Assets and Strains.</p>
+                    <p className="text-slate-400 mt-2 text-lg font-medium">Central Repository for all Biological Assets including Bacterial Strains, Bacteriophages, Primers, and Plasmids.</p>
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -129,13 +135,14 @@ const BioLibrary = () => {
                 </div>
             </div>
 
-            {/* Interactive Quick Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 relative z-10">
+            {/* Interactive Quick Stats Grid - Updated to 5 Columns for Phase 135 */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 px-4 relative z-10">
                 {[
-                    { id: 'all', label: 'Total Assets', value: stats.total, color: 'text-white', icon: Database, accent: 'border-white/20 bg-emerald-500/10' },
-                    { id: 'phage', label: 'Bacteriophages', value: stats.phages, color: 'text-blue-400', icon: Bug, accent: 'border-blue-500/50 bg-blue-500/10' },
-                    { id: 'strain', label: 'Bacterial Strains', value: stats.strains, color: 'text-emerald-400', icon: Dna, accent: 'border-emerald-500/50 bg-emerald-500/10' },
-                    { id: 'primer', label: 'Primers & DNA', value: stats.primers, color: 'text-purple-400', icon: FileCode, accent: 'border-purple-500/50 bg-purple-500/10' }
+                    { id: 'ALL', label: 'Total Assets', value: stats.total, color: 'text-white', icon: Database, accent: 'border-white/20 bg-emerald-500/10' },
+                    { id: 'PHAGE', label: 'Bacteriophages', value: stats.phages, color: 'text-blue-400', icon: Bug, accent: 'border-blue-500/50 bg-blue-500/10' },
+                    { id: 'STRAIN', label: 'Bacterial Strains', value: stats.strains, color: 'text-emerald-400', icon: Dna, accent: 'border-emerald-500/50 bg-emerald-500/10' },
+                    { id: 'PRIMER', label: 'Primers & DNA', value: stats.primers, color: 'text-purple-400', icon: FileCode, accent: 'border-purple-500/50 bg-purple-500/10' },
+                    { id: 'PLASMID', label: 'Plasmids', value: stats.plasmids, color: 'text-amber-400', icon: FlaskConical, accent: 'border-amber-500/50 bg-amber-500/10' }
                 ].map((stat) => (
                     <button
                         key={stat.id}
@@ -186,18 +193,19 @@ const BioLibrary = () => {
                             Filtered Census
                         </div>
                         <div className="text-2xl font-black text-white">
-                            <span className="text-emerald-400">{filteredAssets.length}</span> <span className="text-slate-600 text-sm">/ {assets.length}</span>
+                            <span className="text-emerald-400">{filteredAssets.length}</span> <span className="text-slate-600 text-sm">/ {stats.total}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Table Header */}
-                <div className="grid grid-cols-7 gap-4 px-8 py-5 bg-slate-800/80 text-slate-400 text-[11px] font-black uppercase tracking-[0.2em] border-b border-white/10">
+                <div className="grid grid-cols-8 gap-4 px-8 py-5 bg-slate-800/80 text-slate-400 text-[11px] font-black uppercase tracking-[0.2em] border-b border-white/10">
                     <div className="flex items-center gap-2">ID <ArrowUpDown size={12} /></div>
                     <div className="col-span-2 flex items-center gap-2">Asset Identity <ArrowUpDown size={12} /></div>
                     <div className="flex items-center gap-2">Classification</div>
                     <div className="flex items-center gap-2">Specie / Host</div>
                     <div className="flex items-center gap-2">Location Map</div>
+                    <div className="flex items-center gap-2">Plaque Assay</div>
                     <div className="text-right">Intelligence</div>
                 </div>
 
@@ -231,7 +239,7 @@ const BioLibrary = () => {
                             <p className="text-slate-500 text-2xl font-black">Null Set Detected.</p>
                             <p className="text-slate-600 mt-2 font-medium">Try adjusting your Global Search or Filter Cards.</p>
                             <button
-                                onClick={() => { setSearch(''); setActiveFilter('all'); }}
+                                onClick={() => { setSearch(''); setActiveFilter('ALL'); }}
                                 className="mt-6 text-emerald-400 text-sm font-bold hover:underline tracking-widest uppercase"
                             >
                                 Reset All Parameters
@@ -244,15 +252,17 @@ const BioLibrary = () => {
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: Math.min(idx * 0.005, 0.5) }}
-                                className="grid grid-cols-7 gap-4 px-8 py-5 items-center hover:bg-emerald-500/5 transition-all group cursor-pointer border-l-2 border-transparent hover:border-emerald-500/30"
+                                className="grid grid-cols-8 gap-4 px-8 py-5 items-center hover:bg-emerald-500/5 transition-all group cursor-pointer border-l-2 border-transparent hover:border-emerald-500/30"
                             >
                                 <div className="text-slate-600 font-mono text-xs font-bold tracking-tighter group-hover:text-slate-400 transition-colors">
                                     REG #{asset.asset_id}
                                 </div>
                                 <div className="col-span-2 flex items-center gap-4">
-                                    <div className={`p-3 rounded-xl shadow-lg ${asset.type === 'phage' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                                    <div className={`p-3 rounded-xl shadow-lg ${
+                                        asset.type === 'phage' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
                                         asset.type === 'strain' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
-                                            'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                                        asset.type === 'primer' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/20' :
+                                        'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                                         }`}>
                                         {getTypeIcon(asset.type)}
                                     </div>
@@ -261,7 +271,7 @@ const BioLibrary = () => {
                                             {asset.name}
                                         </div>
                                         <div className="text-[10px] text-slate-500 font-mono mt-0.5 group-hover:text-slate-400">
-                                            {asset.type.toUpperCase()} • {asset.createdAt !== 'Pre-Migration Central' ? new Date(asset.createdAt).toLocaleDateString() : 'Pre-Migration'}
+                                            {asset.type.toUpperCase()} • {asset.createdAt !== 'Pre-Migration Central' && asset.createdAt ? new Date(asset.createdAt).toLocaleDateString() : 'Pre-Migration'}
                                         </div>
                                     </div>
                                 </div>
@@ -280,18 +290,68 @@ const BioLibrary = () => {
                                         {asset.box}
                                     </div>
                                 </div>
+                                {/* Plaque Assay Result Column */}
+                                <div>
+                                    {asset.plaque_assay_result ? (
+                                        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border ${
+                                            asset.plaque_assay_result.startsWith('+++') ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                                            asset.plaque_assay_result.startsWith('++')  ? 'bg-green-500/10 border-green-500/20 text-green-400' :
+                                            asset.plaque_assay_result.startsWith('+')   ? 'bg-lime-500/10 border-lime-500/20 text-lime-400' :
+                                            asset.plaque_assay_result.startsWith('±')   ? 'bg-amber-500/10 border-amber-500/20 text-amber-400' :
+                                            'bg-rose-500/10 border-rose-500/20 text-rose-400'
+                                        }`}>
+                                            <span className={`w-1.5 h-1.5 rounded-full ${
+                                                asset.plaque_assay_result.startsWith('+++') ? 'bg-emerald-400' :
+                                                asset.plaque_assay_result.startsWith('++')  ? 'bg-green-400' :
+                                                asset.plaque_assay_result.startsWith('+')   ? 'bg-lime-400' :
+                                                asset.plaque_assay_result.startsWith('±')   ? 'bg-amber-400' :
+                                                'bg-rose-500'
+                                            }`} />
+                                            {asset.plaque_assay_result}
+                                        </span>
+                                    ) : (
+                                        <span className="text-slate-700 text-[10px] font-mono">—</span>
+                                    )}
+                                </div>
                                 <div className="flex justify-end pr-2">
-                                    <div className="p-2.5 bg-white/5 rounded-xl text-emerald-400 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                                    <button 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedAsset({ id: asset.asset_id, type: asset.type, name: asset.name });
+                                        }}
+                                        className="p-2.5 bg-white/5 rounded-xl text-emerald-400 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300 hover:bg-emerald-500/20 active:scale-95"
+                                    >
                                         <ChevronRight size={20} />
-                                    </div>
+                                    </button>
                                 </div>
                             </motion.div>
                         ))
                     )}
                 </div>
             </div>
+
+            <AnimatePresence>
+                {selectedAsset && (
+                    <QuickEditModal 
+                        asset={selectedAsset} 
+                        onClose={() => setSelectedAsset(null)} 
+                        onUpdate={() => {
+                            // Re-fetch to show updated data in the list
+                            const fetchBio = async () => {
+                                const res = await api.get(`/bio?search=${encodeURIComponent(search)}`);
+                                if (res.data && res.data.success) {
+                                    setAssets(res.data.assets || []);
+                                    setStats(res.data.stats);
+                                }
+                            };
+                            fetchBio();
+                        }} 
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };
+
 
 export default BioLibrary;

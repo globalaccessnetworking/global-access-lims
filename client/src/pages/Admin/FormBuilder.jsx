@@ -1,96 +1,106 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '../../api/axios';
 import {
     Layout, Type, Hash, Calendar, List, CheckSquare,
     Save, GripVertical, Trash2, Settings, Plus, Eye,
-    Database, ArrowLeft, ArrowRight, FileText, Grid, CheckCircle
+    Database, ArrowLeft, ArrowRight, FileText, Grid, CheckCircle,
+    Image as ImageIcon, Upload, File as FileIcon, X, Activity, Zap, AlertTriangle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+
+/**
+ * [ADMIN ARCHITECT] - Clinical Form Builder v2.2
+ * 
+ * Evolved designer for high-fidelity research forms.
+ * Supports native Media, Relational Logic, and Automated DB Mapping.
+ * 
+ * v2.2 Upgrade: 'Autonomous Architect' (MS Access Parity)
+ *  - Added Live Column Discovery
+ *  - Precise Relational Mapping via Picker
+ */
 
 const FormBuilder = () => {
     const navigate = useNavigate();
-    const [formTitle, setFormTitle] = useState('New Research Form');
+    const [formTitle, setFormTitle] = useState('New Research Registry');
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState(null);
     const [previewMode, setPreviewMode] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
-
-    // Core Tables Hardcoded for Immediate Availability
-    const [bindableTables, setBindableTables] = useState([
-        { name: 'BiologicalAssets', label: 'Biological Assets (General)' },
-        { name: 'BacterialStrains', label: 'Bacterial Strains' },
-        { name: 'Bacteriophages', label: 'Bacteriophages' },
-        { name: 'AntibioticDiscs', label: 'Antibiotic Discs' },
-        { name: 'Plasmids', label: 'Plasmids' },
-        { name: 'Primers', label: 'Primers' }
-    ]);
-
     const [saving, setSaving] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isMounted, setIsMounted] = useState(false);
 
-    // Initial Load & Auth Check
+    // Dynamic Binding Persistence
+    const [bindableTables, setBindableTables] = useState([]);
+    const [availableColumns, setAvailableColumns] = useState([]);
+    const [loadingColumns, setLoadingColumns] = useState(false);
+
     useEffect(() => {
         setIsMounted(true);
-        const token = localStorage.getItem('token');
-        if (!token) {
-            // Show Login Modal or Redirect
-            navigate('/login');
-        }
-
         const init = async () => {
-            // Simulate "loading" for smooth UX
-            setTimeout(() => setIsLoading(false), 800);
-
             try {
-                // We use the hardcoded tables as base, merge if API succeeds
-                const tablesRes = await api.get('/forms/meta/tables');
-                if (tablesRes.data && tablesRes.data.length > 0) {
-                    setBindableTables(tablesRes.data);
-                }
+                const res = await api.get('/forms/meta/tables');
+                setBindableTables(res.data || []);
             } catch (err) {
-                console.error("Using offline tables", err);
-                if (err.response && err.response.status === 401) {
-                    navigate('/login');
-                }
+                console.error("Initialization Failed:", err);
+            } finally {
+                setTimeout(() => setIsLoading(false), 500);
             }
         };
         init();
-    }, [navigate]);
+    }, []);
 
-    // Toolbox Items - Hardcoded & Always Visible
+    // Column Discovery Effect (MS Access Style)
+    useEffect(() => {
+        const fetchColumns = async () => {
+            if (selectedField?.type === 'lookup' && selectedField?.binding) {
+                setLoadingColumns(true);
+                try {
+                    const res = await api.get(`/forms/meta/columns/${selectedField.binding}`);
+                    setAvailableColumns(res.data || []);
+                } catch (err) {
+                    console.error("Discovery Failed:", err);
+                    setAvailableColumns([]);
+                } finally {
+                    setLoadingColumns(false);
+                }
+            } else {
+                setAvailableColumns([]);
+            }
+        };
+        fetchColumns();
+    }, [selectedField?.binding, selectedField?.type]);
+
+    // Advanced Clinical Toolbox
     const toolboxItems = [
-        { type: 'text', label: 'Text Input', icon: Type },
-        { type: 'number', label: 'Number Input', icon: Hash },
-        { type: 'textarea', label: 'Text Area', icon: List },
-        { type: 'date', label: 'Date Picker', icon: Calendar },
-        { type: 'dropdown', label: 'Relational Lookup', icon: Database },
-        { type: 'matrix', label: 'Data Matrix', icon: Grid },
-        { type: 'checkbox', label: 'Checkbox', icon: CheckSquare },
-        { type: 'section', label: 'Section Header', icon: Layout },
-    ];
-
-
-    // Standard Field Definitions for Quick Start
-    const standardFields = [
-        { key: 'phage_id', label: 'Phage ID', type: 'text' },
-        { key: 'host_strain', label: 'Host Strain', type: 'dropdown', binding: 'BacterialStrains' },
-        { key: 'sensitivity_zone', label: 'Sensitivity Zone', type: 'number' },
-        { key: 'incubation_time', label: 'Incubation Time', type: 'number' },
-        { key: 'notes', label: 'Notes', type: 'textarea' }
+        { type: 'section', label: 'Section Header', icon: Layout, color: 'text-emerald-400' },
+        { type: 'text', label: 'Clinical Text', icon: Type, color: 'text-blue-400' },
+        { type: 'number', label: 'Numeric Metric', icon: Hash, color: 'text-purple-400' },
+        { type: 'textarea', label: 'Narrative Box', icon: List, color: 'text-indigo-400' },
+        { type: 'date', label: 'Registry Date', icon: Calendar, color: 'text-amber-400' },
+        { type: 'lookup', label: 'Relational Lookup', icon: Database, color: 'text-rose-400' },
+        { type: 'matrix', label: 'Data Matrix', icon: Grid, color: 'text-teal-400' },
+        { type: 'image', label: 'Stock Imagery', icon: ImageIcon, color: 'text-pink-400' },
+        { type: 'file', label: 'Document (.doc/.pdf)', icon: FileIcon, color: 'text-orange-400' },
+        { type: 'checkbox', label: 'Binary Toggle', icon: CheckSquare, color: 'text-slate-400' },
     ];
 
     const addField = (type) => {
+        const item = toolboxItems.find(i => i.type === type);
         const newField = {
             id: Date.now().toString(),
+            key: `field_${Date.now()}`,
             type,
-            label: `New ${type}`,
+            label: `New ${item?.label || type}`,
             placeholder: '',
             required: false,
-            options: [],
             binding: '',
-            width: 'full',
-            databaseColumn: '' // New property for mapping
+            labelCol: '', // Precise Relationship Mapping
+            width: 'full', // 'half' or 'full'
+            zIndex: 10,
+            options: [],
+            matrixColumns: 'Result, Observation'
         };
         setFields(prev => [...prev, newField]);
         setSelectedField(newField);
@@ -104,14 +114,10 @@ const FormBuilder = () => {
     const updateField = (key, val) => {
         if (!selectedField) return;
         const updated = { ...selectedField, [key]: val };
-
-        // Auto-update Label if Database Column is selected
-        if (key === 'databaseColumn') {
-            const standard = standardFields.find(sf => sf.key === val);
-            if (standard) {
-                updated.label = standard.label;
-                if (standard.binding) updated.binding = standard.binding;
-            }
+        
+        // Auto-sanitize Key for DB compatibility
+        if (key === 'label') {
+            updated.key = val.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').substring(0, 30);
         }
 
         setSelectedField(updated);
@@ -130,353 +136,332 @@ const FormBuilder = () => {
             setTimeout(() => {
                 setShowSuccess(false);
                 navigate('/admin');
-            }, 1500);
+            }, 2000);
         } catch (err) {
-            console.error(err);
-            alert('Save Failed');
+            alert('Architect Deployment Failed: ' + (err.response?.data?.error || err.message));
         } finally {
             setSaving(false);
         }
     };
 
-    // --- RENDERERS ---
+    // --- PREMIUM RENDERER ---
 
     const renderPreviewField = (field) => {
-        const commonClasses = "block w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500 outline-none mt-2";
-
-        if (field.type === 'section') return <h3 className="text-lg font-bold text-white border-b border-slate-700 pb-2 mt-6 mb-4">{field.label}</h3>;
+        const glassInput = "w-full bg-slate-950/80 border border-slate-800 rounded-xl px-5 py-3 text-white focus:border-emerald-500/50 outline-none transition-all shadow-inner";
+        
+        if (field.type === 'section') {
+            return (
+                <div className="mt-10 mb-6 border-b border-emerald-500/20 pb-4">
+                    <h3 className="text-sm font-black text-emerald-400 uppercase tracking-[0.3em]">{field.label}</h3>
+                </div>
+            );
+        }
 
         return (
-            <div className={`mb-4 ${field.width === 'half' ? 'w-1/2 inline-block px-2' : 'w-full'}`}>
-                <label className="block text-xs font-bold text-slate-400 uppercase">
-                    {field.label} {field.required && <span className="text-rose-500">*</span>}
-                    {field.linkedQuery?.active && <span className="ml-2 text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded border border-blue-500/30">Auto-Fill</span>}
+            <div className={`mb-6 ${field.width === 'half' ? 'w-full md:w-1/2 md:inline-block md:px-3' : 'w-full'}`} style={{ zIndex: field.zIndex }}>
+                <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 ml-1">
+                    {field.label} {field.required && <span className="text-emerald-500/50 italic ml-1">(Required)</span>}
                 </label>
 
                 {field.type === 'textarea' ? (
-                    <textarea className={commonClasses} placeholder={field.placeholder} rows={3} />
-                ) : field.type === 'dropdown' ? (
-                    <select className={commonClasses}>
-                        <option>Select...</option>
-                        {field.binding ? <option disabled>(Bound to {field.binding} {field.multiColumn ? '[ID - Name]' : ''})</option> : null}
-                    </select>
+                    <textarea className={`${glassInput} h-24 italic`} placeholder={field.placeholder} />
+                ) : field.type === 'lookup' ? (
+                    <div className="relative">
+                        <div className={`${glassInput} flex justify-between items-center opacity-70`}>
+                            <span>Search {field.binding ? field.binding.replace('ext_', '').toUpperCase() : 'Repository'}...</span>
+                            <Database size={14} className="text-emerald-500/50" />
+                        </div>
+                    </div>
+                ) : field.type === 'image' ? (
+                    <div className="aspect-video bg-black/40 rounded-2xl border-2 border-dashed border-slate-800 flex flex-col items-center justify-center gap-2 text-slate-600">
+                        <ImageIcon size={32} className="opacity-20" />
+                        <span className="text-[10px] uppercase font-bold tracking-widest">Upload Clinical Image</span>
+                    </div>
+                ) : field.type === 'file' ? (
+                    <div className="p-6 bg-slate-900/50 rounded-2xl border border-slate-800 flex items-center gap-4 text-slate-500">
+                        <FileIcon size={24} />
+                        <span className="text-xs uppercase font-bold tracking-wider">Attach Documentation (.pdf / .doc)</span>
+                    </div>
                 ) : field.type === 'matrix' ? (
-                    <div className="mt-2 overflow-hidden rounded-lg border border-slate-700">
-                        <table className="w-full text-sm text-left text-slate-400">
-                            <thead className="bg-slate-800 text-slate-200 font-bold uppercase text-xs">
+                    <div className="rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+                        <table className="w-full text-xs text-left">
+                            <thead className="bg-slate-900 text-slate-500 uppercase font-black">
                                 <tr>
-                                    {field.matrixColumns ? field.matrixColumns.split(',').map((c, i) => <th key={i} className="px-4 py-3">{c.trim()}</th>) : <th className="px-4 py-3">Column 1</th>}
+                                    {field.matrixColumns?.split(',').map((c, i) => <th key={i} className="px-5 py-3 tracking-widest border-r border-slate-800 last:border-0">{c.trim()}</th>) || <th>No Columns</th>}
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr className="border-b border-slate-700 bg-slate-900/50">
-                                    <td className="px-4 py-3 text-emerald-500 italic">Dynamic Entry Row...</td>
+                                <tr className="bg-slate-950/20">
+                                    {field.matrixColumns?.split(',').map((_, i) => <td key={i} className="px-5 py-3 border-r border-slate-800 last:border-0 opacity-20 italic">Data Entry Point...</td>) || <td>-</td>}
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                ) : field.type === 'checkbox' ? (
-                    <div className="mt-2 flex items-center gap-2">
-                        <input type="checkbox" className="w-5 h-5 rounded border-slate-700 bg-slate-900 text-emerald-500 focus:ring-emerald-500" />
-                        <span className="text-sm text-slate-300">Yes</span>
-                    </div>
                 ) : (
-                    <input type={field.type} className={commonClasses} placeholder={field.placeholder} disabled={field.linkedQuery?.active} value={field.linkedQuery?.active ? '(Auto-filled)' : ''} />
+                    <input type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'} className={glassInput} placeholder={field.placeholder} />
                 )}
             </div>
         );
     };
 
-    if (!isMounted) return null; // Prevent hydration mismatch
-
-    // Properties Panel Renderer Check
-    const renderPropertiesPanel = () => {
-        if (!selectedField) return null;
-
-        return (
-            <div className="w-80 bg-slate-900/90 backdrop-blur-xl border-l border-slate-800 flex flex-col">
-                <div className="p-4 border-b border-slate-800 flex items-center gap-2">
-                    <Settings className="w-4 h-4 text-emerald-400" />
-                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Properties</h3>
-                </div>
-                <div className="p-6 space-y-6 overflow-y-auto">
-
-                    {/* TARGET ENTITY MAPPING */}
-                    <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
-                        <label className="block text-[10px] font-bold text-emerald-400 uppercase mb-2">Target Entity / DB Column</label>
-                        <select
-                            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-white text-xs outline-none focus:border-emerald-500"
-                            value={selectedField.databaseColumn || ''}
-                            onChange={(e) => updateField('databaseColumn', e.target.value)}
-                        >
-                            <option value="">Custom / No Mapping</option>
-                            {standardFields.map(sf => (
-                                <option key={sf.key} value={sf.key}>{sf.label} ({sf.key})</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Field Label</label>
-                        <input
-                            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 outline-none"
-                            value={selectedField.label}
-                            onChange={(e) => updateField('label', e.target.value)}
-                        />
-                    </div>
-
-                    {['text', 'number', 'textarea'].includes(selectedField.type) && (
-                        <div>
-                            <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Placeholder</label>
-                            <input
-                                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm focus:border-emerald-500 outline-none"
-                                value={selectedField.placeholder}
-                                onChange={(e) => updateField('placeholder', e.target.value)}
-                            />
-                        </div>
-                    )}
-
-                    <div className="flex items-center gap-3 py-2">
-                        <input
-                            type="checkbox"
-                            className="w-4 h-4 rounded bg-slate-800 border-slate-700 text-emerald-500"
-                            checked={selectedField.required}
-                            onChange={(e) => updateField('required', e.target.checked)}
-                        />
-                        <label className="text-sm font-bold text-slate-300">Required Field</label>
-                    </div>
-
-                    {/* RELATIONAL BINDING */}
-                    {selectedField.type === 'dropdown' && (
-                        <div className="p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl space-y-3">
-                            <div className="flex items-center gap-2 text-indigo-400 mb-1">
-                                <Database className="w-4 h-4" />
-                                <span className="text-xs font-bold uppercase">Table Binding</span>
-                            </div>
-                            <p className="text-[10px] text-slate-400 leading-relaxed">
-                                Bind this dropdown to a system table to auto-populate options.
-                            </p>
-                            <select
-                                className="w-full bg-slate-900 border border-indigo-500/30 rounded-lg px-3 py-2 text-white text-sm focus:ring-1 focus:ring-indigo-500 outline-none"
-                                value={selectedField.binding}
-                                onChange={(e) => updateField('binding', e.target.value)}
-                            >
-                                <option value="">No Binding (Manual)</option>
-                                {bindableTables.map(t => (
-                                    <option key={t.name} value={t.name}>{t.label}</option>
-                                ))}
-                            </select>
-
-                            <div className="flex items-center gap-2 pt-2 border-t border-indigo-500/20">
-                                <input
-                                    type="checkbox"
-                                    className="rounded bg-slate-900 border-indigo-500/50 text-indigo-500"
-                                    checked={selectedField.multiColumn || false}
-                                    onChange={(e) => updateField('multiColumn', e.target.checked)}
-                                />
-                                <span className="text-xs text-indigo-300">Multi-Column (ID - Name)</span>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* MATRIX CONFIGURATION */}
-                    {selectedField.type === 'matrix' && (
-                        <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl space-y-3">
-                            <div className="flex items-center gap-2 text-emerald-400 mb-1">
-                                <Grid className="w-4 h-4" />
-                                <span className="text-xs font-bold uppercase">Matrix Columns</span>
-                            </div>
-                            <p className="text-[10px] text-slate-400 leading-relaxed">
-                                Define columns separated by commas (e.g., Antibiotic, Zone Size, Result).
-                            </p>
-                            <input
-                                className="w-full bg-slate-900 border border-emerald-500/30 rounded-lg px-3 py-2 text-white text-sm focus:ring-1 focus:ring-emerald-500 outline-none font-mono"
-                                placeholder="Col1, Col2, Col3..."
-                                value={selectedField.matrixColumns || ''}
-                                onChange={(e) => updateField('matrixColumns', e.target.value)}
-                            />
-                        </div>
-                    )}
-
-                    {/* AUTO-FILL / LINKED QUERY */}
-                    {['text', 'number'].includes(selectedField.type) && (
-                        <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl space-y-3">
-                            <div className="flex items-center gap-2 text-blue-400 mb-1">
-                                <ArrowRight className="w-4 h-4" />
-                                <span className="text-xs font-bold uppercase">Auto-Fill Linkage</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <span className="text-xs text-slate-400">Enable Fetch</span>
-                                <input
-                                    type="checkbox"
-                                    className="rounded bg-slate-900 border-blue-500/50 text-blue-500"
-                                    checked={selectedField.linkedQuery?.active || false}
-                                    onChange={(e) => updateField('linkedQuery', { ...selectedField.linkedQuery, active: e.target.checked })}
-                                />
-                            </div>
-
-                            {selectedField.linkedQuery?.active && (
-                                <div className="space-y-2 animate-fade-in">
-                                    <label className="text-[10px] text-blue-300 uppercase font-bold">Parent Field (Trigger)</label>
-                                    <select
-                                        className="w-full bg-slate-900 border border-blue-500/30 rounded-lg px-3 py-2 text-white text-sm outline-none"
-                                        value={selectedField.linkedQuery?.parentFieldId || ''}
-                                        onChange={(e) => updateField('linkedQuery', { ...selectedField.linkedQuery, parentFieldId: e.target.value })}
-                                    >
-                                        <option value="">Select Parent...</option>
-                                        {fields.filter(f => f.type === 'dropdown' && f.id !== selectedField.id).map(f => (
-                                            <option key={f.id} value={f.id}>{f.label}</option>
-                                        ))}
-                                    </select>
-
-                                    <label className="text-[10px] text-blue-300 uppercase font-bold mt-2 block">Source Column Name</label>
-                                    <input
-                                        className="w-full bg-slate-900 border border-blue-500/30 rounded-lg px-3 py-2 text-white text-sm outline-none placeholder-slate-600"
-                                        placeholder="e.g. species"
-                                        value={selectedField.linkedQuery?.sourceColumn || ''}
-                                        onChange={(e) => updateField('linkedQuery', { ...selectedField.linkedQuery, sourceColumn: e.target.value })}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
-    };
+    if (!isMounted) return null;
 
     return (
-        <div className="h-full w-full bg-[#0F172A] flex flex-col overflow-hidden text-slate-200 font-sans relative">
-            {/* HEADER */}
-            <div className="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 z-20 shadow-md">
-                <div className="flex items-center gap-4">
-                    <button onClick={() => navigate('/admin')} className="p-2 hover:bg-slate-800 rounded-lg text-slate-400 transition-colors">
-                        <ArrowLeft className="w-5 h-5" />
+        <div className="h-screen w-full bg-[#0B1120] flex flex-col overflow-hidden text-slate-300">
+            
+            {/* --- TOP ARCHITECT BAR --- */}
+            <header className="h-20 bg-[#0F172A] border-b border-slate-800 flex items-center justify-between px-8 z-[100] shadow-2xl">
+                <div className="flex items-center gap-6">
+                    <button onClick={() => navigate('/admin')} className="p-3 hover:bg-slate-800 rounded-xl text-slate-500 hover:text-white transition-all">
+                        <ArrowLeft size={20} />
                     </button>
-                    <input
-                        value={formTitle}
-                        onChange={(e) => setFormTitle(e.target.value)}
-                        className="bg-transparent text-xl font-bold text-white border-none focus:ring-0 placeholder-slate-600"
-                        placeholder="Form Title..."
-                    />
+                    <div className="h-10 w-px bg-slate-800 mx-2"></div>
+                    <div>
+                        <input
+                            value={formTitle}
+                            onChange={(e) => setFormTitle(e.target.value)}
+                            className="bg-transparent text-xl font-bold text-white border-none focus:ring-0 placeholder-slate-800 p-0"
+                            placeholder="Unnamed Registry..."
+                        />
+                        <p className="text-[10px] text-emerald-500/50 uppercase font-mono tracking-widest mt-0.5 animate-pulse">● System Architect Active</p>
+                    </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    {showSuccess && (
-                        <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20 animate-pulse">
-                            <CheckCircle className="w-4 h-4" />
-                            <span className="text-sm font-bold">Form Schema Saved Successfully</span>
-                        </div>
-                    )}
+                
+                <div className="flex items-center gap-4">
                     <button
                         onClick={() => setPreviewMode(!previewMode)}
-                        className={`px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors ${previewMode ? 'bg-indigo-500/20 text-indigo-400' : 'hover:bg-slate-800 text-slate-400'}`}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${previewMode ? 'bg-emerald-500 text-slate-950 shadow-[0_0_20px_rgba(16,185,129,0.3)]' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}
                     >
-                        <Eye className="w-4 h-4" />
-                        {previewMode ? 'Edit Mode' : 'Preview'}
+                        {previewMode ? <Settings size={14} /> : <Eye size={14} />}
+                        {previewMode ? 'Architect Mode' : 'Live Preview'}
                     </button>
                     <button
                         onClick={saveForm}
                         disabled={saving}
-                        className="px-6 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-sm font-bold flex items-center gap-2 transition-all shadow-lg shadow-emerald-900/20"
+                        className="bg-gradient-to-br from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 text-white px-8 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-3 shadow-xl transition-all hover:scale-105 active:scale-95"
                     >
-                        <Save className="w-4 h-4" />
-                        {saving ? 'Saving...' : 'Save Form'}
+                        {saving ? <Activity className="animate-spin" size={16} /> : <Zap size={16} />}
+                        {saving ? 'Deploying...' : 'Deploy Form'}
                     </button>
                 </div>
-            </div>
+            </header>
 
-            <div className="flex-1 flex overflow-hidden">
-                {/* LEFT: TOOLBOX (Hidden in Preview) */}
+            <main className="flex-1 flex overflow-hidden">
+                
+                {/* --- TOOLBOX (LEFT) --- */}
                 {!previewMode && (
-                    <div className="w-64 bg-slate-900/50 backdrop-blur-md border-r border-slate-800 flex flex-col">
-                        <div className="p-4 border-b border-slate-800">
-                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Toolbox</h3>
-                        </div>
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                            {isLoading ? (
-                                // Skeleton Loader for Toolbox
-                                [1, 2, 3, 4, 5].map(i => (
-                                    <div key={i} className="h-12 bg-slate-800 rounded-xl animate-pulse"></div>
-                                ))
-                            ) : (
-                                toolboxItems.map(item => (
+                    <aside className="w-80 bg-[#0F172A] border-r border-slate-800 p-6 flex flex-col gap-6 overflow-y-auto custom-scrollbar">
+                        <div>
+                            <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4">Registry Elements</h3>
+                            <div className="space-y-3">
+                                {toolboxItems.map(item => (
                                     <button
                                         key={item.type}
                                         onClick={() => addField(item.type)}
-                                        className="w-full flex items-center gap-3 p-3 bg-slate-800 border border-slate-700 rounded-xl hover:border-emerald-500/50 hover:bg-slate-800/80 transition-all group text-left shadow-sm"
+                                        className="w-full flex items-center gap-4 p-4 bg-slate-950/50 border border-slate-800 rounded-2xl hover:border-emerald-500/30 transition-all group hover:bg-slate-900 shadow-lg"
                                     >
-                                        <div className="p-2 bg-slate-900 rounded-lg group-hover:bg-emerald-500/10 text-slate-400 group-hover:text-emerald-400 transition-colors">
-                                            <item.icon className="w-4 h-4" />
+                                        <div className={`p-2 rounded-lg bg-slate-900 ${item.color} group-hover:scale-110 transition-transform shadow-inner`}>
+                                            <item.icon size={16} />
                                         </div>
-                                        <span className="text-sm font-medium text-slate-300 group-hover:text-white">{item.label}</span>
+                                        <div className="text-left">
+                                            <p className="text-xs font-bold text-slate-200 group-hover:text-white">{item.label}</p>
+                                            <p className="text-[9px] text-slate-600 uppercase font-mono tracking-tighter mt-0.5">LIMS Component</p>
+                                        </div>
                                     </button>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                )}
-
-                {/* CENTER: CANVAS */}
-                <div className="flex-1 bg-[#0B1120] relative overflow-y-auto p-12">
-                    {isLoading ? (
-                        <div className="max-w-3xl mx-auto min-h-[500px] bg-[#0F172A] border border-slate-800 rounded-3xl shadow-2xl p-8 relative animate-pulse">
-                            <div className="h-8 bg-slate-800 rounded w-1/3 mb-8"></div>
-                            <div className="space-y-6">
-                                <div className="h-20 bg-slate-800 rounded-xl"></div>
-                                <div className="h-20 bg-slate-800 rounded-xl"></div>
-                                <div className="h-20 bg-slate-800 rounded-xl"></div>
+                                ))}
                             </div>
                         </div>
-                    ) : (
-                        <div className="max-w-3xl mx-auto min-h-[500px] bg-[#0F172A] border border-slate-800 rounded-3xl shadow-2xl p-8 relative">
+                    </aside>
+                )}
+
+                {/* --- CANVAS (CENTER) --- */}
+                <section className="flex-1 bg-[#090E1A] overflow-y-auto p-12 scroll-smooth">
+                    <div className="max-w-4xl mx-auto">
+                        <AnimatePresence>
                             {fields.length === 0 ? (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-600 border-2 border-dashed border-slate-800 m-4 rounded-2xl">
-                                    <Layout className="w-12 h-12 mb-4 opacity-20" />
-                                    <p>Drag field here or click Toolbox to add</p>
+                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-[500px] rounded-[3rem] border-4 border-dashed border-slate-900 flex flex-col items-center justify-center text-slate-800">
+                                    <Plus size={48} className="mb-4 opacity-10" />
+                                    <p className="text-sm font-black uppercase tracking-[0.3em] opacity-20 text-center">Drag Components from Toolbox<br/>to start construction</p>
+                                </motion.div>
+                            ) : (
+                                <motion.div layout className={`bg-[#0F172A] p-12 rounded-[3.5rem] border border-slate-800 shadow-2xl relative overflow-hidden ${previewMode ? 'animate-fade-in' : ''}`}>
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] pointer-events-none"></div>
+                                    
+                                    <div className="relative mb-12 border-b border-slate-800 pb-8">
+                                        <h1 className="text-3xl font-black text-white tracking-tight">{formTitle}</h1>
+                                        <p className="text-xs text-slate-500 uppercase tracking-widest mt-2">{previewMode ? 'Live Clinical Form' : 'Architect Blueprint'}</p>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        {fields.map((field) => {
+                                            const item = toolboxItems.find(i => i.type === field.type);
+                                            const Icon = item?.icon || AlertTriangle;
+                                            
+                                            return previewMode ? (
+                                                <div key={field.id}>{renderPreviewField(field)}</div>
+                                            ) : (
+                                                <div
+                                                    key={field.id}
+                                                    onClick={() => setSelectedField(field)}
+                                                    className={`group relative p-6 rounded-3xl border-2 transition-all mb-4 cursor-pointer ${selectedField?.id === field.id ? 'border-emerald-500 bg-slate-900 shadow-2xl scale-[1.02]' : 'border-transparent hover:border-slate-800 hover:bg-slate-900/30'}`}
+                                                >
+                                                    <div className="flex justify-between items-center mb-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-emerald-400 transition-colors">
+                                                                <Icon size={14} />
+                                                            </div>
+                                                            <div>
+                                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">{field.label}</label>
+                                                                <p className="text-[9px] text-slate-700 font-mono mt-0.5 uppercase">ID: {field.key}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                            <div className="px-2 py-1 bg-slate-800 rounded-md text-[9px] font-mono text-slate-500 uppercase">{field.width}</div>
+                                                            <button 
+                                                                onClick={(e) => { e.stopPropagation(); removeField(field.id); }}
+                                                                className="p-1.5 bg-rose-500/20 text-rose-500 hover:bg-rose-500 hover:text-white rounded-lg transition-all"
+                                                            >
+                                                                <Trash2 size={12} />
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-12 bg-slate-950 border border-slate-800/50 rounded-xl w-full opacity-30 shadow-inner"></div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+                </section>
+
+                {/* --- PROPERTIES (RIGHT) --- */}
+                {!previewMode && (
+                    <aside className="w-96 bg-[#0F172A] border-l border-slate-800 flex flex-col shadow-2xl">
+                        <div className="p-6 border-b border-slate-800 flex items-center gap-3">
+                            <Settings className="w-5 h-5 text-emerald-400" />
+                            <h3 className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Parameter Architect</h3>
+                        </div>
+                        
+                        <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                            {!selectedField ? (
+                                <div className="h-full flex flex-col items-center justify-center text-center opacity-20">
+                                    <Settings size={48} className="mb-4" />
+                                    <p className="text-xs font-black uppercase tracking-widest">Select an element<br/>to adjust parameters</p>
                                 </div>
                             ) : (
-                                <div className="space-y-4">
-                                    {fields.map((field) => (
-                                        previewMode ? (
-                                            <React.Fragment key={field.id}>{renderPreviewField(field)}</React.Fragment>
-                                        ) : (
-                                            <div
-                                                key={field.id}
-                                                onClick={() => setSelectedField(field)}
-                                                className={`relative group p-4 rounded-xl border-2 cursor-pointer transition-all ${selectedField?.id === field.id ? 'border-emerald-500 bg-slate-900' : 'border-transparent hover:border-slate-700 hover:bg-slate-900/50'}`}
-                                            >
-                                                <div className="flex justify-between items-start mb-2 pointer-events-none">
-                                                    <label className="text-xs font-bold text-slate-400 uppercase">{field.label}</label>
-                                                    <GripVertical className="text-slate-600 w-4 h-4 opacity-0 group-hover:opacity-100" />
-                                                </div>
-                                                <div className="h-10 bg-slate-950 border border-slate-700 rounded-lg w-full opacity-50 pointer-events-none"></div>
+                                <div className="space-y-8 animate-fade-in">
+                                    
+                                    {/* IDENTIFICATION */}
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 ml-1">Visible Label</label>
+                                            <input
+                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-emerald-500 outline-none shadow-inner"
+                                                value={selectedField.label}
+                                                onChange={(e) => updateField('label', e.target.value)}
+                                            />
+                                            <p className="text-[9px] text-slate-700 font-mono mt-2 uppercase">DB Column: {selectedField.key}</p>
+                                        </div>
+                                        
+                                        <div>
+                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3 ml-1">Placeholder (Optional)</label>
+                                            <input
+                                                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:border-emerald-500 outline-none shadow-inner"
+                                                value={selectedField.placeholder}
+                                                onChange={(e) => updateField('placeholder', e.target.value)}
+                                                placeholder="e.g. Enter DNA sequence..."
+                                            />
+                                        </div>
+                                    </div>
 
-                                                <button
-                                                    onClick={(e) => { e.stopPropagation(); removeField(field.id); }}
-                                                    className="absolute -right-2 -top-2 p-1.5 bg-rose-500 text-white rounded-full opacity-0 group-hover:opacity-100 shadow-lg hover:bg-rose-600 transition-all z-10"
-                                                >
-                                                    <Trash2 className="w-3 h-3" />
-                                                </button>
+                                    {/* LAYOUT LOGIC */}
+                                    <div className="bg-slate-950/40 p-6 rounded-[2rem] border border-slate-800/50 space-y-6">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <Layout className="w-4 h-4 text-indigo-400" />
+                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Architectural Layout</span>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <button onClick={() => updateField('width', 'full')} className={`px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${selectedField.width === 'full' ? 'bg-indigo-500 text-white shadow-lg' : 'bg-slate-900 border border-slate-800 text-slate-500'}`}>Full Width</button>
+                                            <button onClick={() => updateField('width', 'half')} className={`px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${selectedField.width === 'half' ? 'bg-indigo-500 text-white shadow-lg' : 'bg-slate-900 border border-slate-800 text-slate-500'}`}>Split Width</button>
+                                        </div>
+                                        <div className="flex items-center justify-between pt-2">
+                                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Compulsory Value</span>
+                                            <button onClick={() => updateField('required', !selectedField.required)} className={`w-12 h-6 rounded-full p-1 transition-all ${selectedField.required ? 'bg-emerald-500/20' : 'bg-slate-800'}`}>
+                                                <div className={`w-4 h-4 rounded-full transition-all ${selectedField.required ? 'bg-emerald-400 translate-x-6' : 'bg-slate-600 translate-x-0'}`}></div>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* DATA BINDING (MS ACCESS AUTONOMY) */}
+                                    {selectedField.type === 'lookup' && (
+                                        <div className="bg-rose-500/5 p-6 rounded-[2rem] border border-rose-500/20 space-y-6">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Database className="w-4 h-4 text-rose-500" />
+                                                <span className="text-[10px] font-black text-rose-400 uppercase tracking-widest">Relationship Assignment</span>
                                             </div>
-                                        )
-                                    ))}
-                                </div>
-                            )}
+                                            <div>
+                                                <label className="text-[9px] text-slate-500 uppercase font-bold mb-2 block">Target Repository (Registry)</label>
+                                                <select
+                                                    className="w-full bg-slate-950 border border-rose-500/20 rounded-xl px-4 py-3 text-white text-xs outline-none focus:border-rose-500 shadow-inner"
+                                                    value={selectedField.binding || ''}
+                                                    onChange={(e) => updateField('binding', e.target.value)}
+                                                >
+                                                    <option value="">No Binding / Manual Entry</option>
+                                                    {bindableTables.map(t => (
+                                                        <option key={t.id} value={t.id}>{t.label}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            
+                                            {selectedField.binding && (
+                                                <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+                                                    <label className="text-[9px] text-slate-500 uppercase font-bold mb-2 block flex justify-between">
+                                                        <span>Display Column (Dropdown Label)</span>
+                                                        {loadingColumns && <Activity size={10} className="animate-spin text-rose-500" />}
+                                                    </label>
+                                                    <select
+                                                        className="w-full bg-slate-950 border border-rose-500/20 rounded-xl px-4 py-3 text-white text-xs outline-none focus:border-rose-500 shadow-inner"
+                                                        value={selectedField.labelCol || ''}
+                                                        onChange={(e) => updateField('labelCol', e.target.value)}
+                                                        disabled={loadingColumns}
+                                                    >
+                                                        <option value="">Select Header Name...</option>
+                                                        {availableColumns.map(col => (
+                                                            <option key={col.id} value={col.id}>{col.label}</option>
+                                                        ))}
+                                                    </select>
+                                                </motion.div>
+                                            )}
 
-                            {previewMode && (
-                                <div className="mt-8 pt-6 border-t border-slate-800 flex justify-end">
-                                    <button disabled className="px-6 py-3 bg-emerald-600 opacity-50 rounded-xl font-bold text-white cursor-not-allowed">
-                                        Submit Form
-                                    </button>
+                                            <p className="text-[9px] text-slate-600 italic leading-relaxed">System will pull live data from the selected registry using the header you specify for the labels.</p>
+                                        </div>
+                                    )}
+
+                                    {/* MATRIX LOGIC */}
+                                    {selectedField.type === 'matrix' && (
+                                        <div className="bg-teal-500/5 p-6 rounded-[2rem] border border-teal-500/20 space-y-6">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Grid className="w-4 h-4 text-teal-400" />
+                                                <span className="text-[10px] font-black text-teal-400 uppercase tracking-widest">Matrix Columns</span>
+                                            </div>
+                                            <input
+                                                className="w-full bg-slate-950 border border-teal-500/20 rounded-xl px-4 py-3 text-white text-sm outline-none font-mono"
+                                                placeholder="Result, Observation..."
+                                                value={selectedField.matrixColumns}
+                                                onChange={(e) => updateField('matrixColumns', e.target.value)}
+                                            />
+                                            <p className="text-[9px] text-slate-600 uppercase tracking-tighter">Comma-separated Clinical headers</p>
+                                        </div>
+                                    )}
+
                                 </div>
                             )}
                         </div>
-                    )}
-                </div>
-
-                {/* RIGHT: PROPERTIES (Hidden in Preview) */}
-                {!previewMode && renderPropertiesPanel()}
-            </div>
+                    </aside>
+                )}
+            </main>
         </div>
     );
 };

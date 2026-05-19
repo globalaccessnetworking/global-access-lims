@@ -1,0 +1,4429 @@
+{
+  "-80 Freezer stoage details-final": {
+    "access_name": "-80 Freezer stoage details-final",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "3",
+          "1",
+          "2",
+          "4"
+        ]
+      },
+      {
+        "name": "Location-detail",
+        "type": "<class 'str'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "3",
+          "1",
+          "2",
+          "4"
+        ]
+      },
+      {
+        "name": "A",
+        "type": "<class 'str'>",
+        "is_relational": true,
+        "multi_select": true,
+        "delimiter": ";",
+        "sample_values": [
+          "5;6;7",
+          "14;15;16",
+          "2;3"
+        ]
+      },
+      {
+        "name": "B",
+        "type": "<class 'str'>",
+        "is_relational": true,
+        "multi_select": true,
+        "delimiter": ";",
+        "sample_values": [
+          "18;19;20",
+          "8;9",
+          "11;12;13"
+        ]
+      },
+      {
+        "name": "C",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "D",
+        "type": "<class 'str'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "21"
+        ]
+      },
+      {
+        "name": "E",
+        "type": "<class 'str'>",
+        "is_relational": true,
+        "multi_select": true,
+        "delimiter": ";",
+        "sample_values": [
+          "22;23;24"
+        ]
+      },
+      {
+        "name": "F",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "G",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "H",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "I",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "J",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "K",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "L",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "M",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "N",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "O",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Location-detail",
+      "A",
+      "B",
+      "D",
+      "E"
+    ],
+    "multi_select_columns": [
+      "A",
+      "B",
+      "E"
+    ]
+  },
+  "-80 Freezer storage details": {
+    "access_name": "-80 Freezer storage details",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Location",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1-b",
+          "2-a",
+          "1-c",
+          "2-b",
+          "3-b",
+          "3-a",
+          "2-c",
+          "1-a",
+          "3-c",
+          "4-a"
+        ]
+      },
+      {
+        "name": "A",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "2",
+          "25",
+          "16",
+          "5",
+          "6",
+          "26",
+          "15",
+          "38",
+          "3",
+          "27"
+        ]
+      },
+      {
+        "name": "B",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "20",
+          "8",
+          "12",
+          "9",
+          "28",
+          "19",
+          "40",
+          "13",
+          "18",
+          "11"
+        ]
+      },
+      {
+        "name": "c",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "30",
+          "46",
+          "31",
+          "45",
+          "47",
+          "42",
+          "18",
+          "32",
+          "48",
+          "44"
+        ]
+      },
+      {
+        "name": "D",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "21",
+          "33",
+          "17",
+          "35"
+        ]
+      },
+      {
+        "name": "E",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "23",
+          "22",
+          "36",
+          "51",
+          "37",
+          "24",
+          "52"
+        ]
+      },
+      {
+        "name": "F",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "56",
+          "59",
+          "53",
+          "54",
+          "28",
+          "57",
+          "55",
+          "60",
+          "58"
+        ]
+      },
+      {
+        "name": "G",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "71",
+          "72",
+          "64",
+          "63",
+          "69",
+          "70",
+          "66",
+          "68",
+          "65",
+          "67"
+        ]
+      },
+      {
+        "name": "H",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "96",
+          "30",
+          "95"
+        ]
+      },
+      {
+        "name": "I",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "77",
+          "76",
+          "75",
+          "78"
+        ]
+      },
+      {
+        "name": "J",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "80"
+        ]
+      },
+      {
+        "name": "K",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "L",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "M",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "83",
+          "98",
+          "82",
+          "81"
+        ]
+      },
+      {
+        "name": "N",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "90",
+          "88",
+          "91",
+          "89",
+          "85",
+          "84",
+          "92",
+          "93",
+          "87"
+        ]
+      },
+      {
+        "name": "O",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "94"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "A",
+      "B",
+      "c",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "M",
+      "N",
+      "O"
+    ],
+    "multi_select_columns": []
+  },
+  "Antibiotics": {
+    "access_name": "Antibiotics",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Complete Name",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Azlocillin",
+          "Amoxicillin",
+          "Amikacin",
+          "Ampicillin + sulbactam",
+          "Ampicillin",
+          "Azithromycin",
+          "Kanamycin",
+          "Amoxicillin + clavulanic acid",
+          "Aztreonam"
+        ]
+      },
+      {
+        "name": "Abbreviation",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "AZL",
+          "AMC",
+          "AMP",
+          "AMO",
+          "AZT",
+          "AMI",
+          "Kan",
+          "Amp",
+          "AMS",
+          "AZI"
+        ]
+      },
+      {
+        "name": "Quantity",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Available Antibiotics Discs": {
+    "access_name": "Available Antibiotics Discs",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Antibiotic Disc",
+        "type": "<class 'str'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "39",
+          "63",
+          "21",
+          "28",
+          "57",
+          "55",
+          "19",
+          "31",
+          "7",
+          "24"
+        ]
+      },
+      {
+        "name": "Quntity",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "8",
+          "2",
+          "5",
+          "6",
+          "7",
+          "1"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Antibiotic Disc",
+      "Quntity"
+    ],
+    "multi_select_columns": []
+  },
+  "Bacterial Species": {
+    "access_name": "Bacterial Species",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Species",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Salmonella Gallinarum",
+          "Salmonella Gallinarum Lysogen",
+          "Salmonella Typhimurium",
+          "Staphylococcus aureus",
+          "Salmonella Enteritidis",
+          "Clostridium Perfringens Lysogen",
+          "Clostridium Perfringens",
+          "Pseudomonas aeroginosa",
+          "E.coli",
+          "Salmonella Species"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Bacterial Strains": {
+    "access_name": "Bacterial Strains",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Specie",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "2"
+        ]
+      },
+      {
+        "name": "Strain No",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "PA 26",
+          "PA27",
+          "PA 30",
+          "PA29",
+          "PA33",
+          "PA 35",
+          "PA23",
+          "PA24",
+          "PA31",
+          "PA 13"
+        ]
+      },
+      {
+        "name": "Wild-type/Recom",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "Glycerol Stock-tube label",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "PA 26",
+          "PA 31",
+          "PA30",
+          "PA 33",
+          "PA 35",
+          "PA23",
+          "PA24",
+          "PA29",
+          "PA 13"
+        ]
+      },
+      {
+        "name": "GS-Freezer Number",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "GS-Rack Number",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "GS-Box-details",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "2"
+        ]
+      },
+      {
+        "name": "Genomic DNA Label",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "GD-Freezer Number",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "GD-Rack Number",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "95"
+        ]
+      },
+      {
+        "name": "GD-Box-detail",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Antibiotic sensitivity",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Antibiotic resistance",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Detail of Bacterial Strain",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "NS"
+        ]
+      },
+      {
+        "name": "Genomic DNA tube Label",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Location in Box-GS",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "A1",
+          "A5",
+          "A9",
+          "A4",
+          "A2",
+          "A6",
+          "A10",
+          "A7",
+          "A8",
+          "A3"
+        ]
+      },
+      {
+        "name": "Loction in Box-PD",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Specie",
+      "Wild-type/Recom",
+      "GS-Freezer Number",
+      "GS-Rack Number",
+      "GS-Box-details",
+      "GD-Rack Number"
+    ],
+    "multi_select_columns": []
+  },
+  "Bacteriophage Names": {
+    "access_name": "Bacteriophage Names",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Bacteriophage Name",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "SGP-18",
+          "SGP-13",
+          "SGP-10",
+          "vB-SGT",
+          "SGP-12",
+          "STL",
+          "SGP-5",
+          "SGP-3",
+          "SGP-9",
+          "SGP-11"
+        ]
+      },
+      {
+        "name": "Host Name",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "3"
+        ]
+      },
+      {
+        "name": "Lytic/Lysogenic",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "Wild-type/Recombinant",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "3"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Host Name",
+      "Lytic/Lysogenic",
+      "Wild-type/Recombinant"
+    ],
+    "multi_select_columns": []
+  },
+  "Bacteriophages": {
+    "access_name": "Bacteriophages",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "12",
+          "9",
+          "4",
+          "5",
+          "6",
+          "3",
+          "7",
+          "11"
+        ]
+      },
+      {
+        "name": "Bacteriophage Name",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "3",
+          "1",
+          "2",
+          "52"
+        ]
+      },
+      {
+        "name": "WT-RECOMB",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "Host Bacteria",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "42",
+          "1345"
+        ]
+      },
+      {
+        "name": "Host Range",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Genome Size",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Plaque Morphology",
+        "type": "<class 'bytearray'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Characterization details",
+        "type": "<class 'bytearray'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Glycerol Stock tube Label",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "SGP-9 infected to host",
+          "MSTA (72 hrs, 24 hrs enrichment)",
+          "SGP-3 infected to host",
+          "SGP-5",
+          "SGP-3",
+          "SGP-9"
+        ]
+      },
+      {
+        "name": "GS-Freezer Name",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "GS-Racks",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "22",
+          "1"
+        ]
+      },
+      {
+        "name": "GS-Box details",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "121",
+          "4"
+        ]
+      },
+      {
+        "name": "4C Stock detail",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "MSTA  24 hours enrichment stocks ( in 15ml Falcon rack labelled as TF)"
+        ]
+      },
+      {
+        "name": "4C-Fridge Number",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "2"
+        ]
+      },
+      {
+        "name": "4C-Rack Number",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Against Species",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "3"
+        ]
+      },
+      {
+        "name": "DNA Storage Label",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "DNA storage Box detail",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "GS-position in Box",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "A5",
+          "A9",
+          "A4",
+          "A2",
+          "A6",
+          "A10",
+          "A7",
+          "A8",
+          "F1, F2, F3, F4",
+          "A3"
+        ]
+      },
+      {
+        "name": "4C-Position in box",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Bacteriophage Name",
+      "WT-RECOMB",
+      "Host Bacteria",
+      "GS-Freezer Name",
+      "GS-Racks",
+      "GS-Box details",
+      "4C-Fridge Number",
+      "Against Species"
+    ],
+    "multi_select_columns": []
+  },
+  "Chemical Storage Area details": {
+    "access_name": "Chemical Storage Area details",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Storage Area",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "f",
+          "c",
+          "i",
+          "d",
+          "a",
+          "h",
+          "b",
+          "g",
+          "e",
+          "4C Refrigerator"
+        ]
+      },
+      {
+        "name": "Field1",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Cloninig Methods": {
+    "access_name": "Cloninig Methods",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "2",
+          "4",
+          "5",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Cloninig Method",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Gibbson Assembly",
+          "Restriction cloning",
+          "Golden Gate Assembly",
+          "Assembly Mastermix",
+          "Main Plasmid"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Gene Source": {
+    "access_name": "Gene Source",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "8",
+          "2",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Donar DNA detail",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Mutated Plasmid",
+          "Virus",
+          "Humans",
+          "Synthetic DNA",
+          "Phage",
+          "gRNA",
+          "Bacteria",
+          "Main Plasmid"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Host Bacteria": {
+    "access_name": "Host Bacteria",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "8",
+          "2",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Host Bacteria",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "SG-18-D-SSAU",
+          "DH5-Alpha",
+          "SG-18-D-SSAU-SPVB",
+          "SG-18",
+          "Top-10",
+          "SGPC",
+          "Lemo-cells",
+          "BL-21"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Lab-Stock": {
+    "access_name": "Lab-Stock",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Item Name",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Salmonella Ag Coated Plate",
+          "Cesium Chloride",
+          "Bis-Acrylamide",
+          "Thermo Scientific\u2122 Pierce\u2122 ECL Western Blotting Substrate",
+          "D-cycloserine",
+          "Catalse Identification test",
+          "Kanamycin Sulphate",
+          "NiNTA-Resin\r\nThermo Scientific\u2122\r\nHisPur\u2122 Ni-NTA Resin",
+          "Mitomycin C",
+          "Salmonella Group D-Antibody Detection kit"
+        ]
+      },
+      {
+        "name": "Manufacturer",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "8",
+          "9",
+          "5",
+          "6",
+          "7",
+          "1"
+        ]
+      },
+      {
+        "name": "Pack Size",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "2mg",
+          "5g",
+          "480 reactions",
+          "1-box",
+          "10ml",
+          "10g",
+          "100g",
+          "1",
+          "500ml"
+        ]
+      },
+      {
+        "name": "Category",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "8",
+          "2",
+          "4",
+          "5",
+          "1"
+        ]
+      },
+      {
+        "name": "Available Quantity",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1",
+          "2",
+          "9",
+          "4"
+        ]
+      },
+      {
+        "name": "Location-Area",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "Location shelf",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Location details",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Basket-2",
+          "Present in Kit Box",
+          "Present in its own Packing",
+          "Antibiotics Basket-B1",
+          "Basket-1",
+          "Present in Pack"
+        ]
+      },
+      {
+        "name": "Location-Area-final",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "54",
+          "21"
+        ]
+      },
+      {
+        "name": "Cat #",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "J17924-\t5",
+          "PI32106",
+          "sc-221470B",
+          "J11259",
+          "29805.01",
+          "88222",
+          "10062-05",
+          "J61714.06",
+          "15433599",
+          "sc-203876"
+        ]
+      },
+      {
+        "name": "Field1",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "only 15 pieces remaining"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Manufacturer",
+      "Category",
+      "Available Quantity",
+      "Location-Area",
+      "Location-Area-final"
+    ],
+    "multi_select_columns": []
+  },
+  "Location detail-Box name": {
+    "access_name": "Location detail-Box name",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Box-detail",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "GS-18 (B2-c)",
+          "GS-11 (A4-b)",
+          "GS-2 (A1-b)",
+          "CRISPr plasmids-MRSA",
+          "GS-35 (D1-a)",
+          "New deletion Primers-Hamza",
+          "Dr. Shafiq- ur Rehman Glycerol Stocks",
+          "GS-1 (A1-a)",
+          "GS-34 (D1-c)",
+          "GS-16 (B2-a)"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Location detail-freezer": {
+    "access_name": "Location detail-freezer",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "8",
+          "2",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Freezer",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "L20",
+          "L5",
+          "MMG Store",
+          "Green Cubord",
+          "L4",
+          "Gray Cubord",
+          "Phage Lab",
+          "-80 Freezer"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Location detail-Rack": {
+    "access_name": "Location detail-Rack",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Rack-No",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "B-3",
+          "B-4",
+          "B-2",
+          "C-2",
+          "A-3",
+          "A-4",
+          "A-2",
+          "B-1",
+          "A-1",
+          "C-1"
+        ]
+      },
+      {
+        "name": "Consumeable location rack",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Lytic-lysogenic": {
+    "access_name": "Lytic-lysogenic",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "2",
+          "4",
+          "5",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Type",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Lytic",
+          "Lysogenic",
+          "Wild",
+          "Recmbinant"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Manufacturers": {
+    "access_name": "Manufacturers",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Manufacturers",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Merk",
+          "Canta Cruz",
+          "Chem-Impex",
+          "NEB",
+          "Oxoid",
+          "Thermo",
+          "Neogen",
+          "Biostone",
+          "Serva",
+          "Alfa Aser"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Plasmid Vectors": {
+    "access_name": "Plasmid Vectors",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "8",
+          "2",
+          "9",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Plasmid Name",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "pCas",
+          "pUC57",
+          "pET28a",
+          "pEM-Cas9HF1-indRecA56",
+          "pBAD-mCherry",
+          "pCas9",
+          "pET21a",
+          "pBAD33-Gm",
+          "pET22-B",
+          "pCas9(D10A)"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "PLasmids": {
+    "access_name": "PLasmids",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "62",
+          "56",
+          "61",
+          "59",
+          "53",
+          "54",
+          "57",
+          "55",
+          "60",
+          "58"
+        ]
+      },
+      {
+        "name": "Plasmid Name",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "END CP1",
+          "Pet28",
+          "gRNA2 (hafsa Nasim)",
+          "\u03bbRED SG"
+        ]
+      },
+      {
+        "name": "Plasmid Backbone",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1",
+          "2",
+          "7"
+        ]
+      },
+      {
+        "name": "Gene Source",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "5",
+          "1",
+          "6"
+        ]
+      },
+      {
+        "name": "Cloning Method",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1",
+          "2",
+          "4"
+        ]
+      },
+      {
+        "name": "Antibiotic Marker",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "44",
+          "40"
+        ]
+      },
+      {
+        "name": "Cloned Gene Sequence",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "main Plasmid",
+          "END CP1",
+          "BL21 END CP1",
+          "hafsa gRNA for deletion of long fragment from SG",
+          "\u03bbRED in SG-18"
+        ]
+      },
+      {
+        "name": "Cloned Protein Sequence",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Glycerol Stock-Tube Label",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Tace2Bl21",
+          "END CP1",
+          "Pet28",
+          "\u03bbRED SG",
+          "T-cell5a1Bl-21",
+          "BL21 END CP1",
+          "T-cell5oldBl-21",
+          "Ha-SPVBPet22B-SG-18",
+          "gRNA2",
+          "tace2Bl21"
+        ]
+      },
+      {
+        "name": "Host Bacteria",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "5",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Activity Shown Against",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Protein Purification status",
+        "type": "<class 'bool'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "False"
+        ]
+      },
+      {
+        "name": "Expression Picture",
+        "type": "<class 'bytearray'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Purified Protein Picture",
+        "type": "<class 'bytearray'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "GLycerol Stock Freezer",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "Glycerol Stock Rack",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Glycerol Stock Box",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "25",
+          "9",
+          "26"
+        ]
+      },
+      {
+        "name": "PLasmid DNA Label",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "DNA Store Freezer",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "DNA Store Rack",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "DNA Store Box Detail",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Location in Box-GS",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "F1,F2,F3,F4",
+          "A-3",
+          "A-5",
+          "A-4",
+          "A-7",
+          "A-9",
+          "F3,F4,F5,F6,F7",
+          "B6,B7",
+          "F2",
+          "G2,G3,G4,G5,H2,H3,H4,H5"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Plasmid Backbone",
+      "Gene Source",
+      "Cloning Method",
+      "Antibiotic Marker",
+      "Host Bacteria",
+      "GLycerol Stock Freezer",
+      "Glycerol Stock Box"
+    ],
+    "multi_select_columns": []
+  },
+  "Primer binding organism type": {
+    "access_name": "Primer binding organism type",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "3",
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "Field1",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Phage",
+          "Bacteria",
+          "Plasmid"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Primers-details": {
+    "access_name": "Primers-details",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "10",
+          "12",
+          "9",
+          "14",
+          "16",
+          "15",
+          "17",
+          "13",
+          "18",
+          "11"
+        ]
+      },
+      {
+        "name": "Primer Name",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "LBLMA1-rev",
+          "gRNA-4F-SSAU",
+          "HA1_ssau_FP:",
+          "HA2_ssau_Rp:",
+          "HA2_ssau_Fp",
+          "SSau_screening_Rp:",
+          "HA1_ssau_RP:",
+          "gRNA-4R-ssau",
+          "2HA2-F SSAU",
+          "SSau_screening_Fp:"
+        ]
+      },
+      {
+        "name": "DNA sequence",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "TTTAAATCGGTCGGCACAACAATTCGTCTGAATGGACTCGAACCATCG",
+          "AAACACAGAAAAGAAATTACGTGAG",
+          "ACGTCTATGCCGGTAGTGTTGGT",
+          "TTATGACTCGAGTGCTGCTTGCTGCGGTTTACCAGA",
+          "GAAAACAGAACAGACTACAGAAAAGAAGAGATAAAATTCCTGAAACGTTATT",
+          "AAAATCTCTAGAAGCGGTATCCTGTTGAATTATACC",
+          "CATTTGTATGGCTGTGGTTACCG",
+          "5'-CTC AAAACTAAACAAAGT TTC-3'",
+          "CGATGGTTCGAGTCCATTCAGACGAATTGTTGTGCCGACCGATTTAAA",
+          "AAAACTCACGTAATTTCTTTTCTGT"
+        ]
+      },
+      {
+        "name": "Purpose",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Guide rna 4 for ssau-Fp",
+          "homology arm 2 for ssau forward",
+          "Guide rna 4 for ssau-Rp",
+          "homology arm 2 for ssau reverse",
+          "new homology arm Fp OF HA2 for ssau gene",
+          "screening for ssau gene deletion sg18",
+          "Homology arm 1 for ssau",
+          "Lactobacillus specific Primers"
+        ]
+      },
+      {
+        "name": "Binds with Phage/Bacteria/Plasmid",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "Phage",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Bacteria",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "602"
+        ]
+      },
+      {
+        "name": "Plasmid",
+        "type": "<class 'int'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Freezer",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1"
+        ]
+      },
+      {
+        "name": "Freezer Shelve",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "5",
+          "13"
+        ]
+      },
+      {
+        "name": "Box detail",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "101",
+          "23"
+        ]
+      },
+      {
+        "name": "Location in Box",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "B4",
+          "A5",
+          "A9",
+          "A4",
+          "A6",
+          "B5",
+          "J1",
+          "A7",
+          "A8",
+          "A3"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID",
+      "Binds with Phage/Bacteria/Plasmid",
+      "Bacteria",
+      "Freezer",
+      "Freezer Shelve",
+      "Box detail"
+    ],
+    "multi_select_columns": []
+  },
+  "Sheet1": {
+    "access_name": "Sheet1",
+    "columns": [
+      {
+        "name": "Storage Box",
+        "type": "<class 'float'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1.0"
+        ]
+      },
+      {
+        "name": "Storage Position",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "F7",
+          "E9",
+          "F3",
+          "F4",
+          "F5",
+          "F1",
+          "F6",
+          "E7",
+          "F2",
+          "E8"
+        ]
+      },
+      {
+        "name": "Microorganism",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "E.coli",
+          "SG18"
+        ]
+      },
+      {
+        "name": "Parent Strain",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Top 10"
+        ]
+      },
+      {
+        "name": "Plasmid",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Selection",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "kana"
+        ]
+      },
+      {
+        "name": "Characteristics/Details",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "LAMBDA-RED-SG18-KANA",
+          "ECC-LAMBDA-RED-SG18-KANA",
+          "WT-SGPC-LAMBDA RED",
+          "WT-SGPC-GRNA3"
+        ]
+      },
+      {
+        "name": "Source",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "single deletion with lambda red",
+          "gRNA for ssau",
+          "Guide RNA",
+          "Insertion of ampicillin casette at ssau protein",
+          "Require testing for Confirmation",
+          "Single deletion"
+        ]
+      },
+      {
+        "name": "Date",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "see phage deletion snapgene files"
+        ]
+      },
+      {
+        "name": "Ref",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Notes",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field12",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field13",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field14",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field15",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field16",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field17",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field18",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field19",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field20",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field21",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field22",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field23",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field24",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field25",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field26",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field27",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field28",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field29",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field30",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field31",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field32",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field33",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field34",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field35",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field36",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field37",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field38",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field39",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field40",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field41",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field42",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field43",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field44",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field45",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field46",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field47",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field48",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field49",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field50",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field51",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field52",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field53",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field54",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field55",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field56",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field57",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field58",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field59",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field60",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field61",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field62",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field63",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field64",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field65",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field66",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field67",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field68",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field69",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field70",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field71",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field72",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field73",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field74",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field75",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field76",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field77",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field78",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field79",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field80",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field81",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field82",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field83",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field84",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field85",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field86",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field87",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field88",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field89",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field90",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field91",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field92",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field93",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field94",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field95",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field96",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field97",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field98",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field99",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field100",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field101",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field102",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field103",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field104",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field105",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field106",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field107",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field108",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field109",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field110",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field111",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field112",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field113",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field114",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field115",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field116",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field117",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field118",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field119",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field120",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field121",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field122",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field123",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field124",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field125",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field126",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field127",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field128",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field129",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field130",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field131",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field132",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field133",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field134",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field135",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field136",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field137",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field138",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field139",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field140",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field141",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field142",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field143",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field144",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field145",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field146",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field147",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field148",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field149",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field150",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field151",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field152",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field153",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field154",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field155",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field156",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field157",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field158",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field159",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field160",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field161",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field162",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field163",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field164",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field165",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field166",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field167",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field168",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field169",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field170",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field171",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field172",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field173",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field174",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field175",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field176",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field177",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field178",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field179",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field180",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field181",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field182",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field183",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field184",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field185",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field186",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field187",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field188",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field189",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field190",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field191",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field192",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field193",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field194",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field195",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field196",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field197",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field198",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field199",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field200",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field201",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field202",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field203",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field204",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field205",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field206",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field207",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field208",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field209",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field210",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field211",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field212",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field213",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field214",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field215",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field216",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field217",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field218",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field219",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field220",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field221",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field222",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field223",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field224",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field225",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field226",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field227",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field228",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field229",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field230",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field231",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field232",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field233",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field234",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field235",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field236",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field237",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field238",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field239",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field240",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field241",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field242",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field243",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field244",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field245",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field246",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field247",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field248",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field249",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field250",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field251",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field252",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field253",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field254",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      },
+      {
+        "name": "Field255",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": []
+      }
+    ],
+    "relational_columns": [],
+    "multi_select_columns": []
+  },
+  "Stock Category": {
+    "access_name": "Stock Category",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "8",
+          "2",
+          "4",
+          "5",
+          "6",
+          "7",
+          "3",
+          "1"
+        ]
+      },
+      {
+        "name": "Category",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Plasticware",
+          "Antibodies",
+          "Chemicals",
+          "Antibiotics",
+          "Glassware",
+          "Mol-Biology-Kits",
+          "Enzymes",
+          "Microbiology-Kit"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  },
+  "Wild-type-recomb": {
+    "access_name": "Wild-type-recomb",
+    "columns": [
+      {
+        "name": "ID",
+        "type": "<class 'int'>",
+        "is_relational": true,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "1",
+          "2"
+        ]
+      },
+      {
+        "name": "Field1",
+        "type": "<class 'str'>",
+        "is_relational": false,
+        "multi_select": false,
+        "delimiter": null,
+        "sample_values": [
+          "Wild-type",
+          "Recomb"
+        ]
+      }
+    ],
+    "relational_columns": [
+      "ID"
+    ],
+    "multi_select_columns": []
+  }
+}

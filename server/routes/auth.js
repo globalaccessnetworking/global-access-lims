@@ -61,4 +61,14 @@ router.put('/users/:id', [auth, authorize(['Admin', 'SuperAdmin'])], authControl
 // @access  Admin
 router.delete('/users/:id', auth, authController.deleteUser);
 
+// @route   POST api/auth/forgot-password-step1
+// @desc    Return user's security questions (public)
+// @access  Public
+router.post('/forgot-password-step1', authController.forgotPasswordStep1);
+
+// @route   POST api/auth/forgot-password-step2
+// @desc    Verify security answers and reset password (public)
+// @access  Public
+router.post('/forgot-password-step2', authController.forgotPasswordStep2);
+
 module.exports = router;

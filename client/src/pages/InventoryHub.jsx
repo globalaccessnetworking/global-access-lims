@@ -1,10 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import api from '../api/axios';
-import { Package, Plus, FileDown, Search, Edit, Trash2, X, Save, AlertTriangle, Activity, Database } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { exportToPDF, exportToExcel } from '../utils/exportUtils';
-import { useTheme } from '../context/ThemeContext';
-import SmartLookup from '../components/SmartLookup';
+import RelationalSelect from '../components/RelationalSelect';
 
 const InventoryHub = () => {
     const { theme } = useTheme();
@@ -16,8 +10,13 @@ const InventoryHub = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('add');
     const [currentItem, setCurrentItem] = useState({
-        item_name: '', manufacturer: '', pack_size: '', category: 'Reagent',
-        available_quantity: 0, location_area: '', notes: ''
+        item_name: '', 
+        manufacturer_id: '', 
+        stock_category_id: '',
+        pack_size: '', 
+        available_quantity: 0, 
+        storage_area_id: '',
+        notes: ''
     });
 
     useEffect(() => { fetchStocks(); }, []);
@@ -36,9 +35,8 @@ const InventoryHub = () => {
         const lower = searchTerm.toLowerCase();
         return stocks.filter(s =>
             s.item_name?.toLowerCase().includes(lower) ||
-            s.manufacturer?.toLowerCase().includes(lower) ||
-            s.location_area?.toLowerCase().includes(lower) ||
-            s.physical_location?.toLowerCase().includes(lower)
+            s.manufacturer_label?.toLowerCase().includes(lower) ||
+            s.category_label?.toLowerCase().includes(lower)
         );
     }, [stocks, searchTerm]);
 
@@ -49,7 +47,10 @@ const InventoryHub = () => {
             else await api.put(`/inventory/stocks/${currentItem.id}`, currentItem);
             setIsModalOpen(false);
             fetchStocks();
-        } catch (err) { alert("Failed to save."); }
+        } catch (err) { 
+            console.error("Save failed:", err);
+            alert("Failed to save: " + (err.response?.data?.error || err.message)); 
+        }
     };
 
     const handleDelete = async (id) => {
@@ -75,7 +76,7 @@ const InventoryHub = () => {
                     <button onClick={() => exportToExcel(filteredStocks, 'Inventory_Export')} className="p-3 rounded-lg bg-[var(--bg-surface)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-color)] transition-all" title="Export Excel">
                         <Activity size={20} />
                     </button>
-                    <button onClick={() => { setModalMode('add'); setCurrentItem({}); setIsModalOpen(true); }} className="bg-[var(--accent-primary)] hover:bg-[var(--accent-secondary)] text-white px-5 py-2.5 rounded-lg font-bold shadow-lg shadow-[var(--accent-dim)] flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
+                    <button onClick={() => { setModalMode('add'); setCurrentItem({ item_name: '', available_quantity: 0 }); setIsModalOpen(true); }} className="bg-[var(--accent-primary)] hover:bg-[var(--accent-secondary)] text-white px-5 py-2.5 rounded-lg font-bold shadow-lg shadow-[var(--accent-dim)] flex items-center gap-2 transition-all hover:scale-105 active:scale-95">
                         <Plus size={20} /> Add Item
                     </button>
                 </div>
@@ -124,7 +125,6 @@ const InventoryHub = () => {
                                 <th className="px-6 py-4 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">Manufacturer</th>
                                 <th className="px-6 py-4 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">Category</th>
                                 <th className="px-6 py-4 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">Qty</th>
-                                <th className="px-6 py-4 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider">Location</th>
                                 <th className="px-6 py-4 text-xs font-bold text-[var(--text-secondary)] uppercase tracking-wider text-right">Actions</th>
                             </tr>
                         </thead>
@@ -135,10 +135,10 @@ const InventoryHub = () => {
                                         <div className="font-medium text-[var(--text-primary)]">{item.item_name}</div>
                                         <div className="text-xs text-[var(--text-secondary)]">{item.pack_size}</div>
                                     </td>
-                                    <td className="px-6 py-4 text-[var(--text-primary)]">{item.manufacturer}</td>
+                                    <td className="px-6 py-4 text-[var(--text-primary)]">{item.manufacturer_label || item.manufacturer || '-'}</td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2 py-1 rounded-md text-xs font-medium border ${theme === 'dark' ? 'bg-slate-800 border-slate-700 text-slate-300' : 'bg-slate-100 border-slate-200 text-slate-600'}`}>
-                                            {item.category}
+                                            {item.category_label || item.category || '-'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">
@@ -146,7 +146,6 @@ const InventoryHub = () => {
                                             {item.available_quantity}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4 text-[var(--text-primary)]">{item.physical_location}</td>
                                     <td className="px-6 py-4 text-right">
                                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button onClick={() => { setModalMode('edit'); setCurrentItem(item); setIsModalOpen(true); }} className="p-2 hover:bg-blue-500/10 text-slate-400 hover:text-blue-500 rounded-lg"><Edit size={16} /></button>
@@ -172,31 +171,28 @@ const InventoryHub = () => {
                             <form onSubmit={handleSaveItem} className="p-6 space-y-4">
                                 <FormInput label="Item Name" value={currentItem.item_name} onChange={v => setCurrentItem({ ...currentItem, item_name: v })} required />
                                 <div className="grid grid-cols-2 gap-4">
-                                    <SmartLookup 
+                                    <RelationalSelect 
                                         label="Manufacturer" 
-                                        module="inventory" 
-                                        field="manufacturer" 
-                                        value={currentItem.manufacturer} 
-                                        onChange={v => setCurrentItem({ ...currentItem, manufacturer: v })} 
+                                        endpoint="/lookup/manufacturers" 
+                                        value={currentItem.manufacturer_id} 
+                                        onChange={(id) => setCurrentItem({ ...currentItem, manufacturer_id: id })} 
                                     />
                                     <FormInput label="Pack Size" value={currentItem.pack_size} onChange={v => setCurrentItem({ ...currentItem, pack_size: v })} />
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <SmartLookup 
+                                    <RelationalSelect 
                                         label="Category" 
-                                        module="inventory" 
-                                        field="category" 
-                                        value={currentItem.category} 
-                                        onChange={v => setCurrentItem({ ...currentItem, category: v })} 
+                                        endpoint="/lookup/stock-categories" 
+                                        value={currentItem.stock_category_id} 
+                                        onChange={(id) => setCurrentItem({ ...currentItem, stock_category_id: id })} 
                                     />
                                     <FormInput label="Quantity" type="number" value={currentItem.available_quantity} onChange={v => setCurrentItem({ ...currentItem, available_quantity: parseInt(v) || 0 })} />
                                 </div>
-                                <SmartLookup 
-                                    label="Location" 
-                                    module="inventory" 
-                                    field="physical_location" 
-                                    value={currentItem.physical_location} 
-                                    onChange={v => setCurrentItem({ ...currentItem, physical_location: v })} 
+                                <RelationalSelect 
+                                    label="Storage Location" 
+                                    endpoint="/lookup/freezers" 
+                                    value={currentItem.storage_area_id} 
+                                    onChange={(id) => setCurrentItem({ ...currentItem, storage_area_id: id })} 
                                 />
 
                                 <div className="flex justify-end gap-3 pt-4">

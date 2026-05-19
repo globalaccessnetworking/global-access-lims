@@ -95,7 +95,7 @@ const ExperimentalLogbook = ({ initialShowForm = false }) => {
                                     onChange={v => setFormData({ ...formData, protocol: v })} 
                                 />
                             </div>
- stories:
+
                         </div>
                         <div className="space-y-4">
                             <div>
@@ -111,7 +111,7 @@ const ExperimentalLogbook = ({ initialShowForm = false }) => {
                                     placeholder="Search Asset..."
                                 />
                             </div>
- stories:
+
                             <div>
                                 <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Date</label>
                                 <input

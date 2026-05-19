@@ -1,254 +1,490 @@
-import React, { useState, useEffect } from 'react';
-import api from '../api/axios';
-import { Grid, Filter, Activity, Info, Beaker, Download } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import {
+    Search, FlaskConical, ChevronRight, Download, Microscope,
+    Activity, AlertCircle, Loader2, X, Filter, PlusCircle,
+    Save, Info, Dna, TestTube, Edit3, CheckCircle
+} from 'lucide-react';
 
-const HostRangeMatrix = () => {
-    const [interactions, setInteractions] = useState([]);
-    const [phages, setPhages] = useState([]);
-    const [hosts, setHosts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
-    const [hoveredCell, setHoveredCell] = useState(null);
+const api = axios.create({ baseURL: '/api' });
 
-    // Filter & Pagination State
-    const [phageSearch, setPhageSearch] = useState('');
-    const [hostSearch, setHostSearch] = useState('');
-    const [currentPage, setCurrentPage] = useState(0);
-    const rowsPerPage = 50;
+const RESULT_OPTIONS = [
+    { value: '+++', label: '+++  Complete Lysis',  color: 'bg-emerald-500' },
+    { value: '++',  label: '++   Strong Lysis',    color: 'bg-green-500' },
+    { value: '+',   label: '+    Partial Lysis',   color: 'bg-lime-500' },
+    { value: '±',   label: '±    Turbid Plaques',  color: 'bg-yellow-500' },
+    { value: '-',   label: '-    No Infection',    color: 'bg-red-500' },
+];
+
+const RESULT_STYLE = {
+    '+++': { bg: 'bg-emerald-500/20', text: 'text-emerald-400', border: 'border-emerald-500/40' },
+    '++':  { bg: 'bg-green-500/20',   text: 'text-green-400',   border: 'border-green-500/40' },
+    '+':   { bg: 'bg-lime-500/20',    text: 'text-lime-400',    border: 'border-lime-500/40' },
+    '±':   { bg: 'bg-yellow-500/20',  text: 'text-yellow-400',  border: 'border-yellow-500/40' },
+    '-':   { bg: 'bg-red-500/20',     text: 'text-red-400',     border: 'border-red-500/40' },
+};
+
+export default function PhageInfectivityViewer() {
+    const [phages,          setPhages]          = useState([]);
+    const [phageSearch,     setPhageSearch]     = useState('');
+    const [selectedPhage,   setSelectedPhage]   = useState(null);
+    const [profile,         setProfile]         = useState(null);
+    const [loadingPhages,   setLoadingPhages]   = useState(true);
+    const [loadingProfile,  setLoadingProfile]  = useState(false);
+    
+    // Tab state
+    const [activeTab,       setActiveTab]       = useState('legacy'); // 'legacy' or 'recorded'
+
+    // Record-mode state
+    const [strains,         setStrains]         = useState([]);
+    const [showRecordModal, setShowRecordModal] = useState(false);
+    const [strainFilter,    setStrainFilter]    = useState('');
+    const [selectedStrain,  setSelectedStrain]  = useState(null);
+    const [selectedResult,  setSelectedResult]  = useState('+++');
+    const [saving,          setSaving]          = useState(false);
+    const [saveMsg,         setSaveMsg]         = useState(null);
+
+    // Filter states for tables
+    const [legacySearch,    setLegacySearch]    = useState('');
+    const [recordedSearch,  setRecordedSearch]  = useState('');
+
+    // Load phage list
+    const loadPhages = useCallback(async (q = '') => {
+        setLoadingPhages(true);
+        try {
+            const res = await api.get('/interactions/all-phages', { params: { search: q } });
+            if (res.data.success) setPhages(res.data.phages || []);
+        } catch (err) {
+            console.error('[VIEWER] phage list error:', err);
+        } finally {
+            setLoadingPhages(false);
+        }
+    }, []);
+
+    useEffect(() => { loadPhages(); }, [loadPhages]);
 
     useEffect(() => {
-        fetchData();
-    }, [hostSearch, phageSearch, currentPage]);
+        const t = setTimeout(() => loadPhages(phageSearch), 350);
+        return () => clearTimeout(t);
+    }, [phageSearch, loadPhages]);
 
-    const fetchData = async () => {
-        if (!loading) setRefreshing(true);
+    // ── Load strains for record mode (with backend search) ────────────────────
+    const loadStrains = useCallback(async (q = '') => {
         try {
-            // Fetch Phages (with search)
-            const phageRes = await api.get('/assets', {
-                params: { type: 'Phage', search: phageSearch, limit: 50 }
-            });
+            const res = await api.get('/interactions/matrix', { params: { phage_limit: 1, strain_limit: 1000, strain_search: q } });
+            if (res.data.success) setStrains(res.data.strains || []);
+        } catch (err) {}
+    }, []);
 
-            // Fetch Hosts (with search and pagination)
-            const hostRes = await api.get('/assets', {
-                params: {
-                    type: 'Strain',
-                    search: hostSearch,
-                    limit: rowsPerPage,
-                    offset: currentPage * rowsPerPage
-                }
-            });
+    useEffect(() => {
+        const t = setTimeout(() => loadStrains(strainFilter), 350);
+        return () => clearTimeout(t);
+    }, [strainFilter, loadStrains]);
 
-            // Fetch Interaction Data
-            const interactionRes = await api.get('/interactions');
-
-            setPhages(phageRes.data);
-            setHosts(hostRes.data);
-            setInteractions(interactionRes.data);
-            setLoading(false);
-            setRefreshing(false);
+    // Load profile
+    const loadProfile = useCallback(async (phage) => {
+        if (!phage) return;
+        setSelectedPhage(phage);
+        setProfile(null);
+        setLegacySearch('');
+        setRecordedSearch('');
+        setShowRecordModal(false);
+        setSaveMsg(null);
+        setLoadingProfile(true);
+        try {
+            const res = await api.get(`/interactions/profile/${phage.id}`);
+            if (res.data.success) setProfile(res.data);
         } catch (err) {
-            console.error("Matrix load failed:", err);
-            setLoading(false);
-            setRefreshing(false);
+            console.error('[VIEWER] profile error:', err);
+        } finally {
+            setLoadingProfile(false);
         }
-    };
+    }, []);
 
-    const getInteraction = (phageId, hostId) => {
-        return interactions.find(i => i.phage_id === phageId && i.host_id === hostId);
-    };
-
-    const toggleInteraction = async (phageId, hostId) => {
-        const current = getInteraction(phageId, hostId);
-        const currentSensitivity = current ? current.sensitivity : 'None';
-
-        let nextSensitivity = 'Clear';
-        if (currentSensitivity === 'Clear') nextSensitivity = 'Turbid';
-        if (currentSensitivity === 'Turbid') nextSensitivity = 'None';
-        if (currentSensitivity === 'None') nextSensitivity = 'Clear';
-
+    // Save one interaction
+    const saveInteraction = async () => {
+        if (!selectedPhage || !selectedStrain || !selectedResult) return;
+        setSaving(true);
+        setSaveMsg(null);
         try {
-            const res = await api.post('/interactions', {
-                phage_id: phageId,
-                host_id: hostId,
-                sensitivity: nextSensitivity
+            const res = await api.post('/interactions/upsert', {
+                phage_id:  selectedPhage.id,
+                strain_id: selectedStrain.id,
+                result:    selectedResult,
             });
-
-            const updatedInteractions = [...interactions];
-            const existingIndex = updatedInteractions.findIndex(i => i.phage_id === phageId && i.host_id === hostId);
-
-            if (existingIndex >= 0) {
-                updatedInteractions[existingIndex] = res.data;
+            if (res.data.success) {
+                setSaveMsg({ type: 'ok', text: `✅ Saved: ${selectedPhage.phage_name} × ${selectedStrain.name} = ${selectedResult}` });
+                // Refresh profile to show updated recorded count
+                loadProfile(selectedPhage);
+                setTimeout(() => setShowRecordModal(false), 1500);
             } else {
-                updatedInteractions.push(res.data);
+                setSaveMsg({ type: 'err', text: `❌ Error: ${res.data.error}` });
             }
-            setInteractions(updatedInteractions);
         } catch (err) {
-            console.error("Failed to update interaction", err);
+            setSaveMsg({ type: 'err', text: `❌ ${err.response?.data?.error || err.message}` });
+        } finally {
+            setSaving(false);
         }
     };
 
-    if (loading) return (
-        <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
-            <p className="text-slate-400 animate-pulse font-mono text-sm tracking-widest">INITIALIZING BIOMETRIC MATRIX...</p>
-        </div>
+    // CSV export
+    const exportCSV = (type) => {
+        if (!profile) return;
+        let rows = [];
+        let filename = '';
+        if (type === 'legacy' && profile.legacy_strains?.length) {
+            rows = profile.legacy_strains.map(r => `"${selectedPhage.phage_name}","${r.strain_name}","${r.species_name}","${r.stock_label || ''}","${r.detail || ''}","Target Host"`);
+            filename = `${selectedPhage.phage_name}_legacy_host_range.csv`;
+        } else if (type === 'recorded' && profile.recorded_interactions?.length) {
+            rows = profile.recorded_interactions.map(r => `"${selectedPhage.phage_name}","${r.strain_name}","${r.species_name}","${r.stock_label || ''}","${r.detail || ''}","${r.result}","${r.tested_by || ''}","${r.date_tested || ''}"`);
+            filename = `${selectedPhage.phage_name}_recorded_interactions.csv`;
+        } else { return; }
+
+        const header = type === 'legacy' ? 'Phage,Strain,Species,Stock Label,Details,Note' : 'Phage,Strain,Species,Stock Label,Details,Result,Tested By,Date';
+        const csv = [header, ...rows].join('\n');
+        const a   = Object.assign(document.createElement('a'), {
+            href:     URL.createObjectURL(new Blob([csv], { type: 'text/csv' })),
+            download: filename
+        });
+        a.click();
+    };
+
+    const filteredLegacy = (profile?.legacy_strains || []).filter(r =>
+        !legacySearch || r.strain_name?.toLowerCase().includes(legacySearch.toLowerCase())
+    );
+    const filteredRecorded = (profile?.recorded_interactions || []).filter(r =>
+        !recordedSearch || r.strain_name?.toLowerCase().includes(recordedSearch.toLowerCase())
+    );
+    const filteredStrains = strains.filter(s =>
+        !strainFilter || s.name?.toLowerCase().includes(strainFilter.toLowerCase()) ||
+        s.species?.toLowerCase().includes(strainFilter.toLowerCase())
     );
 
     return (
-        <div className="space-y-6 h-full flex flex-col">
-            {/* Header Section */}
-            <div className="flex justify-between items-end bg-slate-900/40 p-6 rounded-2xl border border-white/5 backdrop-blur-xl">
-                <div>
-                    <h1 className="text-4xl font-bold text-white tracking-tight flex items-center gap-3">
-                        <Grid className="w-8 h-8 text-emerald-400" /> Host-Range Matrix
-                    </h1>
-                    <p className="text-slate-400 mt-2 text-lg">Phage-Host Interaction heatmap with server-side indexing.</p>
-                </div>
-
-                <div className="flex flex-col items-end gap-3">
-                    <div className="bg-slate-950/50 backdrop-blur border border-white/10 p-2 rounded-xl flex gap-4 text-[10px] font-black text-slate-500 uppercase items-center px-4 tracking-tighter">
-                        <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Clear</div>
-                        <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-amber-400"></span> Turbid</div>
-                        <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-slate-800 border border-white/10"></span> None</div>
-                        {refreshing && <div className="ml-4 animate-spin h-3 w-3 border-t border-emerald-400 rounded-full"></div>}
+        <div className="min-h-screen bg-slate-950 text-white p-6 pt-24 font-sans">
+            <div className="mb-8">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center border border-emerald-500/20">
+                        <FlaskConical size={20} className="text-emerald-400" />
                     </div>
-
-                    <div className="flex gap-2">
-                        <div className="relative">
-                            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-500" />
-                            <input
-                                type="text"
-                                placeholder="Filter Phages..."
-                                value={phageSearch}
-                                onChange={(e) => setPhageSearch(e.target.value)}
-                                className="bg-slate-950 border border-white/10 rounded-lg py-1.5 pl-8 pr-3 text-xs text-white focus:border-emerald-500/50 outline-none w-40"
-                            />
-                        </div>
-                        <div className="relative">
-                            <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-slate-500" />
-                            <input
-                                type="text"
-                                placeholder="Filter Hosts..."
-                                value={hostSearch}
-                                onChange={(e) => { setHostSearch(e.target.value); setCurrentPage(0); }}
-                                className="bg-slate-950 border border-white/10 rounded-lg py-1.5 pl-8 pr-3 text-xs text-white focus:border-emerald-500/50 outline-none w-40"
-                            />
-                        </div>
+                    <div>
+                        <h1 className="text-2xl font-black text-white tracking-tight">Phage Infectivity Viewer</h1>
+                        <p className="text-slate-500 text-sm">Select a bacteriophage to view its infectivity profile and record interactions</p>
                     </div>
                 </div>
             </div>
 
-            {/* Matrix Core */}
-            <div className="flex-1 overflow-auto bg-slate-950 border border-white/5 shadow-2xl relative rounded-2xl custom-scrollbar">
-                <table className="border-collapse w-max">
-                    <thead>
-                        <tr className="bg-slate-900/80 backdrop-blur">
-                            <th className="sticky left-0 top-0 z-30 bg-slate-900 border-b border-r border-white/10 p-4 text-left text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] min-w-[220px]">
-                                <div className="flex items-center justify-between">
-                                    <span>Bacterial Strain</span>
-                                    <span className="text-slate-600 text-[8px]">Row: {currentPage * rowsPerPage + 1} - {(currentPage + 1) * rowsPerPage}</span>
-                                </div>
-                            </th>
-                            {phages.map(phage => (
-                                <th key={phage.id} className="sticky top-0 z-20 bg-slate-900 border-b border-white/10 p-2 min-w-[64px]">
-                                    <div className="h-28 flex items-end justify-center w-full pb-2">
-                                        <span className="transform -rotate-90 text-[10px] font-mono font-bold text-slate-400 whitespace-nowrap tracking-widest uppercase">
-                                            {phage.strain_number}
-                                        </span>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* LEFT: Phage Selector */}
+                <div className="lg:col-span-4 flex flex-col gap-4">
+                    <div className="relative">
+                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <input
+                            type="text"
+                            placeholder="Search phages..."
+                            value={phageSearch}
+                            onChange={e => setPhageSearch(e.target.value)}
+                            className="w-full bg-slate-900 border border-white/10 rounded-xl py-3 pl-9 pr-4 text-sm text-white placeholder-slate-600 focus:border-emerald-500 outline-none transition-colors"
+                        />
+                    </div>
+
+                    <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden flex flex-col h-[calc(100vh-220px)]">
+                        <div className="p-4 border-b border-white/5 flex items-center justify-between shrink-0">
+                            <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                                Bacteriophages ({phages.filter(p => p.phage_name).length} named)
+                            </span>
+                            {loadingPhages && <Loader2 size={12} className="text-emerald-400 animate-spin" />}
+                        </div>
+                        <div className="overflow-y-auto flex-1">
+                            {phages.filter(p => p.phage_name).map(p => (
+                                <button
+                                    key={p.id}
+                                    onClick={() => loadProfile(p)}
+                                    className={`w-full text-left px-4 py-3 border-b border-white/5 transition-all hover:bg-slate-800/50 flex items-center justify-between group ${
+                                        selectedPhage?.id === p.id ? 'bg-emerald-500/10 border-l-2 border-l-emerald-500' : ''
+                                    }`}
+                                >
+                                    <div className="min-w-0">
+                                        <div className="text-sm font-bold text-white truncate">{p.phage_name}</div>
+                                        {p.against_species && (
+                                            <div className="text-[10px] text-slate-500 truncate mt-0.5">{p.against_species}</div>
+                                        )}
                                     </div>
-                                </th>
+                                    <ChevronRight size={14} className={`shrink-0 ml-2 transition-colors ${selectedPhage?.id === p.id ? 'text-emerald-400' : 'text-slate-700 group-hover:text-slate-500'}`} />
+                                </button>
                             ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-white/5">
-                        {hosts.map(host => (
-                            <tr key={host.id} className="group hover:bg-emerald-500/5 transition-colors">
-                                <td className="sticky left-0 z-10 bg-slate-900/95 group-hover:bg-slate-800 border-r border-white/10 p-4 py-3">
-                                    <div className="font-bold text-slate-200 text-sm tracking-tight">{host.strain_number}</div>
-                                    <div className="text-[10px] text-slate-500 truncate max-w-[180px] font-medium uppercase tracking-wider">{host.species}</div>
-                                </td>
-                                {phages.map(phage => {
-                                    const interaction = getInteraction(phage.id, host.id);
-                                    const status = interaction ? interaction.sensitivity : 'None';
-
-                                    return (
-                                        <td key={phage.id} className="p-0.5 text-center relative">
-                                            <button
-                                                onClick={() => toggleInteraction(phage.id, host.id)}
-                                                onMouseEnter={() => setHoveredCell({ phage, host, status })}
-                                                onMouseLeave={() => setHoveredCell(null)}
-                                                className={`
-                                                    w-10 h-10 rounded-sm transition-all duration-150 border border-transparent
-                                                    ${status === 'Clear' ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)] hover:scale-105' :
-                                                        status === 'Turbid' ? 'bg-amber-400/80 shadow-[0_0_10px_rgba(251,191,36,0.2)] hover:scale-105' :
-                                                            'bg-slate-900 group-hover:bg-slate-800 hover:border-white/20'
-                                                    }
-                                                `}
-                                            />
-                                        </td>
-                                    );
-                                })}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                {/* Pagination HUD */}
-                <div className="sticky bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-slate-900/90 backdrop-blur-xl border border-white/10 p-2 rounded-2xl shadow-2xl z-40">
-                    <button
-                        disabled={currentPage === 0}
-                        onClick={() => setCurrentPage(p => p - 1)}
-                        className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold disabled:opacity-20 transition-all active:scale-95"
-                    >
-                        PREV
-                    </button>
-                    <div className="px-4 text-[10px] font-black text-slate-400 tracking-widest uppercase bg-black/40 rounded-lg py-2 border border-white/5">
-                        PAGE {currentPage + 1}
+                        </div>
                     </div>
-                    <button
-                        disabled={hosts.length < rowsPerPage}
-                        onClick={() => setCurrentPage(p => p + 1)}
-                        className="px-4 py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold disabled:opacity-20 transition-all active:scale-95"
-                    >
-                        NEXT
-                    </button>
                 </div>
 
-                <AnimatePresence>
-                    {hoveredCell && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="fixed bottom-24 right-8 bg-slate-900/90 border border-emerald-500/30 p-5 rounded-2xl shadow-2xl z-50 w-72 backdrop-blur-2xl ring-1 ring-white/10"
-                        >
-                            <div className="flex items-center gap-3 mb-3 border-b border-white/10 pb-3">
-                                <Beaker className="w-5 h-5 text-emerald-400" />
-                                <span className="font-black text-white text-xs uppercase tracking-widest">Interaction Profile</span>
+                {/* RIGHT: Profile Panel */}
+                <div className="lg:col-span-8">
+                    {!selectedPhage ? (
+                        <div className="h-full min-h-[400px] bg-slate-900 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-4 p-12">
+                            <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center">
+                                <Microscope size={28} className="text-slate-600" />
                             </div>
-                            <div className="space-y-4 text-[11px]">
-                                <div className="flex justify-between items-center group">
-                                    <span className="text-slate-500 font-bold uppercase tracking-tighter">Phage Identity:</span>
-                                    <span className="font-mono text-emerald-300 font-bold bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">{hoveredCell.phage.strain_number}</span>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <span className="text-slate-500 font-bold uppercase tracking-tighter">Bacterial Host:</span>
-                                    <span className="font-mono text-white font-bold bg-white/5 px-2 py-1 rounded border border-white/10">{hoveredCell.host.strain_number}</span>
-                                </div>
-                                <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                                    <span className="text-slate-500 font-bold uppercase tracking-tighter">Lysis Status:</span>
-                                    <span className={`px-3 py-1 rounded-full font-black tracking-widest text-[9px] uppercase ${hoveredCell.status === 'Clear' ? 'bg-emerald-500 text-slate-900' :
-                                        hoveredCell.status === 'Turbid' ? 'bg-amber-400 text-slate-900' : 'bg-slate-700 text-slate-400'
-                                        }`}>{hoveredCell.status}</span>
+                            <div className="text-center">
+                                <p className="text-slate-500 font-bold">Select a Phage</p>
+                                <p className="text-slate-700 text-sm mt-1">Click any bacteriophage on the left to view its profile</p>
+                            </div>
+                        </div>
+                    ) : loadingProfile ? (
+                        <div className="h-full min-h-[400px] bg-slate-900 border border-white/5 rounded-2xl flex items-center justify-center gap-3">
+                            <Loader2 size={20} className="text-emerald-400 animate-spin" />
+                            <span className="text-slate-500 text-sm">Loading profile...</span>
+                        </div>
+                    ) : (
+                        <div className="bg-slate-900 border border-white/5 rounded-2xl flex flex-col h-[calc(100vh-220px)]">
+                            {/* Header */}
+                            <div className="p-6 border-b border-white/5 bg-gradient-to-r from-emerald-500/5 to-transparent shrink-0">
+                                <h2 className="text-xl font-black text-white">{selectedPhage.phage_name}</h2>
+                                <div className="flex flex-wrap gap-2 mt-2">
+                                    {selectedPhage.against_species && (
+                                        <span className="px-2 py-0.5 bg-purple-500/15 border border-purple-500/25 rounded-lg text-purple-400 text-xs font-semibold">
+                                            🎯 Target Species: {selectedPhage.against_species}
+                                        </span>
+                                    )}
+                                    {profile?.host_bacteria && (
+                                        <span className="px-2 py-0.5 bg-cyan-500/15 border border-cyan-500/25 rounded-lg text-cyan-400 text-xs font-semibold">
+                                            🧫 Propagation Host: {profile.host_bacteria}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
-                        </motion.div>
+
+                            {/* Tabs */}
+                            <div className="flex border-b border-white/5 shrink-0">
+                                <button
+                                    onClick={() => setActiveTab('legacy')}
+                                    className={`flex-1 py-4 text-sm font-bold border-b-2 transition-all ${
+                                        activeTab === 'legacy' ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5' : 'border-transparent text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
+                                    }`}
+                                >
+                                    Legacy Host Range ({profile?.total_legacy || 0})
+                                </button>
+                                <button
+                                    onClick={() => setActiveTab('recorded')}
+                                    className={`flex-1 py-4 text-sm font-bold border-b-2 transition-all ${
+                                        activeTab === 'recorded' ? 'border-emerald-500 text-emerald-400 bg-emerald-500/5' : 'border-transparent text-slate-500 hover:text-slate-300 hover:bg-slate-800/50'
+                                    }`}
+                                >
+                                    Lab Recorded ({profile?.total_recorded || 0})
+                                </button>
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-6 flex-1 overflow-y-auto">
+                                {activeTab === 'legacy' ? (
+                                    <div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="relative flex-1 max-w-xs">
+                                                <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                                                <input
+                                                    type="text" placeholder="Filter strains..."
+                                                    value={legacySearch} onChange={e => setLegacySearch(e.target.value)}
+                                                    className="w-full bg-slate-800 border border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-white focus:border-emerald-500 outline-none"
+                                                />
+                                            </div>
+                                            {(profile?.total_legacy || 0) > 0 && (
+                                                <button onClick={() => exportCSV('legacy')} className="ml-4 flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10 rounded-xl text-xs font-bold transition-all">
+                                                    <Download size={14} /> Export CSV
+                                                </button>
+                                            )}
+                                        </div>
+                                        {filteredLegacy.length > 0 ? (
+                                            <div className="overflow-hidden rounded-xl border border-white/5">
+                                                <table className="w-full text-sm">
+                                                    <thead>
+                                                        <tr className="bg-slate-800/50 border-b border-white/5">
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Strain No.</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Species</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Stock Label</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {filteredLegacy.map((r, i) => (
+                                                            <tr key={i} className="border-b border-white/5 hover:bg-slate-800/30">
+                                                                <td className="px-4 py-3 font-bold text-white">
+                                                                    {r.strain_name ? r.strain_name : <span className="text-slate-500 italic font-normal">Unnamed Strain</span>}
+                                                                </td>
+                                                                <td className="px-4 py-3 text-slate-400 text-xs">{r.species_name}</td>
+                                                                <td className="px-4 py-3 text-slate-400 text-xs">{r.stock_label || '—'}</td>
+                                                                <td className="px-4 py-3 text-slate-500 text-xs italic">{r.detail || '—'}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-12 text-slate-500">No legacy strains found.</div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <button
+                                                onClick={() => { setShowRecordModal(true); setSaveMsg(null); setSelectedStrain(null); }}
+                                                className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-sm transition-all shadow-lg shadow-emerald-900/20"
+                                            >
+                                                <PlusCircle size={16} /> Record New Test
+                                            </button>
+                                            <div className="flex items-center gap-3">
+                                                <div className="relative w-48">
+                                                    <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                                                    <input
+                                                        type="text" placeholder="Filter recorded..."
+                                                        value={recordedSearch} onChange={e => setRecordedSearch(e.target.value)}
+                                                        className="w-full bg-slate-800 border border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-white focus:border-emerald-500 outline-none"
+                                                    />
+                                                </div>
+                                                {(profile?.total_recorded || 0) > 0 && (
+                                                    <button onClick={() => exportCSV('recorded')} className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-white/10 rounded-xl text-xs font-bold transition-all">
+                                                        <Download size={14} /> Export CSV
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {(profile?.total_recorded || 0) === 0 ? (
+                                            <div className="text-center py-16">
+                                                <TestTube size={32} className="mx-auto text-slate-600 mb-4" />
+                                                <p className="text-slate-400 font-bold mb-2">No Interaction Data Recorded Yet</p>
+                                                <p className="text-slate-500 text-sm max-w-sm mx-auto">
+                                                    Click "Record New Test" to manually enter plaque assay results for this phage.
+                                                </p>
+                                            </div>
+                                        ) : filteredRecorded.length > 0 ? (
+                                            <div className="overflow-hidden rounded-xl border border-white/5">
+                                                <table className="w-full text-sm">
+                                                    <thead>
+                                                        <tr className="bg-slate-800/50 border-b border-white/5">
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Result</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Strain No.</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Species</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Stock Label</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Details</th>
+                                                            <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {filteredRecorded.map((r, i) => {
+                                                            const s = RESULT_STYLE[r.result] || RESULT_STYLE['-'];
+                                                            return (
+                                                                <tr key={i} className="border-b border-white/5 hover:bg-slate-800/30">
+                                                                    <td className="px-4 py-3">
+                                                                        <span className={`px-2 py-1 rounded-lg font-black text-xs border ${s.bg} ${s.text} ${s.border}`}>{r.result}</span>
+                                                                    </td>
+                                                                    <td className="px-4 py-3 font-bold text-white">{r.strain_name}</td>
+                                                                    <td className="px-4 py-3 text-slate-400 text-xs">{r.species_name}</td>
+                                                                    <td className="px-4 py-3 text-slate-400 text-xs">{r.stock_label || '—'}</td>
+                                                                    <td className="px-4 py-3 text-slate-500 text-xs italic">{r.detail || '—'}</td>
+                                                                    <td className="px-4 py-3 text-slate-500 text-xs">{r.date_tested || '—'}</td>
+                                                                </tr>
+                                                            );
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-12 text-slate-500">No recorded tests match filter.</div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     )}
-                </AnimatePresence>
+                </div>
             </div>
+
+            {/* RECORD MODAL OVERLAY */}
+            {showRecordModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                        <div className="p-4 border-b border-white/5 flex items-center justify-between bg-slate-800/50 shrink-0">
+                            <h3 className="font-bold text-white flex items-center gap-2">
+                                <Edit3 size={18} className="text-emerald-400" />
+                                Record Test: {selectedPhage?.phage_name}
+                            </h3>
+                            <button onClick={() => setShowRecordModal(false)} className="text-slate-400 hover:text-white p-1">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        
+                        <div className="p-6 overflow-y-auto flex-1">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Strain picker */}
+                                <div className="flex flex-col h-full max-h-[300px]">
+                                    <label className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2 shrink-0">
+                                        1. Select Bacterial Strain
+                                    </label>
+                                    <div className="relative mb-2 shrink-0">
+                                        <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                                        <input
+                                            type="text" placeholder="Search inventory..."
+                                            value={strainFilter} onChange={e => setStrainFilter(e.target.value)}
+                                            className="w-full bg-slate-950 border border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-white focus:border-emerald-500 outline-none"
+                                        />
+                                    </div>
+                                    <div className="bg-slate-950 border border-white/10 rounded-xl overflow-y-auto flex-1">
+                                        {filteredStrains.slice(0, 100).map(s => (
+                                            <button key={s.id} onClick={() => setSelectedStrain(s)}
+                                                className={`w-full text-left px-3 py-2 border-b border-white/5 text-sm transition-colors ${selectedStrain?.id === s.id ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-300 hover:bg-slate-800'}`}>
+                                                <div className="font-bold">{s.name}</div>
+                                                <div className="text-[10px] text-slate-500">{s.species || '—'}</div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Result picker */}
+                                <div>
+                                    <label className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2 block">
+                                        2. Plaque Assay Result
+                                    </label>
+                                    <div className="flex flex-col gap-2">
+                                        {RESULT_OPTIONS.map(opt => (
+                                            <button key={opt.value} onClick={() => setSelectedResult(opt.value)}
+                                                className={`flex items-center gap-3 px-4 py-3 rounded-xl border text-sm font-bold transition-all text-left ${
+                                                    selectedResult === opt.value
+                                                        ? 'bg-slate-800 border-emerald-500 text-white'
+                                                        : 'border-white/10 text-slate-400 hover:bg-slate-800/50'
+                                                }`}>
+                                                <span className={`w-3 h-3 rounded-full ${opt.color} shrink-0`} />
+                                                {opt.label}
+                                                {selectedResult === opt.value && <CheckCircle size={16} className="ml-auto text-emerald-400" />}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {saveMsg && (
+                                <div className={`mt-6 px-4 py-3 rounded-xl text-sm font-bold border ${
+                                    saveMsg.type === 'ok' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'
+                                }`}>
+                                    {saveMsg.text}
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="p-4 border-t border-white/5 bg-slate-800/30 flex justify-end gap-3 shrink-0">
+                            <button onClick={() => setShowRecordModal(false)} className="px-4 py-2 text-sm font-bold text-slate-400 hover:text-white transition-colors">
+                                Cancel
+                            </button>
+                            <button
+                                onClick={saveInteraction}
+                                disabled={!selectedStrain || saving}
+                                className="flex items-center gap-2 px-6 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl text-sm transition-all shadow-lg"
+                            >
+                                {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                                {saving ? 'Saving...' : 'Save Result'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
-};
-
-export default HostRangeMatrix;
+}
