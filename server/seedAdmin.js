@@ -13,24 +13,34 @@ const seedAdmin = async () => {
 
         const hashedPassword = await bcrypt.hash('admin123', 10);
 
+        const defaults = {
+            username: 'admin',
+            email: 'admin@globalaccess.com',
+            password_hash: hashedPassword,
+            role: 'Admin',
+            permissions: { library: 'write', inventory: 'write', storage: 'write', entry: 'write' },
+            security_question_1: 'What was the name of your first laboratory or department?',
+            security_answer_1: 'phagelab',
+            security_question_2: 'What is the last name of your first scientific supervisor or mentor?',
+            security_answer_2: 'shafiq'
+        };
+
         const [admin, created] = await User.findOrCreate({
             where: { username: 'admin' },
-            defaults: {
-                username: 'admin',
-                email: 'admin@globalaccess.com',
-                password_hash: hashedPassword,
-                role: 'Admin',
-                permissions: { library: 'write', inventory: 'write', storage: 'write', entry: 'write' }
-            }
+            defaults
         });
 
         if (created) {
             console.log('Admin user created successfully.');
         } else {
-            console.log('Admin user already exists. Updating password and permissions...');
+            console.log('Admin user already exists. Updating password, permissions, and security questions...');
             admin.password_hash = hashedPassword;
             admin.role = 'Admin';
             admin.permissions = { library: 'write', inventory: 'write', storage: 'write', entry: 'write' };
+            admin.security_question_1 = defaults.security_question_1;
+            admin.security_answer_1 = defaults.security_answer_1;
+            admin.security_question_2 = defaults.security_question_2;
+            admin.security_answer_2 = defaults.security_answer_2;
             await admin.save();
             console.log('Admin updated.');
         }
