@@ -98,15 +98,67 @@ exports.lookupAsset = async (req, res) => {
 exports.getAssets = async (req, res) => {
     try {
         const query = `
-            SELECT id, "Bacteriophage_Name" AS name, 'Phage' AS "assetType", 'BIO' AS prefix, 'LIMS-PHG-' || id AS uid FROM ext_bacteriophages
+            SELECT 
+                p.id, 
+                COALESCE(NULLIF(pn."Bacteriophage_Name", ''), p."Bacteriophage_Name") AS name, 
+                'Phage' AS "assetType", 
+                'BIO' AS prefix, 
+                'LIMS-PHG-' || p.id AS uid 
+            FROM ext_bacteriophages p
+            LEFT JOIN phage_names pn ON pn."ID" = p."Bacteriophage_Name"
+            
             UNION ALL
-            SELECT id, "Strain_No" AS name, 'Bacteria' AS "assetType", 'BIO' AS prefix, 'LIMS-STR-' || id AS uid FROM ext_bacterial_strains
+            
+            SELECT 
+                s.id,
+                CASE 
+                    WHEN NULLIF(s."Strain_No", '') IS NOT NULL AND NULLIF(bs."Species", '') IS NOT NULL 
+                        THEN bs."Species" || ' (' || s."Strain_No" || ')'
+                    WHEN NULLIF(s."Strain_No", '') IS NOT NULL 
+                        THEN s."Strain_No"
+                    WHEN NULLIF(s."Glycerol_Stock_tube_label", '') IS NOT NULL AND NULLIF(bs."Species", '') IS NOT NULL 
+                        THEN bs."Species" || ' (' || s."Glycerol_Stock_tube_label" || ')'
+                    WHEN NULLIF(s."Glycerol_Stock_tube_label", '') IS NOT NULL 
+                        THEN s."Glycerol_Stock_tube_label"
+                    WHEN NULLIF(bs."Species", '') IS NOT NULL 
+                        THEN bs."Species" || ' (ID ' || s.id || ')'
+                    ELSE 'Strain #' || s.id
+                END AS name,
+                'Bacteria' AS "assetType", 
+                'BIO' AS prefix, 
+                'LIMS-STR-' || s.id AS uid 
+            FROM ext_bacterial_strains s
+            LEFT JOIN bacterial_species bs ON bs."ID" = s."Specie"
+            
             UNION ALL
-            SELECT id, "Plasmid_Name" AS name, 'Plasmid' AS "assetType", 'BIO' AS prefix, 'LIMS-PLAS-' || id AS uid FROM ext_plasmids
+            
+            SELECT 
+                id, 
+                COALESCE(NULLIF("Plasmid_Name", ''), 'Plasmid #' || id) AS name, 
+                'Plasmid' AS "assetType", 
+                'BIO' AS prefix, 
+                'LIMS-PLAS-' || id AS uid 
+            FROM ext_plasmids
+            
             UNION ALL
-            SELECT id, "Primer_Name" AS name, 'Primer' AS "assetType", 'BIO' AS prefix, 'LIMS-PRM-' || id AS uid FROM ext_primers_details
+            
+            SELECT 
+                id, 
+                COALESCE(NULLIF("Primer_Name", ''), 'Primer #' || id) AS name, 
+                'Primer' AS "assetType", 
+                'BIO' AS prefix, 
+                'LIMS-PRM-' || id AS uid 
+            FROM ext_primers_details
+            
             UNION ALL
-            SELECT id, "Item_Name" AS name, 'Inventory' AS "assetType", 'INV' AS prefix, 'LIMS-INV-' || id AS uid FROM ext_lab_stock
+            
+            SELECT 
+                id, 
+                COALESCE(NULLIF("Item_Name", ''), 'Item #' || id) AS name, 
+                'Inventory' AS "assetType", 
+                'INV' AS prefix, 
+                'LIMS-INV-' || id AS uid 
+            FROM ext_lab_stock
         `;
         const assets = await sequelize.query(query, { type: QueryTypes.SELECT });
         res.json({ success: true, assets });
