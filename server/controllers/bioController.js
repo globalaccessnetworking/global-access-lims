@@ -222,7 +222,7 @@ exports.getAssetDetail = async (req, res) => {
 // PATCH /api/bio/detail/:type/:id - Granular Asset Update
 exports.updateAssetDetail = async (req, res) => {
     try {
-        const { sequelize, CustomForm, SystemAuditLog } = require('../models');
+        const { sequelize, SystemAuditLog } = require('../models');
         const { type, id } = req.params;
         const updates = req.body;
         console.log(`[QUICK-EDIT] Update Triggered for ${type} #${id}`, updates);
@@ -237,33 +237,48 @@ exports.updateAssetDetail = async (req, res) => {
         const targetTable = tableMap[type.toUpperCase()];
         if (!targetTable) return res.status(400).json({ error: "Invalid Update Domain" });
 
-        // Filter out system columns from updates
+        // Filter out system/primary key columns so we never mutate the PK
         const filteredUpdates = { ...updates };
         delete filteredUpdates.id;
+        delete filteredUpdates.ID;
         delete filteredUpdates.createdAt;
         delete filteredUpdates.updatedAt;
+
+        if (Object.keys(filteredUpdates).length === 0) {
+            return res.status(400).json({ error: "No updatable fields provided." });
+        }
 
         const setClause = Object.keys(filteredUpdates)
             .map(key => `"${key}" = :${key}`)
             .join(', ');
 
         await sequelize.query(
-            `UPDATE "${targetTable}" SET ${setClause} WHERE "id" = :id`,
-            { replacements: { ...filteredUpdates, id }, type: QueryTypes.UPDATE }
+            `UPDATE "${targetTable}" SET ${setClause} WHERE "id"::text = :recordId`,
+            { replacements: { ...filteredUpdates, recordId: String(id) }, type: QueryTypes.UPDATE }
         );
 
-        await SystemAuditLog.create({
-            user_id: req.user?.id || null,
-            action: 'QUICK_EDIT',
-            table_name: targetTable,
-            details: { record_id: id, fields: Object.keys(filteredUpdates) }
-        });
+        // Audit log is non-critical — never block the save if it fails
+        try {
+            if (SystemAuditLog) {
+                await SystemAuditLog.create({
+                    user_id: req.user?.id || null,
+                    action: 'QUICK_EDIT',
+                    table_name: targetTable,
+                    details: { record_id: id, fields: Object.keys(filteredUpdates) }
+                });
+            }
+        } catch (auditErr) {
+            console.warn('[QUICK-EDIT] Audit log write failed (non-critical):', auditErr.message);
+        }
 
         res.json({ success: true, message: "Sync Success" });
 
     } catch (err) {
         console.error("[QUICK-EDIT] ERROR IN updateAssetDetail:", err);
-        res.status(500).json({ error: "Failed to synchronize research metadata", debug: err.message });
+        res.status(500).json({ 
+            error: err.message || "Failed to synchronize research metadata",
+            debug: err.message 
+        });
     }
 };
 

@@ -54,7 +54,9 @@ const QuickEditModal = ({ asset, onClose, onUpdate }) => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            await api.patch(`/bio/detail/${asset.type}/${asset.id}`, formData);
+            // Strip primary key and system fields before sending to backend
+            const { id, ID, createdAt, updatedAt, ...payload } = formData;
+            await api.patch(`/bio/detail/${asset.type}/${asset.id}`, payload);
             setMode('view');
             if (onUpdate) onUpdate();
         } catch (err) {
@@ -153,14 +155,17 @@ const QuickEditModal = ({ asset, onClose, onUpdate }) => {
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                             {/* Dynamic Fields */}
-                            {(schema?.fields || Object.keys(details || {}).filter(k => !['id', 'createdAt', 'updatedAt'].includes(k)).map(k => ({ id: k, label: k }))).map((field) => {
+                        {(schema?.fields || Object.keys(details || {}).filter(k => !['id', 'createdAt', 'updatedAt'].includes(k)).map(k => ({ id: k, label: k }))).map((field) => {
                                 const value = formData[field.id] || '';
+                                // ID and system fields are always read-only
+                                const isReadOnly = ['id', 'ID', 'createdAt', 'updatedAt'].includes(field.id);
                                 return (
                                     <div key={field.id} className="space-y-2 group">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block pl-1 group-focus-within:text-emerald-400 transition-colors">
                                             {field.label || field.id.replace(/_/g, ' ')}
+                                            {isReadOnly && <span className="ml-2 text-slate-700">(read-only)</span>}
                                         </label>
-                                        {mode === 'view' ? (
+                                        {mode === 'view' || isReadOnly ? (
                                             <div className="px-5 py-3.5 bg-slate-900/50 border border-white/5 rounded-2xl text-slate-200 font-medium text-sm min-h-[50px] flex items-center">
                                                 {displayValues[field.id] || value || <span className="text-slate-700 italic">Not recorded</span>}
                                             </div>
