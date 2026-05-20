@@ -124,11 +124,29 @@ const FIELD_LOOKUPS = {
     DNA_storage_Box_detail: '/lookup/freezers',
 };
 
-// Fields to completely hide (image/binary data)
-const HIDDEN_FIELDS = ['id', 'ID', 'createdAt', 'updatedAt', 'Expression_Picture', 'Purified_Protein_Picture', 'Primer_Image', 'Attachment_File', 'Image', 'image', 'File_Upload', 'file_upload', '2nd_image'];
-const EXCLUDED_FROM_PATCH = ['id', 'ID', 'createdAt', 'updatedAt', 'Expression_Picture', 'Purified_Protein_Picture', 'Primer_Image', 'Attachment_File'];
+// Fields to completely hide - image/binary data or confusing internal-only columns
+// Covers all known variants across ext_bacteriophages, ext_bacterial_strains, ext_plasmids, ext_primers_details
+const HIDDEN_FIELDS = [
+    // System / PK
+    'id', 'ID', 'createdAt', 'updatedAt',
+    // Image fields (all case variants seen in DB)
+    'Expression_Picture', 'Purified_Protein_Picture',
+    'Primer_Image', 'primer_image', 'Image', 'image', '2nd_image', '2ND_IMAGE',
+    // File attachment fields
+    'Attachment_File', 'attachment_file', 'File_Upload', 'file_upload', 'FILE_UPLOAD',
+    // Any other blob/binary columns
+    'Photo', 'photo', 'Picture', 'picture', 'Attachment', 'attachment',
+];
 
-// Long text fields (textarea)
+const EXCLUDED_FROM_PATCH = [
+    'id', 'ID', 'createdAt', 'updatedAt',
+    'Expression_Picture', 'Purified_Protein_Picture',
+    'Primer_Image', 'primer_image', 'Image', 'image', '2nd_image', '2ND_IMAGE',
+    'Attachment_File', 'attachment_file', 'File_Upload', 'file_upload', 'FILE_UPLOAD',
+    'Photo', 'photo', 'Picture', 'picture', 'Attachment', 'attachment',
+];
+
+// Long text fields rendered as textarea
 const TEXTAREA_FIELDS = ['Characterization_details', 'Detail_of_Bacterial_Strain', 'Cloned_Gene_Sequence', 'Cloned_Protein_Sequence', 'DNA_sequence', 'Plaque_Morphology'];
 
 // =============================================================================
