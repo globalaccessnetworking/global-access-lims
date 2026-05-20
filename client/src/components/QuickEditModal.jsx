@@ -13,6 +13,7 @@ const QuickEditModal = ({ asset, onClose, onUpdate }) => {
     const [error, setError] = useState(null);
     const [formData, setFormData] = useState({});
     const [displayValues, setDisplayValues] = useState({});
+    const [saveSuccess, setSaveSuccess] = useState(false);
 
     // Mappings for RelationalSelect in Edit Mode
     const FIELD_LOOKUPS = {
@@ -22,11 +23,18 @@ const QuickEditModal = ({ asset, onClose, onUpdate }) => {
         'WT-RECOMB': '/lookup/wild-type-recomb',
         'GS_Freezer_Name': '/lookup/freezers',
         '4C_Fridge_Number': '/lookup/freezers',
+        '_4C_Fridge_Number': '/lookup/freezers',
         'GS_Racks': '/lookup/racks',
         '_4C_Rack_Number': '/lookup/racks',
         'GS_Box_details': '/lookup/boxes',
         'DNA_storage_Box_detail': '/lookup/freezers'
     };
+
+    // Fields that store large binary/base64 data - exclude from PATCH payload
+    const BINARY_FIELDS = ['Expression_Picture', 'Purified_Protein_Picture', 'Primer_Image', 'Attachment_File'];
+
+    // Always-excluded system/PK fields
+    const EXCLUDED_FIELDS = ['id', 'ID', 'createdAt', 'updatedAt', ...BINARY_FIELDS];
 
     useEffect(() => {
         if (asset) fetchDetails();
@@ -36,7 +44,8 @@ const QuickEditModal = ({ asset, onClose, onUpdate }) => {
         setLoading(true);
         setError(null);
         try {
-            const res = await api.get(`/bio/detail/${asset.type}/${asset.id}`);
+            // Normalize type to uppercase for the API URL
+            const res = await api.get(`/bio/detail/${asset.type.toUpperCase()}/${asset.id}`);
             if (res.data.success) {
                 setDetails(res.data.data);
                 setSchema(res.data.schema);
@@ -54,10 +63,22 @@ const QuickEditModal = ({ asset, onClose, onUpdate }) => {
     const handleSave = async () => {
         setSaving(true);
         try {
-            // Strip primary key and system fields before sending to backend
-            const { id, ID, createdAt, updatedAt, ...payload } = formData;
-            await api.patch(`/bio/detail/${asset.type}/${asset.id}`, payload);
+            // Strip primary key, system, and binary/image fields before sending to backend
+            const payload = Object.fromEntries(
+                Object.entries(formData).filter(([key]) => !EXCLUDED_FIELDS.includes(key))
+            );
+
+            await api.patch(`/bio/detail/${asset.type.toUpperCase()}/${asset.id}`, payload);
+
+            // Show success flash
+            setSaveSuccess(true);
+            setTimeout(() => setSaveSuccess(false), 2500);
+
+            // Switch back to view mode and re-fetch to show fresh data
             setMode('view');
+            await fetchDetails();
+
+            // Also refresh the parent list
             if (onUpdate) onUpdate();
         } catch (err) {
             console.error("Save failed", err);
@@ -93,24 +114,37 @@ const QuickEditModal = ({ asset, onClose, onUpdate }) => {
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
                 className="relative w-full max-w-4xl bg-slate-900 border border-white/10 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
             >
+                {/* Success Flash Banner */}
+                {saveSuccess && (
+                    <div className="px-8 py-3 bg-emerald-500/10 border-b border-emerald-500/20 flex items-center gap-3">
+                        <CheckCircle size={16} className="text-emerald-400" />
+                        <span className="text-emerald-400 text-xs font-black uppercase tracking-widest">Record synchronized successfully!</span>
+                    </div>
+                )}
+
                 {/* Header */}
                 <div className="p-8 border-b border-white/5 flex items-center justify-between relative bg-gradient-to-r from-white/[0.02] to-transparent">
                     <div className="flex items-center gap-5">
                         <div className={`p-4 rounded-2xl shadow-inner ${
-                            asset.type === 'PHAGE' ? 'bg-blue-500/10 border border-blue-500/20' :
-                            asset.type === 'STRAIN' ? 'bg-emerald-500/10 border border-emerald-500/20' :
+                            asset.type?.toUpperCase() === 'PHAGE' ? 'bg-blue-500/10 border border-blue-500/20' :
+                            asset.type?.toUpperCase() === 'STRAIN' ? 'bg-emerald-500/10 border border-emerald-500/20' :
+                            asset.type?.toUpperCase() === 'PRIMER' ? 'bg-purple-500/10 border border-purple-500/20' :
+                            asset.type?.toUpperCase() === 'PLASMID' ? 'bg-amber-500/10 border border-amber-500/20' :
                             'bg-slate-800 border border-white/10'
                         }`}>
                             {getTypeIcon(asset.type)}
                         </div>
                         <div>
                             <div className="flex items-center gap-3">
-                                <h2 className="text-2xl font-black text-white tracking-tight">{details?.name || asset.name}</h2>
+                                <h2 className="text-2xl font-black text-white tracking-tight">
+                                    {/* Show the correct name field per asset type */}
+                                    {details?.Bacteriophage_Name || details?.Strain_No || details?.Primer_Name || details?.Plasmid_Name || asset.name}
+                                </h2>
                                 <span className="px-2 py-0.5 bg-white/5 rounded-md text-[9px] font-black text-slate-500 uppercase tracking-widest border border-white/5">
                                     REG #{asset.id}
                                 </span>
                             </div>
-                            <p className="text-slate-400 text-sm font-medium mt-1">Classification: {asset.type.toUpperCase()}</p>
+                            <p className="text-slate-400 text-sm font-medium mt-1">Classification: {asset.type?.toUpperCase()}</p>
                         </div>
                     </div>
                     
