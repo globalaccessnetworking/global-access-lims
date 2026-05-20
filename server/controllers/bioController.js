@@ -248,13 +248,19 @@ exports.updateAssetDetail = async (req, res) => {
             return res.status(400).json({ error: "No updatable fields provided." });
         }
 
-        const setClause = Object.keys(filteredUpdates)
-            .map(key => `"${key}" = :${key}`)
+        // Use POSITIONAL parameters ($1, $2...) instead of named params to avoid
+        // PostgreSQL "syntax error at or near ':'" for column names like _4C_Stock_detail
+        const keys = Object.keys(filteredUpdates);
+        const values = keys.map(k => filteredUpdates[k]);
+
+        const setClause = keys
+            .map((key, i) => `"${key}" = $${i + 1}`)
             .join(', ');
 
+        // The id goes in the last positional slot
         await sequelize.query(
-            `UPDATE "${targetTable}" SET ${setClause} WHERE "id"::text = :recordId`,
-            { replacements: { ...filteredUpdates, recordId: String(id) }, type: QueryTypes.UPDATE }
+            `UPDATE "${targetTable}" SET ${setClause} WHERE "id"::text = $${keys.length + 1}`,
+            { bind: [...values, String(id)], type: QueryTypes.UPDATE }
         );
 
         // Audit log is non-critical — never block the save if it fails
