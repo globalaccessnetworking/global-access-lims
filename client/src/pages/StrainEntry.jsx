@@ -109,10 +109,28 @@ const StrainEntry = () => {
         try {
             const { id, ...payload } = formData;
             
-            // Cleanse payload (convert empty strings to null for consistent DB state)
+            // Cleanse payload
             Object.keys(payload).forEach(key => {
                 if (payload[key] === '' || payload[key] === null || payload[key] === undefined) delete payload[key];
             });
+
+            // CONFLICT CHECK
+            if (payload.GS_Box_details && payload.Location_in_Box_GS) {
+                const checkRes = await api.get(`/inventory/check-slot?boxName=${encodeURIComponent(payload.GS_Box_details)}&positionCode=${encodeURIComponent(payload.Location_in_Box_GS)}`);
+                if (checkRes.data.success && checkRes.data.occupied) {
+                    const occ = checkRes.data.assetDetails;
+                    if (!(occ.source_table === 'ext_bacterial_strains' && occ.asset_id === id)) {
+                        const confirmMsg = `WARNING: Slot ${payload.Location_in_Box_GS} in Box "${payload.GS_Box_details}" is already occupied by:\n` +
+                                           `- ${occ.asset_label} (${occ.asset_type})\n\n` +
+                                           `Do you want to REPLACE the existing item with this new strain?`;
+                        if (!window.confirm(confirmMsg)) {
+                            setLoading(false);
+                            return;
+                        }
+                        payload._conflictResolution = { previousOccupant: occ };
+                    }
+                }
+            }
 
             if (id) {
                 await api.put(`/system/ext_bacterial_strains/${id}`, payload);

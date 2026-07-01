@@ -83,6 +83,7 @@ const DynamicModule = ({ type: propsType }) => {
                 'Bacteriophage_Name', 'Plasmid_Name', 'Primer_Name', 'Item_Name', 
                 'Species', 'Manufacturers', 'Category', 'Storage_Area', 'Freezer', 'Rack_No', 'Box_detail',
                 'DNA_sequence', 'Sequence', 'Purpose', 'Complete_Name', 'Abbreviation', 'Antibiotic_Disc',
+                'GS_Box_details', 'Glycerol_Stock_Box', 'DNA_Store_Box_Detail', 'GD_Box_detail', 'DNA_storage_Box_detail',
                 'type', 'name', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'
             ];
             if (WHITELIST.map(w => w.toLowerCase()).includes(lowerKey)) return true;

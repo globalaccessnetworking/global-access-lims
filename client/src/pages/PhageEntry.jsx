@@ -116,8 +116,26 @@ const PhageEntry = () => {
             
             // Cleanse payload
             Object.keys(payload).forEach(key => {
-                if (payload[key] === null || payload[key] === undefined) delete payload[key];
+                if (payload[key] === '' || payload[key] === null) delete payload[key];
             });
+
+            // CONFLICT CHECK
+            if (payload.GS_Box_details && payload.GS_position_in_Box) {
+                const checkRes = await api.get(`/inventory/check-slot?boxName=${encodeURIComponent(payload.GS_Box_details)}&positionCode=${encodeURIComponent(payload.GS_position_in_Box)}`);
+                if (checkRes.data.success && checkRes.data.occupied) {
+                    const occ = checkRes.data.assetDetails;
+                    if (!(occ.source_table === 'ext_bacteriophages' && occ.asset_id === id)) {
+                        const confirmMsg = `WARNING: Slot ${payload.GS_position_in_Box} in Box "${payload.GS_Box_details}" is already occupied by:\n` +
+                                           `- ${occ.asset_label} (${occ.asset_type})\n\n` +
+                                           `Do you want to REPLACE the existing item with this new phage?`;
+                        if (!window.confirm(confirmMsg)) {
+                            setLoading(false);
+                            return;
+                        }
+                        payload._conflictResolution = { previousOccupant: occ };
+                    }
+                }
+            }
 
             if (id) {
                 await api.put(`/system/ext_bacteriophages/${id}`, payload);

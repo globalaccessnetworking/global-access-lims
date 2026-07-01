@@ -204,7 +204,6 @@ const LabStockEntry = () => {
                             ref={barcodeInputRef}
                             type="text"
                             name="barcode"
-                            required
                             value={formData.barcode}
                             onChange={e => setFormData({ ...formData, barcode: e.target.value })}
                             placeholder="Scan Asset / Container Barcode..."
@@ -234,7 +233,6 @@ const LabStockEntry = () => {
                             <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 ml-1">Complete Item Name</label>
                             <input
                                 type="text"
-                                required
                                 value={formData.Item_Name}
                                 onChange={e => setFormData({ ...formData, Item_Name: e.target.value })}
                                 placeholder="e.g. Sodium Chloride (Pharma Grade)"

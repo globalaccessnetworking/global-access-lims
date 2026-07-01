@@ -123,6 +123,25 @@ const PlasmidEntry = () => {
                 if (payload[key] === '' || payload[key] === null) delete payload[key];
             });
 
+            // CONFLICT CHECK
+            if (payload.Glycerol_Stock_Box && payload.Location_in_Box_GS) {
+                const checkRes = await api.get(`/inventory/check-slot?boxName=${encodeURIComponent(payload.Glycerol_Stock_Box)}&positionCode=${encodeURIComponent(payload.Location_in_Box_GS)}`);
+                if (checkRes.data.success && checkRes.data.occupied) {
+                    const occ = checkRes.data.assetDetails;
+                    // Ignore conflict if it's the exact same record
+                    if (!(occ.source_table === 'ext_plasmids' && occ.asset_id === id)) {
+                        const confirmMsg = `WARNING: Slot ${payload.Location_in_Box_GS} in Box "${payload.Glycerol_Stock_Box}" is already occupied by:\n` +
+                                           `- ${occ.asset_label} (${occ.asset_type})\n\n` +
+                                           `Do you want to REPLACE the existing item with this new plasmid? (The old item will be removed from this slot).`;
+                        if (!window.confirm(confirmMsg)) {
+                            setLoading(false);
+                            return;
+                        }
+                        payload._conflictResolution = { previousOccupant: occ };
+                    }
+                }
+            }
+
             if (id) {
                 await api.put(`/system/ext_plasmids/${id}`, payload);
                 setSuccess(`Plasmid Updated Successfully.`);

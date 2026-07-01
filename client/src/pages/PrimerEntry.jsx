@@ -97,6 +97,29 @@ const PrimerEntry = () => {
 
         try {
             const { id, ...payload } = formData;
+            // Cleanse payload
+            Object.keys(payload).forEach(key => {
+                if (payload[key] === '' || payload[key] === null) delete payload[key];
+            });
+
+            // CONFLICT CHECK
+            if (payload.Box_detail && payload.Location_in_Box) {
+                const checkRes = await api.get(`/inventory/check-slot?boxName=${encodeURIComponent(payload.Box_detail)}&positionCode=${encodeURIComponent(payload.Location_in_Box)}`);
+                if (checkRes.data.success && checkRes.data.occupied) {
+                    const occ = checkRes.data.assetDetails;
+                    if (!(occ.source_table === 'ext_primers_details' && occ.asset_id === id)) {
+                        const confirmMsg = `WARNING: Slot ${payload.Location_in_Box} in Box "${payload.Box_detail}" is already occupied by:\n` +
+                                           `- ${occ.asset_label} (${occ.asset_type})\n\n` +
+                                           `Do you want to REPLACE the existing item with this new primer?`;
+                        if (!window.confirm(confirmMsg)) {
+                            setLoading(false);
+                            return;
+                        }
+                        payload._conflictResolution = { previousOccupant: occ };
+                    }
+                }
+            }
+
             if (id) {
                 await api.put(`/system/ext_primers_details/${id}`, payload);
                 setSuccess("Primer Metadata Synchronized.");

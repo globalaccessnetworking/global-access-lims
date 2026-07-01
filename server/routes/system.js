@@ -142,8 +142,9 @@ const LOOKUP_REGISTRY = {
     'Freezer':      { endpoint: '/lookup/freezers',     table: 'freezer_locations',           col: 'Freezer' },
     'Rack_No':       { endpoint: '/lookup/racks',          table: 'rack_locations',              col: 'Rack_No' },
     'Box_detail':   { endpoint: '/lookup/boxes',        table: 'box_locations',               col: 'Box_detail' },
-    'GLycerol_Stock_Freezer': { endpoint: '/lookup/freezers',     table: 'ext_location_detail_freezer',       col: 'Freezer' },
-    'Glycerol_Stock_Box':   { endpoint: '/lookup/boxes',          table: 'ext_location_detail_box',           col: 'Box detail' },
+    'GLycerol_Stock_Freezer': { endpoint: '/lookup/freezers', table: 'freezer_locations',  col: 'Freezer'     },
+    'Glycerol_Stock_Rack':    { endpoint: '/lookup/racks',    table: 'rack_locations',     col: 'Rack_No'     },
+    'Glycerol_Stock_Box':     { endpoint: '/lookup/boxes',    table: 'box_locations',      col: 'Box_detail'  },
 
     'Binds_with_Phage_Bacteria_Plasmid': { endpoint: '/lookup/primer-binding-types', table: 'primer_binding_organism_types', col: 'Field1' },
     'Phage':        { endpoint: '/lookup/phages',       table: 'phage_names',             col: 'Bacteriophage_Name' },
@@ -536,6 +537,68 @@ router.get('/:tableName/:id', async (req, res) => {
     }
 });
 
+// Helper to resolve a box field value to the display name used in box_position_index
+// box_position_index now stores DISPLAY NAMES (e.g. "GS-26 (C1-b)"), NOT numeric IDs.
+// Form fields store numeric IDs from box_locations.ID (via RelationalSelect dropdown).
+async function resolveBoxName(boxValue) {
+    if (!boxValue) return null;
+    const val = String(boxValue).trim();
+
+    // If it's a numeric ID (from dropdown), resolve to display name via box_locations
+    if (/^\d+$/.test(val)) {
+        const rows = await sequelize.query(
+            `SELECT "Box_detail" FROM box_locations WHERE "ID"::text = :v LIMIT 1`,
+            { replacements: { v: val }, type: Sequelize.QueryTypes.SELECT }
+        );
+        if (rows.length > 0 && rows[0].Box_detail) return rows[0].Box_detail.trim();
+        return null;
+    }
+
+    // Already a display name — use directly
+    return val;
+}
+
+// Helper to sync box index
+async function syncBoxIndex(tableName, record) {
+    const config = {
+        ext_bacteriophages: { type: 'phage', label: record.Bacteriophage_Name, tube: record.Glycerol_Stock_tube_Label, mappings: [ { box: record.GS_Box_details, pos: record.GS_position_in_Box }, { box: record.DNA_storage_Box_detail, pos: record._4C_Position_in_box } ] },
+        ext_bacterial_strains: { type: 'bacteria', label: record.Strain_No, tube: record.Glycerol_Stock_tube_label, mappings: [ { box: record.GS_Box_details, pos: record.Location_in_Box_GS }, { box: record.GD_Box_detail, pos: record.Loction_in_Box_PD } ] },
+        ext_plasmids: { type: 'plasmid', label: record.Plasmid_Name, tube: record.Glycerol_Stock_Tube_Label, mappings: [ { box: record.Glycerol_Stock_Box, pos: record.Location_in_Box_GS }, { box: record.DNA_Store_Box_Detail, pos: record.Location_in_Box_GS } ] },
+        ext_primers_details: { type: 'primer', label: record.Primer_Name, tube: record.Purpose, mappings: [ { box: record.Box_detail, pos: record.Location_in_Box } ] }
+    };
+
+    const c = config[tableName];
+    if (!c) return;
+
+    // Clear all existing slots for this asset in the index
+    await sequelize.query(`
+        UPDATE box_position_index 
+        SET is_occupied = false, asset_type = NULL, asset_id = NULL, asset_label = NULL, tube_label = NULL, source_table = NULL 
+        WHERE source_table = :table AND asset_id = :id
+    `, { replacements: { table: tableName, id: record.id } });
+
+    // Set new slots — must resolve box field (could be ID or name) to the actual box_name used in box_position_index
+    for (let m of c.mappings) {
+        if (!m.box || !m.pos) continue;
+        const resolvedBoxName = await resolveBoxName(m.box);
+        if (!resolvedBoxName) {
+            console.warn(`[syncBoxIndex] Could not resolve box "${m.box}" for table ${tableName} record ${record.id}`);
+            continue;
+        }
+        let posArray = m.pos.split(',').map(p => p.trim().toUpperCase().replace(/[\s-]/g, ''));
+        for (let posStr of posArray) {
+            const updateRes = await sequelize.query(`
+                UPDATE box_position_index 
+                SET is_occupied = true, asset_type = :type, asset_id = :id, asset_label = :label, tube_label = :tube, source_table = :table, conflict_flag = false, updated_at = CURRENT_TIMESTAMP
+                WHERE box_name = :box AND position_code = :pos
+            `, { 
+                replacements: { type: c.type, id: record.id, label: c.label || '', tube: c.tube || '', table: tableName, box: resolvedBoxName, pos: posStr }
+            });
+            console.log(`[syncBoxIndex] Updated slot ${resolvedBoxName}/${posStr} for ${tableName} id=${record.id} label="${c.label}"`);
+        }
+    }
+}
+
 // @route   POST api/system/:tableName
 // @desc    Add a record to a dynamic table
 router.post('/:tableName', async (req, res) => {
@@ -580,6 +643,36 @@ router.post('/:tableName', async (req, res) => {
             delete payload.id;
         }
 
+        // [CONFLICT RESOLUTION] Intercept old asset cleanup
+        if (payload._conflictResolution) {
+            const conflictInfo = payload._conflictResolution;
+            delete payload._conflictResolution;
+            try {
+                if (conflictInfo.previousOccupant && conflictInfo.previousOccupant.source_table && conflictInfo.previousOccupant.id) {
+                    const prevTable = conflictInfo.previousOccupant.source_table;
+                    const prevId = conflictInfo.previousOccupant.id;
+                    // We try to NULL out the location columns for the previous asset.
+                    const desc = await sequelize.getQueryInterface().describeTable(prevTable);
+                    let clearFields = [];
+                    const locCols = ['GS_Box_details', 'Location_in_Box_GS', 'GS_position_in_Box', 'DNA_storage_Box_detail', '_4C_Position_in_box', 'GD_Box_detail', 'Loction_in_Box_PD', 'Glycerol_Stock_Box', 'DNA_Store_Box_Detail', 'Box_detail', 'Location_in_Box'];
+                    for (let c of locCols) {
+                        if (desc[c] || desc[c.toLowerCase()]) {
+                            clearFields.push(`"${c}" = NULL`);
+                        }
+                    }
+                    if (clearFields.length > 0) {
+                        await sequelize.query(`UPDATE "${prevTable}" SET ${clearFields.join(', ')} WHERE id = $1`, { bind: [prevId] });
+                    }
+                    
+                    // Also clear box_position_index for that old asset, wait, if we are overwriting the slot, 
+                    // the new asset takes the slot anyway. But what if the old asset was ALSO in other slots?
+                    // We just let the slot be taken over by the new insert/update later.
+                }
+            } catch (err) {
+                console.warn('[SYSTEM] Failed to clear previous occupant location:', err.message);
+            }
+        }
+
         // [PHASE 128] Manual ID Fallback for Legacy Tables (missing SERIAL sequences)
         // If id is still missing after pruning, check if we need to manual increment
         if (!payload.id) {
@@ -604,10 +697,25 @@ router.post('/:tableName', async (req, res) => {
             type: Sequelize.QueryTypes.INSERT
         });
 
-        const record = result[0];
+        // Sequelize returns [[rows], metadata] for INSERT RETURNING, so result[0] is the array
+        const rows = result[0];
+        const record = Array.isArray(rows) ? rows[0] : rows;
+
+        try {
+            if (record && record.id) {
+                // Fetch the full row to ensure all columns are available for syncBoxIndex
+                const fullRecordRes = await sequelize.query(`SELECT * FROM "${tableName}" WHERE id = $1`, {
+                    bind: [record.id], type: Sequelize.QueryTypes.SELECT
+                });
+                const fullRecord = fullRecordRes[0] || record;
+                await syncBoxIndex(tableName, fullRecord);
+            }
+        } catch(e) {
+            console.error('Failed to sync box index:', e);
+        }
 
         // [NOTIFICATION] Trigger for Lab Tasks
-        if (tableName === 'ext_lab_tasks' && record.assigned_to_id) {
+        if (tableName === 'ext_lab_tasks' && record && record.assigned_to_id) {
             try {
                 await Notification.create({
                     user_id: record.assigned_to_id,
@@ -655,6 +763,39 @@ router.put('/:tableName/:id', async (req, res) => {
             }
         }
 
+        // [CONFLICT RESOLUTION] Intercept old asset cleanup
+        if (payload._conflictResolution) {
+            const conflictInfo = payload._conflictResolution;
+            delete payload._conflictResolution;
+            try {
+                if (conflictInfo.previousOccupant && conflictInfo.previousOccupant.source_table && conflictInfo.previousOccupant.id) {
+                    const prevTable = conflictInfo.previousOccupant.source_table;
+                    const prevId = conflictInfo.previousOccupant.id;
+                    const desc = await sequelize.getQueryInterface().describeTable(prevTable);
+                    let clearFields = [];
+                    const locCols = ['GS_Box_details', 'Location_in_Box_GS', 'GS_position_in_Box', 'DNA_storage_Box_detail', '_4C_Position_in_box', 'GD_Box_detail', 'Loction_in_Box_PD', 'Glycerol_Stock_Box', 'DNA_Store_Box_Detail', 'Box_detail', 'Location_in_Box'];
+                    for (let c of locCols) {
+                        if (desc[c] || desc[c.toLowerCase()]) {
+                            clearFields.push(`"${c}" = NULL`);
+                        }
+                    }
+                    if (clearFields.length > 0) {
+                        await sequelize.query(`UPDATE "${prevTable}" SET ${clearFields.join(', ')} WHERE id = $1`, { bind: [prevId] });
+                    }
+
+                    // CRITICAL: Also clear the slot in box_position_index so the old asset is evicted
+                    await sequelize.query(`
+                        UPDATE box_position_index 
+                        SET is_occupied = false, asset_type = NULL, asset_id = NULL, asset_label = NULL, 
+                            tube_label = NULL, source_table = NULL, conflict_flag = false, updated_at = CURRENT_TIMESTAMP
+                        WHERE source_table = :table AND asset_id = :id
+                    `, { replacements: { table: prevTable, id: prevId } });
+                }
+            } catch (err) {
+                console.warn('[SYSTEM] Failed to clear previous occupant location:', err.message);
+            }
+        }
+
         if (hasColumn('updated_at')) payload.updated_at = new Date();
         const updates = Object.keys(payload).map((key, i) => `"${key}" = $${i + 1}`).join(', ');
         const values = Object.values(payload);
@@ -666,10 +807,25 @@ router.put('/:tableName/:id', async (req, res) => {
             type: Sequelize.QueryTypes.UPDATE
         });
 
-        const record = result[0];
+        // Sequelize returns [[rows], rowCount] for UPDATE RETURNING, so result[0] is the array
+        const updatedRows = result[0];
+        const record = Array.isArray(updatedRows) ? updatedRows[0] : updatedRows;
+
+        try {
+            if (record && record.id) {
+                // Fetch the full row to ensure ALL columns are available for syncBoxIndex
+                const fullRecordRes = await sequelize.query(`SELECT * FROM "${tableName}" WHERE id = $1`, {
+                    bind: [record.id], type: Sequelize.QueryTypes.SELECT
+                });
+                const fullRecord = fullRecordRes[0] || record;
+                await syncBoxIndex(tableName, fullRecord);
+            }
+        } catch(e) {
+            console.error('Failed to sync box index:', e);
+        }
 
         // [NOTIFICATION] Trigger for Lab Tasks (if assignment changed)
-        if (tableName === 'ext_lab_tasks' && record.assigned_to_id && payload.assigned_to_id) {
+        if (tableName === 'ext_lab_tasks' && record && record.assigned_to_id && payload.assigned_to_id) {
             try {
                 await Notification.create({
                     user_id: record.assigned_to_id,

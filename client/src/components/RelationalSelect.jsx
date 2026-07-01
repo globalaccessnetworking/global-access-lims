@@ -36,6 +36,7 @@ const RelationalSelect = ({
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [selectedLabels, setSelectedLabels] = useState([]);
+    const [hasFetched, setHasFetched] = useState(false);
     const wrapperRef = useRef(null);
     const searchRef = useRef(null);
 
@@ -49,7 +50,13 @@ const RelationalSelect = ({
 
     const currentValues = getValuesArray(value);
 
-    // Fetch options from Lookup API on first open or endpoint change
+    // Reset fetch state if endpoint changes
+    useEffect(() => {
+        setHasFetched(false);
+        setOptions([]);
+    }, [endpoint]);
+
+    // Fetch options from Lookup API on first open or endpoint change, OR if there is an existing value to resolve
     useEffect(() => {
         const fetchOptions = async () => {
             if (!endpoint) return;
@@ -63,6 +70,7 @@ const RelationalSelect = ({
                     return { id: String(id), label: String(label) };
                 });
                 setOptions(normalized);
+                setHasFetched(true);
             } catch (err) {
                 setError('Failed to load options');
                 console.error(`RelationalSelect: failed to fetch ${endpoint}`, err);
@@ -71,8 +79,10 @@ const RelationalSelect = ({
             }
         };
 
-        if (isOpen) fetchOptions();
-    }, [isOpen, endpoint]);
+        if ((isOpen || currentValues.length > 0) && !hasFetched && !isLoading) {
+            fetchOptions();
+        }
+    }, [isOpen, endpoint, currentValues.length, hasFetched, isLoading]);
 
     // Update displayed labels when value or options change
     useEffect(() => {

@@ -114,7 +114,6 @@ const Sidebar = () => {
             title: "CORE ASSETS",
             items: [
                 { path: "/dashboard", label: "Dashboard", icon: LayoutGrid },
-                { path: "/library", label: "Bio Library", icon: Dna },
                 { path: "/add-data", label: "Data Entry", icon: ClipboardList },
                 { path: "/bulk-import", label: "Bulk CSV Import", icon: FileText },
                 { path: "/features", label: "Features Overview", icon: LayoutGrid },
@@ -243,7 +242,7 @@ const Sidebar = () => {
             </div>
 
             {/* Navigation */}
-            <div className="flex-1 overflow-y-auto py-6 space-y-6 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto pt-6 pb-12 space-y-6 custom-scrollbar">
                 {filteredMenuGroups.map((group, idx) => {
                     const isExtendedGroup = group.title === "Scientific Data Explorer";
                     if (isExtendedGroup && !dynamicModules.length) return null;

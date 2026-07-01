@@ -353,6 +353,51 @@ const resolveConflict = async (req, res) => {
     }
 };
 
+const checkSlot = async (req, res) => {
+    try {
+        let { boxName, positionCode } = req.query;
+        if (!boxName || !positionCode) {
+            return res.status(400).json({ success: false, error: 'boxName and positionCode are required' });
+        }
+
+        // box_position_index now stores DISPLAY NAMES (e.g. "GS-26 (C1-b)")
+        // The form stores numeric ID from the RelationalSelect dropdown
+        // If numeric, look up the display name from box_locations
+        const boxVal = String(boxName).trim();
+        if (/^\d+$/.test(boxVal)) {
+            const boxRows = await sequelize.query(
+                `SELECT "Box_detail" FROM box_locations WHERE "ID"::text = :v LIMIT 1`,
+                { replacements: { v: boxVal }, type: QueryTypes.SELECT }
+            );
+            if (boxRows.length > 0 && boxRows[0].Box_detail) {
+                boxName = boxRows[0].Box_detail.trim();
+            }
+        }
+        // If already a display name, use it directly
+
+        // Normalize position code (strip spaces/dashes, uppercase)
+        const normalizedPos = positionCode.trim().toUpperCase().replace(/[\s-]/g, '');
+
+        const query = `
+            SELECT * FROM box_position_index 
+            WHERE box_name = :boxName AND position_code = :positionCode
+        `;
+        const [slot] = await sequelize.query(query, { 
+            replacements: { boxName, positionCode: normalizedPos }, 
+            type: QueryTypes.SELECT 
+        });
+
+        if (slot && slot.is_occupied) {
+            res.json({ success: true, occupied: true, assetDetails: slot });
+        } else {
+            res.json({ success: true, occupied: false });
+        }
+    } catch (err) {
+        console.error('Error checking slot:', err);
+        res.status(500).json({ success: false, error: 'Database error' });
+    }
+};
+
 module.exports = {
     getBoxes,
     getBoxMatrix,
@@ -360,5 +405,6 @@ module.exports = {
     searchAssets,
     placeTube,
     moveTube,
-    resolveConflict
+    resolveConflict,
+    checkSlot
 };

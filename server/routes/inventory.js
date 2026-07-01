@@ -12,5 +12,6 @@ router.get('/search-assets', inventoryController.searchAssets);
 router.post('/place-tube', inventoryController.placeTube);
 router.post('/move-tube', inventoryController.moveTube);
 router.post('/resolve-conflict', inventoryController.resolveConflict);
+router.get('/check-slot', inventoryController.checkSlot);
 
 module.exports = router;
