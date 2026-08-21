@@ -673,32 +673,34 @@ router.post('/:tableName', async (req, res) => {
             }
         }
 
-        // [PHASE 128-FIX] Manual ID Fallback for Legacy Tables (missing SERIAL sequences)
-        // Handles both lowercase 'id' (modern tables) and uppercase 'ID' (Access-imported tables like bacterial_species, phage_names, box_locations, etc.)
-        if (!payload.id && !payload.ID) {
-            try {
-                // Detect whether the table uses "ID" (uppercase/Access) or "id" (lowercase/modern)
-                const tableDesc = await sequelize.getQueryInterface().describeTable(tableName);
-                const idColName = tableDesc['ID'] ? '"ID"' : tableDesc['id'] ? '"id"' : null;
+        // [PHASE 128-FIX] Robust Manual ID Fallback
+        // Only assign a manual ID if the primary key column does not have a sequence default.
+        try {
+            const tableDesc = await sequelize.getQueryInterface().describeTable(tableName);
+            
+            // Find the actual primary key column name ('id' or 'ID')
+            let pkColName = null;
+            if (tableDesc['id'] && tableDesc['id'].primaryKey) pkColName = 'id';
+            else if (tableDesc['ID'] && tableDesc['ID'].primaryKey) pkColName = 'ID';
+            else if (tableDesc['id']) pkColName = 'id';
+            else if (tableDesc['ID']) pkColName = 'ID';
 
-                if (idColName) {
+            if (pkColName && !payload[pkColName]) {
+                const pkDesc = tableDesc[pkColName];
+                const hasSequence = pkDesc.defaultValue && typeof pkDesc.defaultValue === 'string' && pkDesc.defaultValue.includes('nextval');
+                
+                if (!hasSequence) {
                     const maxRes = await sequelize.query(
-                        `SELECT MAX(${idColName}) as maxid FROM "${tableName}"`,
+                        `SELECT MAX("${pkColName}") as maxid FROM "${tableName}"`,
                         { type: Sequelize.QueryTypes.SELECT }
                     );
                     const maxId = maxRes[0]?.maxid || 0;
-                    const newId = Number(maxId) + 1;
-                    // Assign to the correct key name
-                    if (tableDesc['ID']) {
-                        payload.ID = newId;
-                    } else {
-                        payload.id = newId;
-                    }
-                    console.log(`[SYSTEM] Manual ID Assigned for ${tableName} (${idColName}): ${newId}`);
+                    payload[pkColName] = Number(maxId) + 1;
+                    console.log(`[SYSTEM] Manual ID Assigned for ${tableName} (${pkColName}): ${payload[pkColName]}`);
                 }
-            } catch (eId) {
-                console.warn(`[SYSTEM] Manual ID calculation skipped for ${tableName}:`, eId.message);
             }
+        } catch (eId) {
+            console.warn(`[SYSTEM] Manual ID calculation skipped for ${tableName}:`, eId.message);
         }
 
         const columns = Object.keys(payload).join('", "');
