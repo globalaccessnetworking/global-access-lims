@@ -568,7 +568,7 @@ router.get('/:tableName', async (req, res) => {
             debug: {
                 columnCount: schema.length,
                 timestamp: new Date().toISOString(),
-                version: 'v11_smart_dropdowns_enabled'
+                version: 'v12_race_condition_fixed'
             }
         });
 
