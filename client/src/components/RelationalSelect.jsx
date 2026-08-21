@@ -109,17 +109,13 @@ const RelationalSelect = ({
                             ?? (Array.isArray(item) ? item[1] : null)
                             ?? String(rawId || 'Unknown Option');
 
-                        // Sanitize string "null" / "undefined" from bad legacy data
+                        // Sanitize missing/null IDs: Use string label as ID fallback instead of UUID
                         if (rawId === null || rawId === undefined || rawId === '' || String(rawId).toLowerCase() === 'null' || String(rawId).toLowerCase() === 'undefined') {
-                            rawId = generateSafeId();
+                            rawId = String(rawLabel);
                         } else {
                             rawId = String(rawId);
                         }
 
-                        // Protect against duplicate IDs
-                        if (seenIds.has(rawId)) {
-                            rawId = generateSafeId();
-                        }
                         seenIds.add(rawId);
 
                         return { id: rawId, label: String(rawLabel) };
