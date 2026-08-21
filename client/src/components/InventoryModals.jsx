@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { Search, Loader2, AlertTriangle, Check, X, MoveRight, Box } from 'lucide-react';
-
-const api = axios.create({
-    baseURL: 'http://localhost:5004/api',
-    withCredentials: true
-});
 
 export const PlaceTubeModal = ({ isOpen, onClose, slot, onSuccess }) => {
     const [query, setQuery] = useState('');

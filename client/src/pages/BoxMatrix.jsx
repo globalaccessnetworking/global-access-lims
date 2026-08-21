@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api/axios';
 import { Layers, AlertTriangle, Info, Map, Beaker, Circle, Filter } from 'lucide-react';
 import { PlaceTubeModal, MoveTubeModal, ResolveConflictModal } from '../components/InventoryModals';
-
-const api = axios.create({
-    baseURL: 'http://localhost:5004/api',
-    withCredentials: true
-});
 
 const ROWS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 const COLS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
