@@ -448,17 +448,31 @@ router.get('/:tableName', async (req, res) => {
 
         const schema = await getTableSchema(tableName, sequelize, fks);
         
-        // [PHASE 115] Perform Relational Translation on Data Rows
+        // [PHASE 115] Perform Comprehensive Relational Translation on Data Rows
         const mappedData = [...rows];
-        const relationalCols = schema.filter(c => c.isRelational);
+        
+        if (mappedData.length > 0 && schema.length > 0) {
+            // [OPTIMIZATION] Universal Column Interception & Keyword Fallback
+            const allColKeys = schema.map(c => c.key);
 
-        if (mappedData.length > 0 && relationalCols.length > 0) {
-            // [OPTIMIZATION] Parallel Execution & Universal Key Mapping
-            await Promise.all(relationalCols.map(async (col) => {
-                const normalizeK = (k) => k.toLowerCase().replace(/[\s-]/g, '_');
-                const targetK = normalizeK(col.key);
-                const regK = Object.keys(LOOKUP_REGISTRY).find(k => normalizeK(k) === targetK);
-                const regEntry = LOOKUP_REGISTRY[regK];
+            await Promise.all(allColKeys.map(async (colKey) => {
+                const normalizeK = (k) => k.toLowerCase().replace(/[\s-]/g, '_').replace(/s$/i, '');
+                const targetK = normalizeK(colKey);
+                
+                let regK = Object.keys(LOOKUP_REGISTRY).find(k => normalizeK(k) === targetK);
+                let regEntry = regK ? LOOKUP_REGISTRY[regK] : null;
+
+                // Keyword fallback for unmapped or custom dynamic columns
+                if (!regEntry) {
+                    if (targetK.includes('rack')) regEntry = { table: 'rack_locations', col: 'Rack_No' };
+                    else if (targetK.includes('box')) regEntry = { table: 'box_locations', col: 'Box_detail' };
+                    else if (targetK.includes('freezer')) regEntry = { table: 'freezer_locations', col: 'Freezer' };
+                    else if (targetK.includes('specie')) regEntry = { table: 'bacterial_species', col: 'Species' };
+                    else if (targetK.includes('phage')) regEntry = { table: 'phage_names', col: 'Bacteriophage_Name' };
+                    else if (targetK.includes('antibiotic')) regEntry = { table: 'antibiotics', col: 'Complete_Name' };
+                    else if (targetK.includes('manufacturer')) regEntry = { table: 'manufacturers', col: 'Manufacturers' };
+                    else if (targetK.includes('category')) regEntry = { table: 'stock_categories', col: 'Category' };
+                }
 
                 if (regEntry && regEntry.table !== tableName) {
                     try {
@@ -490,24 +504,24 @@ router.get('/:tableName', async (req, res) => {
                             });
 
                             mappedData.forEach(row => {
-                                const rawVal = row[col.key];
+                                const rawVal = row[colKey];
                                 if (rawVal !== null && rawVal !== undefined) {
                                     const stringVal = String(rawVal).trim();
                                     if (stringVal.includes(';') || (stringVal.includes(',') && !isNaN(parseInt(stringVal.split(',')[0])))) {
                                         const delimeter = stringVal.includes(';') ? ';' : ',';
                                         const ids = stringVal.split(delimeter).map(id => id.trim());
                                         const labels = ids.map(id => dict[id] || dict[id.toLowerCase()] || id).filter(Boolean);
-                                        row[col.key] = labels.join(', ');
+                                        row[colKey] = labels.join(', ');
                                     } else if (dict[stringVal]) {
-                                        row[col.key] = dict[stringVal];
+                                        row[colKey] = dict[stringVal];
                                     } else if (dict[stringVal.toLowerCase()]) {
-                                        row[col.key] = dict[stringVal.toLowerCase()];
+                                        row[colKey] = dict[stringVal.toLowerCase()];
                                     }
                                 }
                             });
                         }
                     } catch (eRel) {
-                        console.warn(`[SYSTEM] Relational translation failed for col ${col.key}:`, eRel.message);
+                        console.warn(`[SYSTEM] Relational translation failed for col ${colKey}:`, eRel.message);
                     }
                 }
             }));
