@@ -3,29 +3,16 @@ import { Search, ChevronDown, Check, Loader2, AlertCircle } from 'lucide-react';
 import api from '../api/axios';
 
 /**
- * RelationalSelect Component — Phase 120+
+ * RelationalSelect Component — Phase 121
  * 
  * A premium searchable dropdown that fetches { id, label } pairs from the
  * Lookup API (/api/lookup/...), saving the ID but displaying the label.
- * This mirrors Microsoft Access "Lookup Field" behavior exactly.
  * 
- * CRITICAL DESIGN PRINCIPLE:
- * - `selectedIds` is the SINGLE source of truth for what is checked.
- * - It is updated IMMEDIATELY (synchronously) on user click — before the
- *   parent re-renders. This prevents the "double-select" flash.
- * - The external `value` prop syncs INTO `selectedIds` whenever options load
- *   or the value prop changes from outside (e.g., form reset, record load).
- * 
- * Props:
- *   endpoint   — e.g. "/lookup/species"
- *   value      — currently selected ID (number/string) or semicolon-delimited string
- *   onChange   — called with (id, label) when selection changes
- *   label      — field label shown above the dropdown
- *   placeholder — text shown when nothing selected
- *   required   — boolean
- *   disabled   — boolean
- *   multiple   — boolean (enables multi-select mode)
- *   refreshKey — increment this value to force a re-fetch of options
+ * CRITICAL FIXES APPLIED:
+ * 1. Strict Key/Value Binding: Uses `crypto.randomUUID()` for any missing, null, 
+ *    or duplicate IDs (like string "null" from legacy Access data).
+ * 2. State Replacement: Single-select strictly replaces state and prevents 
+ *    ghost selections.
  */
 const RelationalSelect = ({
     endpoint,
@@ -45,7 +32,7 @@ const RelationalSelect = ({
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    // SINGLE SOURCE OF TRUTH: what is actually selected (array of id strings)
+    // SINGLE SOURCE OF TRUTH
     const [selectedIds, setSelectedIds] = useState([]);
 
     const [hasFetched, setHasFetched] = useState(false);
@@ -53,7 +40,7 @@ const RelationalSelect = ({
     const searchRef = useRef(null);
 
     // -----------------------------------------------------------------------
-    // Helper: normalize value prop → array of id strings
+    // Helper: normalize value prop → array of strictly typed strings
     // -----------------------------------------------------------------------
     const normalizeValueProp = (val) => {
         if (val === null || val === undefined || val === '') return [];
@@ -63,12 +50,20 @@ const RelationalSelect = ({
     };
 
     // -----------------------------------------------------------------------
+    // Helper: generate a safe UUID
+    // -----------------------------------------------------------------------
+    const generateSafeId = () => {
+        return typeof crypto !== 'undefined' && crypto.randomUUID
+            ? crypto.randomUUID()
+            : `frontend-gen-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    };
+
+    // -----------------------------------------------------------------------
     // Reset on endpoint or refreshKey change → triggers re-fetch
     // -----------------------------------------------------------------------
     useEffect(() => {
         setHasFetched(false);
         setOptions([]);
-        // Don't clear selectedIds here — value prop still holds the current IDs
     }, [endpoint, refreshKey]);
 
     // -----------------------------------------------------------------------
@@ -81,23 +76,38 @@ const RelationalSelect = ({
             setError(null);
             try {
                 const res = await api.get(endpoint);
+                
+                const seenIds = new Set();
+                
                 const normalized = res.data
                     .map(item => {
-                        const rawId = item.id ?? item.ID ?? item.value ?? (Array.isArray(item) ? item[0] : null);
+                        let rawId = item.id ?? item.ID ?? item.value ?? (Array.isArray(item) ? item[0] : null);
                         const rawLabel = item.label ?? item.name ?? item.title ?? item.text
                             ?? (Array.isArray(item) ? item[1] : null)
-                            ?? String(rawId);
-                        // CRITICAL: skip null/empty IDs — they cause bulk-selection bugs
-                        if (rawId === null || rawId === undefined || rawId === '') return null;
-                        return { id: String(rawId), label: String(rawLabel) };
+                            ?? String(rawId || 'Unknown Option');
+
+                        // Sanitize string "null" / "undefined" from bad legacy data
+                        if (rawId === null || rawId === undefined || rawId === '' || String(rawId).toLowerCase() === 'null' || String(rawId).toLowerCase() === 'undefined') {
+                            rawId = generateSafeId();
+                        } else {
+                            rawId = String(rawId);
+                        }
+
+                        // Protect against duplicate IDs (if multiple records somehow have the exact same ID)
+                        if (seenIds.has(rawId)) {
+                            rawId = generateSafeId();
+                        }
+                        seenIds.add(rawId);
+
+                        return { id: rawId, label: String(rawLabel) };
                     })
                     .filter(Boolean);
+                    
                 setOptions(normalized);
                 setHasFetched(true);
 
-                // Sync external value prop into internal selectedIds now that we have options
+                // Sync external value prop into internal selectedIds
                 const extIds = normalizeValueProp(value);
-                // Only set IDs that actually exist in the fetched options
                 const validIds = extIds.filter(id => normalized.some(o => o.id === id));
                 setSelectedIds(validIds);
             } catch (err) {
@@ -116,18 +126,16 @@ const RelationalSelect = ({
 
     // -----------------------------------------------------------------------
     // Sync external value → selectedIds when options are already loaded
-    // (handles: record loads, form resets, parent-driven changes)
     // -----------------------------------------------------------------------
     useEffect(() => {
         if (!hasFetched || options.length === 0) return;
 
         const extIds = normalizeValueProp(value);
-        // Only include IDs that exist in our loaded options (prevents ghost selections)
         const validIds = extIds.filter(id => options.some(o => o.id === id));
 
-        // Only update if the selection actually differs (prevents infinite loops)
         const currentSorted = [...selectedIds].sort().join(',');
         const newSorted = [...validIds].sort().join(',');
+        
         if (currentSorted !== newSorted) {
             setSelectedIds(validIds);
         }
@@ -157,9 +165,10 @@ const RelationalSelect = ({
     }, []);
 
     // -----------------------------------------------------------------------
-    // Computed: selected option objects (for label display)
+    // Computed: selected option objects
     // -----------------------------------------------------------------------
-    const selectedOptions = options.filter(o => selectedIds.includes(o.id));
+    // Use strict equality to find selected options
+    const selectedOptions = options.filter(o => selectedIds.some(sid => sid === o.id));
     const selectedLabels = selectedOptions.map(o => o.label);
 
     const filteredOptions = options.filter(opt =>
@@ -171,23 +180,17 @@ const RelationalSelect = ({
     // -----------------------------------------------------------------------
     const handleSelect = (option) => {
         if (multiple) {
-            // Toggle item in/out of selection
-            const isCurrentlySelected = selectedIds.includes(option.id);
+            const isCurrentlySelected = selectedIds.some(sid => sid === option.id);
             const nextIds = isCurrentlySelected
-                ? selectedIds.filter(id => id !== option.id)
-                : [...selectedIds, option.id];
+                ? selectedIds.filter(sid => sid !== option.id) // Remove strictly
+                : [...selectedIds, option.id]; // Add strictly
 
-            // Update internal state IMMEDIATELY
             setSelectedIds(nextIds);
-
-            // Notify parent
             const nextLabels = nextIds.map(id => options.find(o => o.id === id)?.label ?? '');
             onChange(nextIds.join(';'), nextLabels.join(', '));
         } else {
-            // Single select: replace selection IMMEDIATELY
+            // STRICT SINGLE SELECT: Wipe array and replace with exactly one unique ID
             setSelectedIds([option.id]);
-
-            // Notify parent + close
             onChange(option.id, option.label);
             setIsOpen(false);
             setSearchTerm('');
@@ -290,8 +293,8 @@ const RelationalSelect = ({
                             </div>
                         ) : (
                             filteredOptions.map(option => {
-                                // Use internal selectedIds — the single source of truth
-                                const isSelected = selectedIds.includes(option.id);
+                                // STRICT EVALUATION
+                                const isSelected = selectedIds.some(sid => sid === option.id);
                                 return (
                                     <div
                                         key={option.id}
@@ -315,11 +318,11 @@ const RelationalSelect = ({
                                         {!multiple && isSelected && <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 ml-2" />}
                                     </div>
                                 );
-            })
+                            })
                         )}
                     </div>
 
-                    {/* Footer with count */}
+                    {/* Footer */}
                     {!isLoading && !error && (
                         <div className="px-3 py-1.5 border-t border-slate-800 bg-slate-950/40 text-[10px] text-slate-600 flex justify-between">
                             <span>{filteredOptions.length} of {options.length} options</span>
