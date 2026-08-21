@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
+import api from '../api/axios';
 
 // Approved Bacteriophage LIMS Logo Component
 const LimsLogo = ({ className }) => (
@@ -98,7 +99,6 @@ const Sidebar = () => {
     useEffect(() => {
         const fetchModules = async () => {
             try {
-                const { default: api } = await import('../api/axios');
                 const res = await api.get('/system/tables');
                 setDynamicModules(res.data || []);
             } catch (err) {
