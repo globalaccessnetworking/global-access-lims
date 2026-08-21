@@ -745,7 +745,13 @@ router.post('/:tableName', async (req, res) => {
         res.json({ success: true, record });
     } catch (err) {
         console.error('Insert Error:', err.message);
-        res.status(500).json({ error: err.message });
+        let errorMessage = err.message;
+        if (err.errors && err.errors.length > 0) {
+            errorMessage = err.errors.map(e => e.message).join(', ');
+        } else if (err.original && err.original.detail) {
+            errorMessage = err.original.detail;
+        }
+        res.status(500).json({ error: errorMessage, details: err.errors || null });
     }
 });
 

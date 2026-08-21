@@ -24,6 +24,7 @@ const StrainEntry = () => {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const [schema, setSchema] = useState([]);
     
     // Field Manager Modal State
@@ -104,6 +105,7 @@ const StrainEntry = () => {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setFieldErrors({});
         setSuccess('');
 
         try {
@@ -143,7 +145,28 @@ const StrainEntry = () => {
             
             setTimeout(() => setSuccess(''), 4000);
         } catch (err) {
-            setError(err.response?.data?.error || "Submission failed.");
+            const apiError = err.response?.data?.error || err.message || "Submission failed.";
+            const apiDetails = err.response?.data?.details;
+            
+            let parsedFieldErrors = {};
+            
+            // Handle Sequelize/Postgres specific error formats
+            if (apiError.includes('already exists') && apiError.includes('Key (')) {
+                // e.g. "Key (\"Strain_No\")=(123) already exists."
+                const match = apiError.match(/Key \("?([^"]+)"?\)=/);
+                if (match && match[1]) {
+                    parsedFieldErrors[match[1]] = 'This value already exists and must be unique.';
+                }
+            } else if (apiDetails && Array.isArray(apiDetails)) {
+                apiDetails.forEach(detail => {
+                    if (detail.path) {
+                        parsedFieldErrors[detail.path] = detail.message;
+                    }
+                });
+            }
+
+            setFieldErrors(parsedFieldErrors);
+            setError(apiError);
         } finally {
             setLoading(false);
         }
@@ -233,8 +256,9 @@ const StrainEntry = () => {
                             <input type="text" value={formData.id || "(New)"} readOnly className="w-full bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-3 text-slate-500 font-mono text-xs cursor-not-allowed outline-none shadow-inner" />
                         </div>
                         <div>
-                            <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Strain No</label>
-                            <input type="text" value={formData.Strain_No} onChange={e => setFormData({ ...formData, Strain_No: e.target.value })} className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none transition-all text-sm" placeholder="e.g. MSTA-44" />
+                            <label className={`block text-[10px] font-bold uppercase tracking-wider mb-2 ${fieldErrors.Strain_No ? 'text-rose-500' : 'text-slate-500'}`}>Strain No</label>
+                            <input type="text" value={formData.Strain_No} onChange={e => setFormData({ ...formData, Strain_No: e.target.value })} className={`w-full bg-slate-900 border rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none transition-all text-sm ${fieldErrors.Strain_No ? 'border-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.2)]' : 'border-slate-700'}`} placeholder="e.g. MSTA-44" />
+                            {fieldErrors.Strain_No && <span className="text-rose-500 text-[10px] font-bold mt-1 block">{fieldErrors.Strain_No}</span>}
                         </div>
                         <RelationalSelect label="Species" endpoint="/lookup/species" value={formData.Specie} onChange={(id) => setFormData({ ...formData, Specie: id })} />
                         <RelationalSelect label="Wild-type/Recom" endpoint="/lookup/wild-type-recomb" value={formData.Wild_type_Recom} onChange={(id) => setFormData({ ...formData, Wild_type_Recom: id })} />
@@ -253,15 +277,17 @@ const StrainEntry = () => {
                         </div>
                         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="md:col-span-2">
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Genomic DNA Tube Label</label>
-                                <input type="text" value={formData.Genomic_DNA_tube_Label} onChange={e => setFormData({ ...formData, Genomic_DNA_tube_Label: e.target.value })} className="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-2 text-white text-sm" />
+                                <label className={`block text-[10px] font-bold uppercase tracking-wider mb-2 ${fieldErrors.Genomic_DNA_tube_Label ? 'text-rose-500' : 'text-slate-500'}`}>Genomic DNA Tube Label</label>
+                                <input type="text" value={formData.Genomic_DNA_tube_Label} onChange={e => setFormData({ ...formData, Genomic_DNA_tube_Label: e.target.value })} className={`w-full bg-slate-950/50 border rounded-xl px-4 py-2 text-white text-sm ${fieldErrors.Genomic_DNA_tube_Label ? 'border-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.2)]' : 'border-slate-800'}`} />
+                                {fieldErrors.Genomic_DNA_tube_Label && <span className="text-rose-500 text-[10px] font-bold mt-1 block">{fieldErrors.Genomic_DNA_tube_Label}</span>}
                             </div>
                             <RelationalSelect label="GD Freezer" endpoint="/lookup/freezers" value={formData.GD_Freezer_Number} onChange={(id) => setFormData({ ...formData, GD_Freezer_Number: id })} />
                             <RelationalSelect label="GD Rack" endpoint="/lookup/racks" value={formData.GD_Rack_Number} onChange={(id) => setFormData({ ...formData, GD_Rack_Number: id })} />
                             <RelationalSelect label="GD Box Detail" endpoint="/lookup/boxes" value={formData.GD_Box_detail} onChange={(id) => setFormData({ ...formData, GD_Box_detail: id })} />
                             <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Location in Box-PD</label>
-                                <input type="text" value={formData.Loction_in_Box_PD} onChange={e => setFormData({ ...formData, Loction_in_Box_PD: e.target.value })} className="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-2 text-blue-400 text-sm font-mono" />
+                                <label className={`block text-[10px] font-bold uppercase tracking-wider mb-2 ${fieldErrors.Loction_in_Box_PD ? 'text-rose-500' : 'text-slate-500'}`}>Location in Box-PD</label>
+                                <input type="text" value={formData.Loction_in_Box_PD} onChange={e => setFormData({ ...formData, Loction_in_Box_PD: e.target.value })} className={`w-full bg-slate-950/50 border rounded-xl px-4 py-2 text-blue-400 text-sm font-mono ${fieldErrors.Loction_in_Box_PD ? 'border-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.2)]' : 'border-slate-800'}`} />
+                                {fieldErrors.Loction_in_Box_PD && <span className="text-rose-500 text-[10px] font-bold mt-1 block">{fieldErrors.Loction_in_Box_PD}</span>}
                             </div>
                         </div>
                     </div>
@@ -276,15 +302,17 @@ const StrainEntry = () => {
                         </div>
                         <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="md:col-span-2">
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Glycerol Stock Tube Label</label>
-                                <input type="text" value={formData.Glycerol_Stock_tube_label} onChange={e => setFormData({ ...formData, Glycerol_Stock_tube_label: e.target.value })} className="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-2 text-white text-sm" />
+                                <label className={`block text-[10px] font-bold uppercase tracking-wider mb-2 ${fieldErrors.Glycerol_Stock_tube_label ? 'text-rose-500' : 'text-slate-500'}`}>Glycerol Stock Tube Label</label>
+                                <input type="text" value={formData.Glycerol_Stock_tube_label} onChange={e => setFormData({ ...formData, Glycerol_Stock_tube_label: e.target.value })} className={`w-full bg-slate-950/50 border rounded-xl px-4 py-2 text-white text-sm ${fieldErrors.Glycerol_Stock_tube_label ? 'border-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.2)]' : 'border-slate-800'}`} />
+                                {fieldErrors.Glycerol_Stock_tube_label && <span className="text-rose-500 text-[10px] font-bold mt-1 block">{fieldErrors.Glycerol_Stock_tube_label}</span>}
                             </div>
                             <RelationalSelect label="GS Freezer" endpoint="/lookup/freezers" value={formData.GS_Freezer_Number} onChange={(id) => setFormData({ ...formData, GS_Freezer_Number: id })} />
                             <RelationalSelect label="GS Rack" endpoint="/lookup/racks" value={formData.GS_Rack_Number} onChange={(id) => setFormData({ ...formData, GS_Rack_Number: id })} />
                             <RelationalSelect label="GS Box Detail" endpoint="/lookup/boxes" value={formData.GS_Box_details} onChange={(id) => setFormData({ ...formData, GS_Box_details: id })} />
                             <div>
-                                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Location in Box-GS</label>
-                                <input type="text" value={formData.Location_in_Box_GS} onChange={e => setFormData({ ...formData, Location_in_Box_GS: e.target.value })} className="w-full bg-slate-950/50 border border-slate-800 rounded-xl px-4 py-2 text-emerald-400 text-sm font-mono" />
+                                <label className={`block text-[10px] font-bold uppercase tracking-wider mb-2 ${fieldErrors.Location_in_Box_GS ? 'text-rose-500' : 'text-slate-500'}`}>Location in Box-GS</label>
+                                <input type="text" value={formData.Location_in_Box_GS} onChange={e => setFormData({ ...formData, Location_in_Box_GS: e.target.value })} className={`w-full bg-slate-950/50 border rounded-xl px-4 py-2 text-emerald-400 text-sm font-mono ${fieldErrors.Location_in_Box_GS ? 'border-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.2)]' : 'border-slate-800'}`} />
+                                {fieldErrors.Location_in_Box_GS && <span className="text-rose-500 text-[10px] font-bold mt-1 block">{fieldErrors.Location_in_Box_GS}</span>}
                             </div>
                         </div>
                     </div>
