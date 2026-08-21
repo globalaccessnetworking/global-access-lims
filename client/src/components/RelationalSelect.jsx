@@ -74,8 +74,8 @@ const RelationalSelect = ({
         const validIds = [];
         extVals.forEach(v => {
             const strV = String(v).trim();
-            // 1. Match by Option ID first
-            const matchById = opts.find(o => String(o.id) === strV);
+            // 1. Match by Option ID first or rawId
+            const matchById = opts.find(o => String(o.id) === strV || String(o.rawId) === strV);
             if (matchById) {
                 validIds.push(String(matchById.id));
             } else {
@@ -86,6 +86,11 @@ const RelationalSelect = ({
                 }
             }
         });
+
+        // Enforce strict single-select constraint
+        if (!multiple && validIds.length > 1) {
+            return [validIds[0]];
+        }
         return validIds;
     };
 
@@ -100,25 +105,30 @@ const RelationalSelect = ({
             try {
                 const res = await api.get(endpoint);
                 
-                const seenIds = new Set();
+                const idCounts = new Map();
                 
                 const normalized = res.data
-                    .map(item => {
+                    .map((item, idx) => {
                         let rawId = item.id ?? item.ID ?? item.value ?? (Array.isArray(item) ? item[0] : null);
                         const rawLabel = item.label ?? item.name ?? item.title ?? item.text
                             ?? (Array.isArray(item) ? item[1] : null)
-                            ?? String(rawId || 'Unknown Option');
+                            ?? String(rawId || `Option ${idx + 1}`);
 
-                        // Sanitize missing/null IDs: Use string label as ID fallback instead of UUID
-                        if (rawId === null || rawId === undefined || rawId === '' || String(rawId).toLowerCase() === 'null' || String(rawId).toLowerCase() === 'undefined') {
-                            rawId = String(rawLabel);
+                        const cleanRawId = (rawId === null || rawId === undefined || rawId === '' || String(rawId).toLowerCase() === 'null' || String(rawId).toLowerCase() === 'undefined')
+                            ? String(rawLabel).trim()
+                            : String(rawId).trim();
+
+                        // Disambiguate duplicate IDs so every dropdown option has a strictly unique ID for state tracking
+                        let uniqueId = cleanRawId;
+                        if (idCounts.has(cleanRawId)) {
+                            const count = idCounts.get(cleanRawId) + 1;
+                            idCounts.set(cleanRawId, count);
+                            uniqueId = `${cleanRawId}___${String(rawLabel).trim().toLowerCase().replace(/[^a-z0-9]/g, '')}_${idx}`;
                         } else {
-                            rawId = String(rawId);
+                            idCounts.set(cleanRawId, 1);
                         }
 
-                        seenIds.add(rawId);
-
-                        return { id: rawId, label: String(rawLabel) };
+                        return { id: uniqueId, rawId: cleanRawId, label: String(rawLabel) };
                     })
                     .filter(Boolean);
                     
@@ -197,16 +207,17 @@ const RelationalSelect = ({
         if (multiple) {
             const isCurrentlySelected = selectedIds.some(sid => sid === option.id);
             const nextIds = isCurrentlySelected
-                ? selectedIds.filter(sid => sid !== option.id) // Remove strictly
-                : [...selectedIds, option.id]; // Add strictly
+                ? selectedIds.filter(sid => sid !== option.id)
+                : [...selectedIds, option.id];
 
             setSelectedIds(nextIds);
             const nextLabels = nextIds.map(id => options.find(o => o.id === id)?.label ?? '');
-            onChange(nextIds.join(';'), nextLabels.join(', '));
+            const nextRawIds = nextIds.map(id => options.find(o => o.id === id)?.rawId ?? id);
+            onChange(nextRawIds.join(';'), nextLabels.join(', '));
         } else {
-            // STRICT SINGLE SELECT: Wipe array and replace with exactly one unique ID
+            // STRICT SINGLE SELECT: Wipe array and replace with exactly one unique option ID
             setSelectedIds([option.id]);
-            onChange(option.id, option.label);
+            onChange(option.rawId || option.id, option.label);
             setIsOpen(false);
             setSearchTerm('');
         }
