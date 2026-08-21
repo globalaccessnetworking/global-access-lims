@@ -453,44 +453,55 @@ router.get('/:tableName', async (req, res) => {
         const relationalCols = schema.filter(c => c.isRelational);
 
         if (mappedData.length > 0 && relationalCols.length > 0) {
-            for (const col of relationalCols) {
-                // [PHASE 154/155] Fuzzy Resolution: Match 'Field Name' to 'Field_Name'
+            // [OPTIMIZATION] Parallel Execution & Universal Key Mapping
+            await Promise.all(relationalCols.map(async (col) => {
                 const normalizeK = (k) => k.toLowerCase().replace(/[\s-]/g, '_');
                 const targetK = normalizeK(col.key);
                 const regK = Object.keys(LOOKUP_REGISTRY).find(k => normalizeK(k) === targetK);
                 const regEntry = LOOKUP_REGISTRY[regK];
-                
-                // [PHASE 154] Self-resolution safeguard: Do not translate if table is its own source truth
+
                 if (regEntry && regEntry.table !== tableName) {
                     try {
                         const targetDesc = await sequelize.getQueryInterface().describeTable(regEntry.table);
-                        const idColName = targetDesc['ID'] ? '"ID"' : targetDesc['id'] ? '"id"' : null;
+                        const idCols = [];
+                        if (targetDesc['id']) idCols.push('"id"');
+                        if (targetDesc['ID']) idCols.push('"ID"');
 
-                        if (idColName && targetDesc[regEntry.col]) {
+                        if (idCols.length > 0 && targetDesc[regEntry.col]) {
+                            const selectCols = [...new Set([...idCols, `"${regEntry.col}"`])].join(', ');
                             const lookupResults = await sequelize.query(
-                                `SELECT ${idColName} as id, "${regEntry.col}" as label FROM "${regEntry.table}" WHERE "${regEntry.col}" IS NOT NULL`,
+                                `SELECT ${selectCols} FROM "${regEntry.table}" WHERE "${regEntry.col}" IS NOT NULL`,
                                 { type: Sequelize.QueryTypes.SELECT }
                             );
-                            
+
                             const dict = {};
                             lookupResults.forEach(r => {
-                                if (r.id !== null && r.id !== undefined) {
-                                    dict[String(r.id).trim()] = r.label;
-                                }
+                                const labelVal = r[regEntry.col];
+                                if (!labelVal) return;
+                                const labelStr = String(labelVal).trim();
+                                
+                                // Map by id (lowercase)
+                                if (r.id !== null && r.id !== undefined) dict[String(r.id).trim()] = labelStr;
+                                // Map by ID (uppercase)
+                                if (r.ID !== null && r.ID !== undefined) dict[String(r.ID).trim()] = labelStr;
+                                // Map by label itself (identity mapping)
+                                dict[labelStr] = labelStr;
+                                dict[labelStr.toLowerCase()] = labelStr;
                             });
 
                             mappedData.forEach(row => {
                                 const rawVal = row[col.key];
                                 if (rawVal !== null && rawVal !== undefined) {
-                                    // Support semicolon or comma-separated multi-select IDs
                                     const stringVal = String(rawVal).trim();
                                     if (stringVal.includes(';') || (stringVal.includes(',') && !isNaN(parseInt(stringVal.split(',')[0])))) {
                                         const delimeter = stringVal.includes(';') ? ';' : ',';
                                         const ids = stringVal.split(delimeter).map(id => id.trim());
-                                        const labels = ids.map(id => dict[id] || id).filter(Boolean);
+                                        const labels = ids.map(id => dict[id] || dict[id.toLowerCase()] || id).filter(Boolean);
                                         row[col.key] = labels.join(', ');
                                     } else if (dict[stringVal]) {
                                         row[col.key] = dict[stringVal];
+                                    } else if (dict[stringVal.toLowerCase()]) {
+                                        row[col.key] = dict[stringVal.toLowerCase()];
                                     }
                                 }
                             });
@@ -499,7 +510,7 @@ router.get('/:tableName', async (req, res) => {
                         console.warn(`[SYSTEM] Relational translation failed for col ${col.key}:`, eRel.message);
                     }
                 }
-            }
+            }));
         }
 
         res.json({

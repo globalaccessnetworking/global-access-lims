@@ -90,7 +90,7 @@ const RelationalSelect = ({
     };
 
     // -----------------------------------------------------------------------
-    // Fetch options
+    // Fetch options on mount or endpoint/refreshKey change
     // -----------------------------------------------------------------------
     useEffect(() => {
         const fetchOptions = async () => {
@@ -140,17 +140,16 @@ const RelationalSelect = ({
             }
         };
 
-        const hasValue = normalizeValueProp(value).length > 0;
-        if ((isOpen || hasValue) && !hasFetched && !isLoading) {
+        if (endpoint && !hasFetched && !isLoading) {
             fetchOptions();
         }
-    }, [isOpen, endpoint, hasFetched, isLoading]);
+    }, [endpoint, hasFetched, isLoading, value]);
 
     // -----------------------------------------------------------------------
-    // Sync external value → selectedIds when options are already loaded
+    // Sync external value → selectedIds whenever value or options change
     // -----------------------------------------------------------------------
     useEffect(() => {
-        if (!hasFetched || options.length === 0) return;
+        if (options.length === 0) return;
 
         const validIds = resolveToOptionIds(value, options);
         const currentSorted = [...selectedIds].sort().join(',');
@@ -159,7 +158,7 @@ const RelationalSelect = ({
         if (currentSorted !== newSorted) {
             setSelectedIds(validIds);
         }
-    }, [value, options, hasFetched]);
+    }, [value, options]);
 
     // -----------------------------------------------------------------------
     // Auto-focus search on open
