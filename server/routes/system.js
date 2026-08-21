@@ -440,8 +440,13 @@ router.get('/:tableName', async (req, res) => {
     try {
         console.log(`[SYSTEM] Fetching data/schema for table: ${tableName}`);
 
+        const tableDesc = await sequelize.getQueryInterface().describeTable(tableName);
+        let orderClause = '';
+        if (tableDesc['id']) orderClause = 'ORDER BY id DESC';
+        else if (tableDesc['ID']) orderClause = 'ORDER BY "ID" DESC';
+
         const [rows, fks] = await Promise.all([
-            sequelize.query(`SELECT * FROM "${tableName}" LIMIT 2000`, { type: Sequelize.QueryTypes.SELECT }),
+            sequelize.query(`SELECT * FROM "${tableName}" ${orderClause} LIMIT 2000`, { type: Sequelize.QueryTypes.SELECT }),
             getForeignKeys(tableName)
         ]);
 
