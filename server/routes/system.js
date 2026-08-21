@@ -638,14 +638,7 @@ router.post('/:tableName', async (req, res) => {
         if (hasColumn('created_at') && !payload.created_at) payload.created_at = now;
         if (hasColumn('updated_at') && !payload.updated_at) payload.updated_at = now;
 
-        // [PHASE 128] Prune null IDs to allow DB Auto-Increment to kick in
-        if (payload.id === null || payload.id === undefined || payload.id === '') {
-            delete payload.id;
-        }
-        // Also prune uppercase "ID" variant (Access-imported tables)
-        if (payload.ID === null || payload.ID === undefined || payload.ID === '') {
-            delete payload.ID;
-        }
+        // We will prune the primary key *after* discovering what the primary key actually is.
 
         // [CONFLICT RESOLUTION] Intercept old asset cleanup
         if (payload._conflictResolution) {
@@ -684,6 +677,14 @@ router.post('/:tableName', async (req, res) => {
             else if (tableDesc['ID'] && tableDesc['ID'].primaryKey) pkColName = 'ID';
             else if (tableDesc['id']) pkColName = 'id';
             else if (tableDesc['ID']) pkColName = 'ID';
+
+            // [CRITICAL FIX] Strictly prune ONLY the structural primary key
+            if (pkColName) {
+                // If it's a new record or undefined, remove it so PostgreSQL Auto-Increment kicks in
+                if (payload[pkColName] === null || payload[pkColName] === undefined || payload[pkColName] === '' || payload[pkColName] === '(New)') {
+                    delete payload[pkColName];
+                }
+            }
 
             if (pkColName && !payload[pkColName]) {
                 const pkDesc = tableDesc[pkColName];
@@ -818,8 +819,19 @@ router.put('/:tableName/:id', async (req, res) => {
                 console.warn('[SYSTEM] Failed to clear previous occupant location:', err.message);
             }
         }
-
         if (hasColumn('updated_at')) payload.updated_at = new Date();
+        
+        // Find the actual primary key column name
+        let pkColName = null;
+        if (description['id'] && description['id'].primaryKey) pkColName = 'id';
+        else if (description['ID'] && description['ID'].primaryKey) pkColName = 'ID';
+        else if (description['id']) pkColName = 'id';
+        else if (description['ID']) pkColName = 'ID';
+
+        // Never allow updating the primary key itself, but DO NOT wipe out custom fields named 'ID'
+        if (pkColName) {
+            delete payload[pkColName];
+        }
         const updates = Object.keys(payload).map((key, i) => `"${key}" = $${i + 1}`).join(', ');
         const values = Object.values(payload);
 
