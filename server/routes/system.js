@@ -642,6 +642,10 @@ router.post('/:tableName', async (req, res) => {
         if (payload.id === null || payload.id === undefined || payload.id === '') {
             delete payload.id;
         }
+        // Also prune uppercase "ID" variant (Access-imported tables)
+        if (payload.ID === null || payload.ID === undefined || payload.ID === '') {
+            delete payload.ID;
+        }
 
         // [CONFLICT RESOLUTION] Intercept old asset cleanup
         if (payload._conflictResolution) {
@@ -663,24 +667,35 @@ router.post('/:tableName', async (req, res) => {
                     if (clearFields.length > 0) {
                         await sequelize.query(`UPDATE "${prevTable}" SET ${clearFields.join(', ')} WHERE id = $1`, { bind: [prevId] });
                     }
-                    
-                    // Also clear box_position_index for that old asset, wait, if we are overwriting the slot, 
-                    // the new asset takes the slot anyway. But what if the old asset was ALSO in other slots?
-                    // We just let the slot be taken over by the new insert/update later.
                 }
             } catch (err) {
                 console.warn('[SYSTEM] Failed to clear previous occupant location:', err.message);
             }
         }
 
-        // [PHASE 128] Manual ID Fallback for Legacy Tables (missing SERIAL sequences)
-        // If id is still missing after pruning, check if we need to manual increment
-        if (!payload.id) {
+        // [PHASE 128-FIX] Manual ID Fallback for Legacy Tables (missing SERIAL sequences)
+        // Handles both lowercase 'id' (modern tables) and uppercase 'ID' (Access-imported tables like bacterial_species, phage_names, box_locations, etc.)
+        if (!payload.id && !payload.ID) {
             try {
-                const maxRes = await sequelize.query(`SELECT MAX("id") as maxid FROM "${tableName}"`, { type: Sequelize.QueryTypes.SELECT });
-                const maxId = maxRes[0]?.maxid || 0;
-                payload.id = Number(maxId) + 1;
-                console.log(`[SYSTEM] Manual ID Assigned for ${tableName}: ${payload.id}`);
+                // Detect whether the table uses "ID" (uppercase/Access) or "id" (lowercase/modern)
+                const tableDesc = await sequelize.getQueryInterface().describeTable(tableName);
+                const idColName = tableDesc['ID'] ? '"ID"' : tableDesc['id'] ? '"id"' : null;
+
+                if (idColName) {
+                    const maxRes = await sequelize.query(
+                        `SELECT MAX(${idColName}) as maxid FROM "${tableName}"`,
+                        { type: Sequelize.QueryTypes.SELECT }
+                    );
+                    const maxId = maxRes[0]?.maxid || 0;
+                    const newId = Number(maxId) + 1;
+                    // Assign to the correct key name
+                    if (tableDesc['ID']) {
+                        payload.ID = newId;
+                    } else {
+                        payload.id = newId;
+                    }
+                    console.log(`[SYSTEM] Manual ID Assigned for ${tableName} (${idColName}): ${newId}`);
+                }
             } catch (eId) {
                 console.warn(`[SYSTEM] Manual ID calculation skipped for ${tableName}:`, eId.message);
             }

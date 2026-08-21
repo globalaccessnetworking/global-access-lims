@@ -3,7 +3,7 @@ import { Search, ChevronDown, Check, Loader2, AlertCircle } from 'lucide-react';
 import api from '../api/axios';
 
 /**
- * RelationalSelect Component — Phase 113
+ * RelationalSelect Component — Phase 119+
  * 
  * A premium searchable dropdown that fetches { id, label } pairs from the
  * Lookup API (/api/lookup/...), saving the ID but displaying the label.
@@ -17,7 +17,7 @@ import api from '../api/axios';
  *   placeholder — text shown when nothing selected
  *   required   — boolean
  *   disabled   — boolean
- *   className  — extra wrapper classes
+ *   refreshKey — increment this value to force a re-fetch of options (use after adding new items)
  */
 const RelationalSelect = ({
     endpoint,
@@ -27,8 +27,9 @@ const RelationalSelect = ({
     placeholder = 'Select...',
     required = false,
     disabled = false,
-    multiple = false, // New Prop for Phase 118
+    multiple = false,
     className = '',
+    refreshKey = 0, // NEW: increment to force re-fetch
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -50,11 +51,11 @@ const RelationalSelect = ({
 
     const currentValues = getValuesArray(value);
 
-    // Reset fetch state if endpoint changes
+    // Reset fetch state if endpoint changes OR if refreshKey changes (new item added)
     useEffect(() => {
         setHasFetched(false);
         setOptions([]);
-    }, [endpoint]);
+    }, [endpoint, refreshKey]);
 
     // Fetch options from Lookup API on first open or endpoint change, OR if there is an existing value to resolve
     useEffect(() => {
@@ -64,11 +65,16 @@ const RelationalSelect = ({
             setError(null);
             try {
                 const res = await api.get(endpoint);
-                const normalized = res.data.map(item => {
-                    const id = item.id ?? item.ID ?? item.value ?? (Array.isArray(item) ? item[0] : null);
-                    const label = item.label ?? item.name ?? item.title ?? item.text ?? (Array.isArray(item) ? item[1] : null) ?? String(id);
-                    return { id: String(id), label: String(label) };
-                });
+                const normalized = res.data
+                    .map(item => {
+                        const rawId = item.id ?? item.ID ?? item.value ?? (Array.isArray(item) ? item[0] : null);
+                        const rawLabel = item.label ?? item.name ?? item.title ?? item.text ?? (Array.isArray(item) ? item[1] : null) ?? String(rawId);
+                        // CRITICAL FIX: Skip items with null/undefined/empty IDs — they indicate 
+                        // bad data and would cause ALL null-id items to be selected together.
+                        if (rawId === null || rawId === undefined || rawId === '') return null;
+                        return { id: String(rawId), label: String(rawLabel) };
+                    })
+                    .filter(Boolean); // Remove null entries (items with no valid ID)
                 setOptions(normalized);
                 setHasFetched(true);
             } catch (err) {
@@ -252,7 +258,7 @@ const RelationalSelect = ({
                                         {!multiple && isSelected && <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 ml-2" />}
                                     </div>
                                 );
-                            })
+            })
                         )}
                     </div>
 
