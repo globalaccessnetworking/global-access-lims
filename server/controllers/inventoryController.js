@@ -13,7 +13,7 @@ const getBoxes = async (req, res) => {
                 SUM(CASE WHEN NOT b.is_occupied THEN 1 ELSE 0 END) as empty_count,
                 SUM(CASE WHEN b.conflict_flag THEN 1 ELSE 0 END) as conflict_count
             FROM box_position_index b
-            LEFT JOIN box_locations l ON b.box_name = l."ID"
+            LEFT JOIN box_locations l ON CAST(b.box_name AS TEXT) = CAST(l."ID" AS TEXT)
             GROUP BY b.box_name
             ORDER BY b.box_name
         `;
