@@ -683,13 +683,15 @@ router.post('/:tableName', async (req, res) => {
             else if (tableDesc['id']) pkColName = 'id';
             else if (tableDesc['ID']) pkColName = 'ID';
 
-            // [CRITICAL FIX] Strictly prune ONLY the structural primary key
-            if (pkColName) {
-                // If it's a new record or undefined, remove it so PostgreSQL Auto-Increment kicks in
-                if (payload[pkColName] === null || payload[pkColName] === undefined || payload[pkColName] === '' || payload[pkColName] === '(New)') {
-                    delete payload[pkColName];
-                }
+            // [CRITICAL FIX] Aggressive Payload Stripping for Primary Key Variants on INSERT
+            const isNewVal = (val) => val === null || val === undefined || val === '' || val === '(New)' || val === '(Auto)';
+
+            if (pkColName && isNewVal(payload[pkColName])) {
+                delete payload[pkColName];
             }
+            // Strip any leftover primary key alias variants if they are blank/new
+            if (isNewVal(payload.id)) delete payload.id;
+            if (isNewVal(payload._id)) delete payload._id;
 
             if (pkColName && !payload[pkColName]) {
                 const pkDesc = tableDesc[pkColName];
