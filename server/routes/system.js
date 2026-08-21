@@ -453,83 +453,111 @@ router.get('/:tableName', async (req, res) => {
 
         const schema = await getTableSchema(tableName, sequelize, fks);
         
-        // [PHASE 115] Perform Comprehensive Relational Translation on Data Rows
-        const mappedData = [...rows];
-        
+        // ─────────────────────────────────────────────────────────────────────
+        // [PHASE 115] Relational Translation — RACE-CONDITION-FREE
+        //
+        // Root cause of previous data scramble:
+        //   Promise.all(allColKeys.map(async colKey => { row[colKey] = ... }))
+        //   runs all column DB lookups in PARALLEL. Each async callback then
+        //   mutates the shared `mappedData` row objects. If lookup for Column A
+        //   resolves AFTER lookup for Column B, Column B's value overwrites
+        //   Column A's value in the same row — hence "BL-21" appearing in Species.
+        //
+        // Fix — Two-phase approach:
+        //   PHASE 1: Pre-fetch ALL lookup dictionaries in PARALLEL (no row writes)
+        //   PHASE 2: Apply translations SEQUENTIALLY one column at a time (safe)
+        // ─────────────────────────────────────────────────────────────────────
+        const mappedData = rows.map(r => ({ ...r })); // deep clone each row
+
         if (mappedData.length > 0 && schema.length > 0) {
-            // [OPTIMIZATION] Universal Column Interception & Keyword Fallback
             const allColKeys = schema.map(c => c.key);
 
-            await Promise.all(allColKeys.map(async (colKey) => {
-                const normalizeK = (k) => k.toLowerCase().replace(/[\s-]/g, '_').replace(/s$/i, '');
+            const normalizeK = (k) => k.toLowerCase().replace(/[\s-]/g, '_').replace(/s$/i, '');
+
+            // ── PHASE 1: Resolve each column to a regEntry + fetch its dict (parallel) ──
+            const colDicts = await Promise.all(allColKeys.map(async (colKey) => {
                 const targetK = normalizeK(colKey);
-                
+
+                // Strict LOOKUP_REGISTRY match first
                 let regK = Object.keys(LOOKUP_REGISTRY).find(k => normalizeK(k) === targetK);
                 let regEntry = regK ? LOOKUP_REGISTRY[regK] : null;
 
-                // Keyword fallback for unmapped or custom dynamic columns
+                // Keyword fallback for custom dynamic columns
                 if (!regEntry) {
-                    if (targetK.includes('rack')) regEntry = { table: 'rack_locations', col: 'Rack_No' };
-                    else if (targetK.includes('box')) regEntry = { table: 'box_locations', col: 'Box_detail' };
+                    if (targetK.includes('rack'))         regEntry = { table: 'rack_locations',    col: 'Rack_No' };
+                    else if (targetK.includes('box'))     regEntry = { table: 'box_locations',     col: 'Box_detail' };
                     else if (targetK.includes('freezer')) regEntry = { table: 'freezer_locations', col: 'Freezer' };
-                    else if (targetK.includes('specie')) regEntry = { table: 'bacterial_species', col: 'Species' };
-                    else if (targetK.includes('phage')) regEntry = { table: 'phage_names', col: 'Bacteriophage_Name' };
-                    else if (targetK.includes('antibiotic')) regEntry = { table: 'antibiotics', col: 'Complete_Name' };
+                    else if (targetK.includes('specie'))  regEntry = { table: 'bacterial_species', col: 'Species' };
+                    else if (targetK.includes('phage'))   regEntry = { table: 'phage_names',       col: 'Bacteriophage_Name' };
+                    else if (targetK.includes('antibiotic')) regEntry = { table: 'antibiotics',   col: 'Complete_Name' };
                     else if (targetK.includes('manufacturer')) regEntry = { table: 'manufacturers', col: 'Manufacturers' };
                     else if (targetK.includes('category')) regEntry = { table: 'stock_categories', col: 'Category' };
                 }
 
-                if (regEntry && regEntry.table !== tableName) {
-                    try {
-                        const targetDesc = await sequelize.getQueryInterface().describeTable(regEntry.table);
-                        const idCols = [];
-                        if (targetDesc['id']) idCols.push('"id"');
-                        if (targetDesc['ID']) idCols.push('"ID"');
+                if (!regEntry || regEntry.table === tableName) {
+                    return { colKey, dict: null }; // not a relational column
+                }
 
-                        if (idCols.length > 0 && targetDesc[regEntry.col]) {
-                            const selectCols = [...new Set([...idCols, `"${regEntry.col}"`])].join(', ');
-                            const lookupResults = await sequelize.query(
-                                `SELECT ${selectCols} FROM "${regEntry.table}" WHERE "${regEntry.col}" IS NOT NULL`,
-                                { type: Sequelize.QueryTypes.SELECT }
-                            );
+                try {
+                    const targetDesc = await sequelize.getQueryInterface().describeTable(regEntry.table);
+                    const idCols = [];
+                    if (targetDesc['id']) idCols.push('"id"');
+                    if (targetDesc['ID']) idCols.push('"ID"');
 
-                            const dict = {};
-                            lookupResults.forEach(r => {
-                                const labelVal = r[regEntry.col];
-                                if (!labelVal) return;
-                                const labelStr = String(labelVal).trim();
-                                
-                                // Map by id (lowercase)
-                                if (r.id !== null && r.id !== undefined) dict[String(r.id).trim()] = labelStr;
-                                // Map by ID (uppercase)
-                                if (r.ID !== null && r.ID !== undefined) dict[String(r.ID).trim()] = labelStr;
-                                // Map by label itself (identity mapping)
-                                dict[labelStr] = labelStr;
-                                dict[labelStr.toLowerCase()] = labelStr;
-                            });
-
-                            mappedData.forEach(row => {
-                                const rawVal = row[colKey];
-                                if (rawVal !== null && rawVal !== undefined) {
-                                    const stringVal = String(rawVal).trim();
-                                    if (stringVal.includes(';') || (stringVal.includes(',') && !isNaN(parseInt(stringVal.split(',')[0])))) {
-                                        const delimeter = stringVal.includes(';') ? ';' : ',';
-                                        const ids = stringVal.split(delimeter).map(id => id.trim());
-                                        const labels = ids.map(id => dict[id] || dict[id.toLowerCase()] || id).filter(Boolean);
-                                        row[colKey] = labels.join(', ');
-                                    } else if (dict[stringVal]) {
-                                        row[colKey] = dict[stringVal];
-                                    } else if (dict[stringVal.toLowerCase()]) {
-                                        row[colKey] = dict[stringVal.toLowerCase()];
-                                    }
-                                }
-                            });
-                        }
-                    } catch (eRel) {
-                        console.warn(`[SYSTEM] Relational translation failed for col ${colKey}:`, eRel.message);
+                    if (idCols.length === 0 || !targetDesc[regEntry.col]) {
+                        return { colKey, dict: null };
                     }
+
+                    const selectCols = [...new Set([...idCols, `"${regEntry.col}"`])].join(', ');
+                    const lookupResults = await sequelize.query(
+                        `SELECT ${selectCols} FROM "${regEntry.table}" WHERE "${regEntry.col}" IS NOT NULL`,
+                        { type: Sequelize.QueryTypes.SELECT }
+                    );
+
+                    // Build id→label dictionary for this column's lookup table
+                    const dict = {};
+                    lookupResults.forEach(r => {
+                        const labelVal = r[regEntry.col];
+                        if (!labelVal) return;
+                        const labelStr = String(labelVal).trim();
+                        if (r.id  != null) dict[String(r.id).trim()]  = labelStr;
+                        if (r.ID  != null) dict[String(r.ID).trim()]  = labelStr;
+                        dict[labelStr]                = labelStr; // identity pass-through
+                        dict[labelStr.toLowerCase()]  = labelStr;
+                    });
+
+                    return { colKey, dict, multiSelect: !!(regEntry.multiSelect) };
+                } catch (eRel) {
+                    console.warn(`[SYSTEM] Dict fetch failed for col "${colKey}":`, eRel.message);
+                    return { colKey, dict: null };
                 }
             }));
+
+            // ── PHASE 2: Apply translations SEQUENTIALLY — zero concurrent row writes ──
+            for (const { colKey, dict, multiSelect } of colDicts) {
+                if (!dict) continue; // skip non-relational columns
+
+                for (const row of mappedData) {
+                    const rawVal = row[colKey];
+                    if (rawVal == null) continue;
+                    const stringVal = String(rawVal).trim();
+                    if (!stringVal) continue;
+
+                    const isSemicolon = stringVal.includes(';');
+                    const isNumericComma = stringVal.includes(',') && !isNaN(parseInt(stringVal.split(',')[0]));
+
+                    if (isSemicolon || isNumericComma) {
+                        // Multi-value field (antibiotic_sensitivity, host_range, etc.)
+                        const delimeter = isSemicolon ? ';' : ',';
+                        const ids = stringVal.split(delimeter).map(id => id.trim()).filter(Boolean);
+                        const labels = ids.map(id => dict[id] ?? dict[id.toLowerCase()] ?? id);
+                        row[colKey] = labels.join(', ');
+                    } else {
+                        // Single-value field
+                        row[colKey] = dict[stringVal] ?? dict[stringVal.toLowerCase()] ?? rawVal;
+                    }
+                }
+            }
         }
 
         res.json({
