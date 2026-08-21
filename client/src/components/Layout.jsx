@@ -113,7 +113,7 @@ const Layout = ({ children }) => {
             {/* Floating Sidebar */}
             <Sidebar />
 
-            <main className="flex-1 ml-64 p-8 h-screen overflow-y-auto relative scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+            <main className="flex-1 ml-72 p-8 h-screen overflow-y-auto relative scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
 
                 {/* Top Bar / Status Pill */}
                 <header className="flex justify-between items-center mb-10 sticky top-0 z-40 py-2">

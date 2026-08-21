@@ -14,7 +14,7 @@ router.get('/stats', async (req, res) => {
         const [ { projectCount } ] = await sequelize.query('SELECT COUNT(*) as "projectCount" FROM "ext_lab_projects"', { type: QueryTypes.SELECT });
         
         // 2. Low Stock (Using canonical Available_Quantity column)
-        const [ { lowStockCount } ] = await sequelize.query('SELECT COUNT(*) as "lowStockCount" FROM "ext_lab_stock" WHERE CAST("Available_Quantity" AS INTEGER) < 5', { type: QueryTypes.SELECT });
+        const [ { lowStockCount } ] = await sequelize.query(`SELECT COUNT(*) as "lowStockCount" FROM "ext_lab_stock" WHERE "Available_Quantity" ~ '^[0-9]+$' AND CAST("Available_Quantity" AS INTEGER) < 5`, { type: QueryTypes.SELECT });
 
         // 3. Top 5 Bacterial Species
         const topSpecies = await sequelize.query(`

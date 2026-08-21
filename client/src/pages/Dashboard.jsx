@@ -58,50 +58,72 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                // Fetch main stats
-                api.get('/dashboard/stats')
-                    .then(res => {
-                        if (res.data.metrics) {
-                            setStats(res.data.metrics);
-                            setTopSpecies(res.data.topSpecies || []);
-                        }
-                    })
-                    .catch(e => console.error('Stats fetch failed:', e.message));
+                const [statsRes, quickRes, alertsRes, tasksRes, activityRes, favRes] = await Promise.allSettled([
+                    api.get('/dashboard/stats'),
+                    api.get('/activity/stats'),
+                    api.get('/alerts'),
+                    api.get('/dashboard/user-tasks'),
+                    api.get('/activity/recent?limit=10'),
+                    api.get('/activity/favorites'),
+                ]);
 
-                // Fetch quick stats
-                api.get('/activity/stats')
-                    .then(res => setQuickStats(res.data))
-                    .catch(e => console.error('Quick stats failed:', e.message));
+                // Stats — primary metrics cards
+                if (statsRes.status === 'fulfilled' && statsRes.value?.data?.metrics) {
+                    setStats(statsRes.value.data.metrics);
+                    setTopSpecies(statsRes.value.data.topSpecies || []);
+                } else {
+                    // Fallback: fetch counts directly if stats endpoint fails
+                    console.warn('Dashboard stats endpoint failed, attempting direct count fallback...');
+                    try {
+                        const [strainRes, phageRes, invRes, projRes] = await Promise.allSettled([
+                            api.get('/system/ext_bacterial_strains'),
+                            api.get('/system/ext_bacteriophages'),
+                            api.get('/system/ext_lab_stock'),
+                            api.get('/system/ext_lab_projects'),
+                        ]);
+                        setStats({
+                            totalStrains: strainRes.status === 'fulfilled' ? (strainRes.value.data?.count || strainRes.value.data?.data?.length || 0) : 0,
+                            totalPhages: phageRes.status === 'fulfilled' ? (phageRes.value.data?.count || phageRes.value.data?.data?.length || 0) : 0,
+                            totalInventory: invRes.status === 'fulfilled' ? (invRes.value.data?.count || invRes.value.data?.data?.length || 0) : 0,
+                            lowStock: 0,
+                            activeProjects: projRes.status === 'fulfilled' ? (projRes.value.data?.count || projRes.value.data?.data?.length || 0) : 0,
+                        });
+                    } catch (fallbackErr) {
+                        console.error('Dashboard fallback counts also failed:', fallbackErr.message);
+                    }
+                }
 
-                // Fetch alerts
-                api.get('/alerts')
-                    .then(res => setAlerts(res.data || { lowStock: [], expiring: [] }))
-                    .catch(e => console.error('Alerts fetch failed:', e.message));
+                // Quick stats (experiments, samples, tasks)
+                if (quickRes.status === 'fulfilled') {
+                    setQuickStats(quickRes.value.data || { experimentsThisWeek: 0, samplesToday: 0, tasksCompletedWeek: 0 });
+                }
 
-                // Fetch user tasks
-                api.get('/dashboard/user-tasks')
-                    .then(res => {
-                        setUserTasks(res.data || []);
-                        setLoading(false);
-                    })
-                    .catch(e => {
-                        console.error('User Tasks fetch failed:', e.message);
-                        setUserTasks([]);
-                        setLoading(false);
-                    });
+                // Alerts
+                if (alertsRes.status === 'fulfilled') {
+                    setAlerts(alertsRes.value.data || { lowStock: [], expiring: [] });
+                }
 
-                // Fetch recent activity
-                api.get('/activity/recent?limit=10')
-                    .then(res => setRecentActivity(res.data.activities || []))
-                    .catch(e => console.error('Activity fetch failed:', e.message));
+                // User tasks
+                if (tasksRes.status === 'fulfilled') {
+                    setUserTasks(tasksRes.value.data || []);
+                } else {
+                    console.warn('User tasks fetch failed (may need auth):', tasksRes.reason?.message);
+                    setUserTasks([]);
+                }
 
-                // Fetch favorites
-                api.get('/activity/favorites')
-                    .then(res => setFavorites(res.data.favorites || []))
-                    .catch(e => console.error('Favorites fetch failed:', e.message));
+                // Recent activity
+                if (activityRes.status === 'fulfilled') {
+                    setRecentActivity(activityRes.value.data?.activities || []);
+                }
+
+                // Favorites
+                if (favRes.status === 'fulfilled') {
+                    setFavorites(favRes.value.data?.favorites || []);
+                }
 
             } catch (error) {
                 console.error('Dashboard orchestration failed:', error);
+            } finally {
                 setLoading(false);
             }
         };
