@@ -109,11 +109,11 @@ async function getForeignKeyOptions(foreignTable, foreignCol) {
 // Maps exact case-sensitive column names (from DB) → lookup endpoint + source table
 const LOOKUP_REGISTRY = {
 
-    // ── ext_bacteriophages ─────────────────────────────────────────────────────────────
+    // ── ext_bacteriophages & ext_plasmids ──────────────────────────────────────────────────
     'Bacteriophage_Name':   { endpoint: '/lookup/phage-names',   table: 'phage_names',            col: 'Bacteriophage_Name' },
     'WT_RECOMB':            { endpoint: '/lookup/wild-type-recomb',       table: 'wild_type_recomb_types',      col: 'Field1' },
     'WT_RECOME':            { endpoint: '/lookup/wild-type-recomb',       table: 'wild_type_recomb_types',      col: 'Field1' },
-    'Host_Bacteria':        { endpoint: '/lookup/all-strains',    table: 'ext_bacterial_strains',   col: 'Glycerol_Stock_tube_label' },
+    'Host_Bacteria':        { endpoint: '/lookup/host-bacteria',  table: 'ext_host_bacteria',       col: 'Host_Bacteria_No' },
     'Host_Range':           { endpoint: '/lookup/all-strains',    table: 'ext_bacterial_strains',   col: 'Strain_No', multiSelect: true },
     'Activity_Shown_Against': { endpoint: '/lookup/species',        table: 'bacterial_species',           col: 'Species' },
     'GS_Freezer_Name':      { endpoint: '/lookup/freezers',       table: 'freezer_locations',           col: 'Freezer' },
@@ -487,11 +487,12 @@ router.get('/:tableName', async (req, res) => {
                     if (targetK.includes('rack'))         regEntry = { table: 'rack_locations',    col: 'Rack_No' };
                     else if (targetK.includes('box'))     regEntry = { table: 'box_locations',     col: 'Box_detail' };
                     else if (targetK.includes('freezer')) regEntry = { table: 'freezer_locations', col: 'Freezer' };
-                    else if (targetK.includes('specie'))  regEntry = { table: 'bacterial_species', col: 'Species' };
+                    else if (targetK.includes('specie') || targetK.includes('against'))  regEntry = { table: 'bacterial_species', col: 'Species' };
                     else if (targetK.includes('phage'))   regEntry = { table: 'phage_names',       col: 'Bacteriophage_Name' };
                     else if (targetK.includes('antibiotic')) regEntry = { table: 'antibiotics',   col: 'Complete_Name' };
                     else if (targetK.includes('manufacturer')) regEntry = { table: 'manufacturers', col: 'Manufacturers' };
                     else if (targetK.includes('category')) regEntry = { table: 'stock_categories', col: 'Category' };
+                    else if (targetK.includes('host'))    regEntry = { table: 'ext_host_bacteria', col: 'Host_Bacteria_No' };
                 }
 
                 if (!regEntry || regEntry.table === tableName) {
@@ -568,7 +569,7 @@ router.get('/:tableName', async (req, res) => {
             debug: {
                 columnCount: schema.length,
                 timestamp: new Date().toISOString(),
-                version: 'v12_race_condition_fixed'
+                version: 'v13_all_tables_relational_fixed'
             }
         });
 
