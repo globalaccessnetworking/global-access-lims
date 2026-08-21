@@ -11,6 +11,7 @@ router.get('/freezers', inventoryController.getFreezers);
 router.get('/search-assets', inventoryController.searchAssets);
 router.post('/place-tube', inventoryController.placeTube);
 router.post('/move-tube', inventoryController.moveTube);
+router.post('/remove-tube', inventoryController.removeTube);
 router.post('/resolve-conflict', inventoryController.resolveConflict);
 router.get('/check-slot', inventoryController.checkSlot);
 

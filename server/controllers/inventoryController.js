@@ -279,9 +279,118 @@ const moveTube = async (req, res) => {
                     details: JSON.stringify({ reason: err.message, target: req.body?.targetBox })
                 }
             });
-        } catch(e) {}
+        } catch (e) { console.error('Failed to write audit log', e); }
 
-        res.status(400).json({ success: false, error: err.message });
+        res.status(500).json({ success: false, error: err.message || 'Database error' });
+    }
+};
+
+const removeTube = async (req, res) => {
+    const transaction = await sequelize.transaction();
+    const userId = req.user?.id || null;
+
+    try {
+        const { slotId } = req.body;
+
+        // 1. Get Source Slot
+        const [source] = await sequelize.query(`SELECT * FROM box_position_index WHERE id = :id FOR UPDATE`, {
+            replacements: { id: slotId }, type: QueryTypes.SELECT, transaction
+        });
+
+        if (!source || !source.is_occupied) {
+            throw new Error('Source slot is invalid or empty.');
+        }
+
+        const sourceTable = source.source_table;
+        const assetId = source.asset_id;
+
+        // 2. Clear Source Slot in box_position_index
+        await sequelize.query(`
+            UPDATE box_position_index 
+            SET is_occupied = false,
+                asset_type = NULL,
+                asset_id = NULL,
+                asset_label = NULL,
+                tube_label = NULL,
+                source_table = NULL,
+                conflict_flag = false,
+                conflict_details = NULL,
+                notes = NULL,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = :sourceId
+        `, {
+            replacements: { sourceId: slotId },
+            transaction
+        });
+
+        // 3. Clear location fields in the original table
+        const config = {
+            ext_bacteriophages: [
+                { box: 'GS_Box_details', pos: 'GS_position_in_Box', rack: 'GS_Rack_details', freezer: 'GS_Freezer_Name' },
+                { box: 'DNA_storage_Box_detail', pos: '_4C_Position_in_box', rack: 'DNA_storage_Rack_Detail', freezer: 'DNA_Storage_Freezer' }
+            ],
+            ext_bacterial_strains: [
+                { box: 'GS_Box_details', pos: 'Location_in_Box_GS', rack: 'Glycerol_Stock_Rack', freezer: 'Glycerol_Stock_Freezer' },
+                { box: 'GD_Box_detail', pos: 'Loction_in_Box_PD', rack: 'Rack_detail_PD', freezer: 'DNA_Store_Freezer' }
+            ],
+            ext_plasmids: [
+                { box: 'Glycerol_Stock_Box', pos: 'Location_in_Box_GS', rack: 'Glycerol_Stock_Rack', freezer: 'GS_Freezer_Name' },
+                { box: 'DNA_Store_Box_Detail', pos: 'Location_in_Box_GS', rack: 'DNA_Store_Rack_Detail', freezer: 'DNA_Store_Freezer' }
+            ],
+            ext_primers_details: [
+                { box: 'Box_detail', pos: 'Location_in_Box', rack: 'Rack_detail', freezer: 'Freezer_Name' }
+            ]
+        };
+
+        if (sourceTable && config[sourceTable] && assetId) {
+            const mappings = config[sourceTable];
+            
+            // Get the record
+            const [record] = await sequelize.query(`SELECT * FROM "${sourceTable}" WHERE id = :id`, {
+                replacements: { id: assetId }, type: QueryTypes.SELECT, transaction
+            });
+
+            if (record) {
+                for (const m of mappings) {
+                    const posVal = record[m.pos];
+                    const normalizedPos = posVal ? String(posVal).trim().toUpperCase().replace(/[\s-]/g, '') : '';
+                    if (normalizedPos === source.position_code) {
+                        let setClauses = [];
+                        setClauses.push(`"${m.box}" = NULL`);
+                        setClauses.push(`"${m.pos}" = NULL`);
+                        if (m.rack) setClauses.push(`"${m.rack}" = NULL`);
+                        if (m.freezer) setClauses.push(`"${m.freezer}" = NULL`);
+                        
+                        await sequelize.query(`UPDATE "${sourceTable}" SET ${setClauses.join(', ')} WHERE id = :id`, {
+                            replacements: { id: assetId }, transaction
+                        });
+                    }
+                }
+            }
+        }
+
+        // 4. Audit Log (Success)
+        await sequelize.query(`
+            INSERT INTO system_audit_logs (user_id, action, table_name, record_id, details)
+            VALUES (:userId, 'REMOVE_TUBE', 'box_position_index', :slotId, :details)
+        `, {
+            replacements: {
+                userId, slotId, 
+                details: JSON.stringify({ 
+                    from: { box: source.box_name, position: source.position_code },
+                    asset_label: source.asset_label
+                })
+            },
+            transaction
+        });
+
+        await transaction.commit();
+        res.json({ success: true });
+
+    } catch (err) {
+        await transaction.rollback();
+        console.error('Error removing tube:', err);
+        res.status(500).json({ success: false, error: err.message || 'Database error' });
     }
 };
 
@@ -405,6 +514,7 @@ module.exports = {
     searchAssets,
     placeTube,
     moveTube,
+    removeTube,
     resolveConflict,
     checkSlot
 };

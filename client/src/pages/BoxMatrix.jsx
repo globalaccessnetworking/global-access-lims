@@ -88,6 +88,28 @@ const BoxMatrix = () => {
         if (selectedBox) fetchMatrix(selectedBox);
     };
 
+    const handleRemoveTube = async () => {
+        if (!selectedSlot) return;
+        const confirmDelete = window.confirm('Are you sure you want to remove this tube from the box? This will clear its location data.');
+        if (!confirmDelete) return;
+
+        setLoading(true);
+        try {
+            const res = await api.post('/inventory/remove-tube', { slotId: selectedSlot.id });
+            if (res.data.success) {
+                handleMutationSuccess();
+                setSelectedSlot(null);
+            } else {
+                alert(res.data.error || 'Failed to remove tube');
+            }
+        } catch (err) {
+            console.error('Error removing tube:', err);
+            alert(err.response?.data?.error || 'Failed to remove tube');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const filteredBoxes = selectedFreezer ? boxes.filter(b => b.freezer_name === selectedFreezer) : boxes;
     const currentBoxStats = boxes.find(b => b.box_name === selectedBox);
 
@@ -312,12 +334,20 @@ const BoxMatrix = () => {
                                         )}
 
                                         {!selectedSlot.conflict_flag && (
-                                            <button 
-                                                onClick={() => setIsMoveModalOpen(true)}
-                                                className="mt-6 w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm"
-                                            >
-                                                Move Tube
-                                            </button>
+                                            <>
+                                                <button 
+                                                    onClick={() => setIsMoveModalOpen(true)}
+                                                    className="mt-6 w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-bold hover:bg-indigo-700 transition-colors shadow-sm"
+                                                >
+                                                    Move Tube
+                                                </button>
+                                                <button 
+                                                    onClick={handleRemoveTube}
+                                                    className="mt-3 w-full bg-red-600 text-white px-4 py-2 rounded-md text-sm font-bold hover:bg-red-700 transition-colors shadow-sm"
+                                                >
+                                                    Remove Tube
+                                                </button>
+                                            </>
                                         )}
                                     </>
                                 )}
