@@ -96,6 +96,8 @@ const PhageEntry = () => {
                 if (res.data) {
                     setFormData(prev => ({ ...prev, ...res.data, id: res.data.id }));
                 }
+            } else {
+                setFormData(extendedForm);
             }
         } catch (err) {
             console.error("Initialization failed", err);

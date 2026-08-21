@@ -100,6 +100,8 @@ const PlasmidEntry = () => {
                         Protein_Purification_status: res.data.Protein_Purification_status === 'Yes' ? 'Yes' : 'No'
                     }));
                 }
+            } else {
+                setFormData(extendedForm);
             }
         } catch (err) {
             console.error("Initialization failed", err);

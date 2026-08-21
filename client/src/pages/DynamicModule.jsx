@@ -243,10 +243,6 @@ const DynamicModule = ({ type: propsType }) => {
         moduleData.schema.forEach(col => {
             if (!['id', 'created_at', 'updated_at', 'createdAt', 'updatedAt'].includes(col.key.toLowerCase())) {
                 let defaultValue = '';
-                if (col.type === 'select' && col.options?.length > 0) {
-                    const firstOpt = col.options[0];
-                    defaultValue = typeof firstOpt === 'object' ? firstOpt.value : firstOpt;
-                }
                 
                 // Smart default for filtered views
                 if (typeFilter && (col.key.toLowerCase() === 'type' || col.key.toLowerCase() === 'asset_type')) {

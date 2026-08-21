@@ -74,6 +74,8 @@ const PrimerEntry = () => {
                     ...dataRes.data,
                     id: dataRes.data.id 
                 }));
+            } else {
+                setFormData(initialForm);
             }
         } catch (err) {
             console.error("Hydration Failed:", err);
