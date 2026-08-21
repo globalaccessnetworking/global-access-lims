@@ -463,33 +463,38 @@ router.get('/:tableName', async (req, res) => {
                 // [PHASE 154] Self-resolution safeguard: Do not translate if table is its own source truth
                 if (regEntry && regEntry.table !== tableName) {
                     try {
-                        const lookupResults = await sequelize.query(
-                            `SELECT "ID" as id, "${regEntry.col}" as label FROM "${regEntry.table}"`,
-                            { type: Sequelize.QueryTypes.SELECT }
-                        );
-                        
-                        const dict = {};
-                        lookupResults.forEach(r => {
-                            if (r.id !== null && r.id !== undefined) {
-                                dict[String(r.id).trim()] = r.label;
-                            }
-                        });
+                        const targetDesc = await sequelize.getQueryInterface().describeTable(regEntry.table);
+                        const idColName = targetDesc['ID'] ? '"ID"' : targetDesc['id'] ? '"id"' : null;
 
-                        mappedData.forEach(row => {
-                            const rawVal = row[col.key];
-                            if (rawVal !== null && rawVal !== undefined) {
-                                // [PHASE 117/119] Support semicolon or comma-separated multi-select IDs (legacy parity)
-                                const stringVal = String(rawVal).trim();
-                                if (stringVal.includes(';') || (stringVal.includes(',') && !isNaN(parseInt(stringVal.split(',')[0])))) {
-                                    const delimeter = stringVal.includes(';') ? ';' : ',';
-                                    const ids = stringVal.split(delimeter).map(id => id.trim());
-                                    const labels = ids.map(id => dict[id] || id).filter(Boolean);
-                                    row[col.key] = labels.join(', ');
-                                } else if (dict[stringVal]) {
-                                    row[col.key] = dict[stringVal];
+                        if (idColName && targetDesc[regEntry.col]) {
+                            const lookupResults = await sequelize.query(
+                                `SELECT ${idColName} as id, "${regEntry.col}" as label FROM "${regEntry.table}" WHERE "${regEntry.col}" IS NOT NULL`,
+                                { type: Sequelize.QueryTypes.SELECT }
+                            );
+                            
+                            const dict = {};
+                            lookupResults.forEach(r => {
+                                if (r.id !== null && r.id !== undefined) {
+                                    dict[String(r.id).trim()] = r.label;
                                 }
-                            }
-                        });
+                            });
+
+                            mappedData.forEach(row => {
+                                const rawVal = row[col.key];
+                                if (rawVal !== null && rawVal !== undefined) {
+                                    // Support semicolon or comma-separated multi-select IDs
+                                    const stringVal = String(rawVal).trim();
+                                    if (stringVal.includes(';') || (stringVal.includes(',') && !isNaN(parseInt(stringVal.split(',')[0])))) {
+                                        const delimeter = stringVal.includes(';') ? ';' : ',';
+                                        const ids = stringVal.split(delimeter).map(id => id.trim());
+                                        const labels = ids.map(id => dict[id] || id).filter(Boolean);
+                                        row[col.key] = labels.join(', ');
+                                    } else if (dict[stringVal]) {
+                                        row[col.key] = dict[stringVal];
+                                    }
+                                }
+                            });
+                        }
                     } catch (eRel) {
                         console.warn(`[SYSTEM] Relational translation failed for col ${col.key}:`, eRel.message);
                     }

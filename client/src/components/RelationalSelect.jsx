@@ -66,6 +66,29 @@ const RelationalSelect = ({
         setOptions([]);
     }, [endpoint, refreshKey]);
 
+    // Helper: resolve external values (IDs or Label strings) to valid Option IDs
+    const resolveToOptionIds = (val, opts) => {
+        const extVals = normalizeValueProp(val);
+        if (extVals.length === 0 || opts.length === 0) return [];
+
+        const validIds = [];
+        extVals.forEach(v => {
+            const strV = String(v).trim();
+            // 1. Match by Option ID first
+            const matchById = opts.find(o => String(o.id) === strV);
+            if (matchById) {
+                validIds.push(String(matchById.id));
+            } else {
+                // 2. Fallback: Match by Option Label (case-insensitive)
+                const matchByLabel = opts.find(o => String(o.label).trim().toLowerCase() === strV.toLowerCase());
+                if (matchByLabel) {
+                    validIds.push(String(matchByLabel.id));
+                }
+            }
+        });
+        return validIds;
+    };
+
     // -----------------------------------------------------------------------
     // Fetch options
     // -----------------------------------------------------------------------
@@ -93,7 +116,7 @@ const RelationalSelect = ({
                             rawId = String(rawId);
                         }
 
-                        // Protect against duplicate IDs (if multiple records somehow have the exact same ID)
+                        // Protect against duplicate IDs
                         if (seenIds.has(rawId)) {
                             rawId = generateSafeId();
                         }
@@ -106,9 +129,8 @@ const RelationalSelect = ({
                 setOptions(normalized);
                 setHasFetched(true);
 
-                // Sync external value prop into internal selectedIds
-                const extIds = normalizeValueProp(value);
-                const validIds = extIds.filter(id => normalized.some(o => o.id === id));
+                // Sync external value prop into internal selectedIds (supports ID or Label matching)
+                const validIds = resolveToOptionIds(value, normalized);
                 setSelectedIds(validIds);
             } catch (err) {
                 setError('Failed to load options');
@@ -130,9 +152,7 @@ const RelationalSelect = ({
     useEffect(() => {
         if (!hasFetched || options.length === 0) return;
 
-        const extIds = normalizeValueProp(value);
-        const validIds = extIds.filter(id => options.some(o => o.id === id));
-
+        const validIds = resolveToOptionIds(value, options);
         const currentSorted = [...selectedIds].sort().join(',');
         const newSorted = [...validIds].sort().join(',');
         
