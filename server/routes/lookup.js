@@ -12,8 +12,23 @@ const db = require('../models');
  */
 
 const rawQ = async (sql) => {
-    const rows = await db.sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
-    return rows.map(r => Array.isArray(r) ? { id: r[0], label: r[1] } : r);
+    try {
+        const rows = await db.sequelize.query(sql, { type: Sequelize.QueryTypes.SELECT });
+        return rows.map(r => {
+            if (Array.isArray(r)) return { id: r[0], label: r[1] };
+            const mainId = r.id != null ? String(r.id) : (r.ID != null ? String(r.ID) : String(r.label));
+            return {
+                id: mainId,
+                rawId: mainId,
+                ID: r.ID != null ? String(r.ID) : null,
+                dbId: r.id != null ? String(r.id) : null,
+                label: String(r.label || mainId)
+            };
+        });
+    } catch (err) {
+        console.warn('[LOOKUP rawQ WARN]', err.message);
+        throw err;
+    }
 };
 
 // ─── Bacterial Strains ─────────────────────────────────────────────────────
@@ -21,7 +36,7 @@ const rawQ = async (sql) => {
 // Species (24 entries) — bacterial_species.Species
 router.get('/species', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Species" as label FROM "bacterial_species" WHERE "Species" IS NOT NULL ORDER BY "Species"`);
+        const data = await rawQ(`SELECT "id", "ID", "Species" as label FROM "bacterial_species" WHERE "Species" IS NOT NULL ORDER BY "Species"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -31,7 +46,7 @@ router.get('/species', async (req, res) => {
 // Wild-type / Recombinant — wild_type_recomb_types.Field1
 router.get('/wild-type-recomb', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Field1" as label FROM "wild_type_recomb_types" WHERE "Field1" IS NOT NULL ORDER BY "ID"`);
+        const data = await rawQ(`SELECT "id", "ID", "Field1" as label FROM "wild_type_recomb_types" WHERE "Field1" IS NOT NULL ORDER BY "ID"`);
         res.json(data);
     } catch (err) {
         res.json([{ id: "1", label: 'Wild-type' }, { id: "2", label: 'Recomb' }]);
@@ -43,7 +58,7 @@ router.get('/wild-type-recomb', async (req, res) => {
 // Phage names (55 entries) — phage_names.Bacteriophage_Name
 router.get('/phage-names', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Bacteriophage_Name" as label FROM "phage_names" WHERE "Bacteriophage_Name" IS NOT NULL ORDER BY "Bacteriophage_Name"`);
+        const data = await rawQ(`SELECT "id", "ID", "Bacteriophage_Name" as label FROM "phage_names" WHERE "Bacteriophage_Name" IS NOT NULL ORDER BY "Bacteriophage_Name"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -53,7 +68,7 @@ router.get('/phage-names', async (req, res) => {
 // Lytic / Lysogenic types — lytic_lysogenic_types.Type
 router.get('/lytic-types', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Type" as label FROM "lytic_lysogenic_types" WHERE "Type" IS NOT NULL ORDER BY "ID"`);
+        const data = await rawQ(`SELECT "id", "ID", "Type" as label FROM "lytic_lysogenic_types" WHERE "Type" IS NOT NULL ORDER BY "ID"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -65,7 +80,7 @@ router.get('/lytic-types', async (req, res) => {
 // Plasmid vectors/backbone (18 entries) — plasmid_vectors.Plasmid_Name
 router.get('/plasmid-vectors', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Plasmid_Name" as label FROM "plasmid_vectors" WHERE "Plasmid_Name" IS NOT NULL ORDER BY "Plasmid_Name"`);
+        const data = await rawQ(`SELECT "id", "ID", "Plasmid_Name" as label FROM "plasmid_vectors" WHERE "Plasmid_Name" IS NOT NULL ORDER BY "Plasmid_Name"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -75,7 +90,7 @@ router.get('/plasmid-vectors', async (req, res) => {
 // Gene sources (8 entries) — gene_sources.Donar_DNA_detail
 router.get('/gene-sources', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Donar_DNA_detail" as label FROM "gene_sources" WHERE "Donar_DNA_detail" IS NOT NULL ORDER BY "Donar_DNA_detail"`);
+        const data = await rawQ(`SELECT "id", "ID", "Donar_DNA_detail" as label FROM "gene_sources" WHERE "Donar_DNA_detail" IS NOT NULL ORDER BY "Donar_DNA_detail"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -85,7 +100,7 @@ router.get('/gene-sources', async (req, res) => {
 // Cloning methods (5 entries) — cloning_methods.Cloninig_Method
 router.get('/cloning-methods', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Cloninig_Method" as label FROM "cloning_methods" WHERE "Cloninig_Method" IS NOT NULL ORDER BY "ID"`);
+        const data = await rawQ(`SELECT "id", "ID", "Cloninig_Method" as label FROM "cloning_methods" WHERE "Cloninig_Method" IS NOT NULL ORDER BY "ID"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -97,7 +112,7 @@ router.get('/cloning-methods', async (req, res) => {
 // Manufacturers (66 entries) — manufacturers.Manufacturers
 router.get('/manufacturers', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Manufacturers" as label FROM "manufacturers" WHERE "Manufacturers" IS NOT NULL ORDER BY "Manufacturers"`);
+        const data = await rawQ(`SELECT "id", "ID", "Manufacturers" as label FROM "manufacturers" WHERE "Manufacturers" IS NOT NULL ORDER BY "Manufacturers"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -107,7 +122,7 @@ router.get('/manufacturers', async (req, res) => {
 // Stock categories (8 entries) — stock_categories.Category
 router.get('/stock-categories', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Category" as label FROM "stock_categories" WHERE "Category" IS NOT NULL ORDER BY "Category"`);
+        const data = await rawQ(`SELECT "id", "ID", "Category" as label FROM "stock_categories" WHERE "Category" IS NOT NULL ORDER BY "Category"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -117,7 +132,7 @@ router.get('/stock-categories', async (req, res) => {
 // Chemical storage areas — chemical_storage_areas.Storage_Area
 router.get('/storage-areas', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Storage_Area" as label FROM "chemical_storage_areas" WHERE "Storage_Area" IS NOT NULL ORDER BY "Storage_Area"`);
+        const data = await rawQ(`SELECT "id", "ID", "Storage_Area" as label FROM "chemical_storage_areas" WHERE "Storage_Area" IS NOT NULL ORDER BY "Storage_Area"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -127,7 +142,7 @@ router.get('/storage-areas', async (req, res) => {
 // Freezers (8 entries) — freezer_locations.Freezer
 router.get('/freezers', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Freezer" as label FROM "freezer_locations" WHERE "Freezer" IS NOT NULL ORDER BY "Freezer"`);
+        const data = await rawQ(`SELECT "id", "ID", "Freezer" as label FROM "freezer_locations" WHERE "Freezer" IS NOT NULL ORDER BY "Freezer"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -137,7 +152,7 @@ router.get('/freezers', async (req, res) => {
 // Racks (428 entries) — rack_locations.Rack_No
 router.get('/racks', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Rack_No" as label FROM "rack_locations" WHERE "Rack_No" IS NOT NULL ORDER BY "ID"`);
+        const data = await rawQ(`SELECT "id", "ID", "Rack_No" as label FROM "rack_locations" WHERE "Rack_No" IS NOT NULL ORDER BY "ID"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -147,7 +162,7 @@ router.get('/racks', async (req, res) => {
 // Boxes (122 entries) — box_locations.Box_detail
 router.get('/boxes', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Box_detail" as label FROM "box_locations" WHERE "Box_detail" IS NOT NULL ORDER BY "ID"`);
+        const data = await rawQ(`SELECT "id", "ID", "Box_detail" as label FROM "box_locations" WHERE "Box_detail" IS NOT NULL ORDER BY "ID"`);
         res.json(data);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -160,7 +175,7 @@ router.get('/boxes', async (req, res) => {
 router.get('/antibiotics', async (req, res) => {
     try {
         const data = await rawQ(
-            `SELECT "ID" as id, "Complete_Name" as label FROM "antibiotics" WHERE "Complete_Name" IS NOT NULL ORDER BY "Complete_Name"`
+            `SELECT "id", "ID", "Complete_Name" as label FROM "antibiotics" WHERE "Complete_Name" IS NOT NULL ORDER BY "Complete_Name"`
         );
         res.json(data);
     } catch (err) {
@@ -173,7 +188,7 @@ router.get('/antibiotics', async (req, res) => {
 // Primer Binding Targets (Bacteria, Phage, Plasmid)
 router.get('/primer-binding-types', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Field1" as label FROM "primer_binding_organism_types" ORDER BY "ID"`);
+        const data = await rawQ(`SELECT "id", "ID", "Field1" as label FROM "primer_binding_organism_types" ORDER BY "ID"`);
         res.json(data);
     } catch (err) {
         res.json([{ id: "1", label: 'Bacteria' }, { id: "2", label: 'Phage' }, { id: "3", label: 'Plasmid' }]);
@@ -182,7 +197,7 @@ router.get('/primer-binding-types', async (req, res) => {
 
 router.get('/binding-types', async (req, res) => {
     try {
-        const data = await rawQ(`SELECT "ID" as id, "Field1" as label FROM "primer_binding_organism_types" ORDER BY "ID"`);
+        const data = await rawQ(`SELECT "id", "ID", "Field1" as label FROM "primer_binding_organism_types" ORDER BY "ID"`);
         res.json(data);
     } catch (err) {
         res.json([{ id: "1", label: 'Bacteria' }, { id: "2", label: 'Phage' }, { id: "3", label: 'Plasmid' }]);

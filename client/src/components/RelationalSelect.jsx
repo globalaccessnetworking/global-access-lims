@@ -74,8 +74,16 @@ const RelationalSelect = ({
         const validIds = [];
         extVals.forEach(v => {
             const strV = String(v).trim();
-            // 1. Match by Option ID first or rawId
-            const matchById = opts.find(o => String(o.id) === strV || String(o.rawId) === strV);
+            if (!strV) return;
+
+            // 1. Match by Option ID first, rawId, ID, or dbId
+            const matchById = opts.find(o => 
+                String(o.id) === strV || 
+                (o.rawId != null && String(o.rawId) === strV) ||
+                (o.ID != null && String(o.ID) === strV) ||
+                (o.dbId != null && String(o.dbId) === strV)
+            );
+
             if (matchById) {
                 validIds.push(String(matchById.id));
             } else {
@@ -109,7 +117,7 @@ const RelationalSelect = ({
                 
                 const normalized = res.data
                     .map((item, idx) => {
-                        let rawId = item.id ?? item.ID ?? item.value ?? (Array.isArray(item) ? item[0] : null);
+                        let rawId = item.id ?? item.ID ?? item.dbId ?? item.value ?? (Array.isArray(item) ? item[0] : null);
                         const rawLabel = item.label ?? item.name ?? item.title ?? item.text
                             ?? (Array.isArray(item) ? item[1] : null)
                             ?? String(rawId || `Option ${idx + 1}`);
@@ -128,7 +136,13 @@ const RelationalSelect = ({
                             idCounts.set(cleanRawId, 1);
                         }
 
-                        return { id: uniqueId, rawId: cleanRawId, label: String(rawLabel) };
+                        return { 
+                            id: uniqueId, 
+                            rawId: cleanRawId, 
+                            ID: item.ID != null ? String(item.ID) : null,
+                            dbId: item.dbId != null ? String(item.dbId) : null,
+                            label: String(rawLabel) 
+                        };
                     })
                     .filter(Boolean);
                     
