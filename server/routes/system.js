@@ -515,16 +515,26 @@ router.get('/:tableName', async (req, res) => {
                         { type: Sequelize.QueryTypes.SELECT }
                     );
 
-                    // Build id→label dictionary for this column's lookup table
+                    // Build id→label dictionary for this column's lookup table.
+                    // CRITICAL: Only use serial `id` (integer PK) as the dict key.
+                    // DO NOT use `r.ID` (legacy varchar) as a dict key — its values
+                    // (e.g. '11' on the BL-21 row) collide with serial id values of
+                    // completely different rows (e.g. id=11 = APEC), causing wrong
+                    // label translation (id 11 → 'BL-21' instead of 'APEC').
                     const dict = {};
                     lookupResults.forEach(r => {
                         const labelVal = r[regEntry.col];
                         if (!labelVal) return;
                         const labelStr = String(labelVal).trim();
-                        if (r.id  != null) dict[String(r.id).trim()]  = labelStr;
-                        if (r.ID  != null) dict[String(r.ID).trim()]  = labelStr;
-                        dict[labelStr]                = labelStr; // identity pass-through
-                        dict[labelStr.toLowerCase()]  = labelStr;
+                        if (r.id != null) {
+                            // Prefer serial id — guaranteed unique, no collision risk
+                            dict[String(r.id).trim()] = labelStr;
+                        } else if (r.ID != null) {
+                            // Only fall back to legacy ID when no serial id exists
+                            dict[String(r.ID).trim()] = labelStr;
+                        }
+                        dict[labelStr]               = labelStr; // identity pass-through
+                        dict[labelStr.toLowerCase()] = labelStr;
                     });
 
                     return { colKey, dict, multiSelect: !!(regEntry.multiSelect) };
@@ -569,7 +579,7 @@ router.get('/:tableName', async (req, res) => {
             debug: {
                 columnCount: schema.length,
                 timestamp: new Date().toISOString(),
-                version: 'v14_dual_pk_update_fixed'
+                version: 'v15_dict_collision_fixed'
             }
         });
 
