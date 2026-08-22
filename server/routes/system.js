@@ -569,7 +569,7 @@ router.get('/:tableName', async (req, res) => {
             debug: {
                 columnCount: schema.length,
                 timestamp: new Date().toISOString(),
-                version: 'v13_all_tables_relational_fixed'
+                version: 'v14_dual_pk_update_fixed'
             }
         });
 
@@ -589,10 +589,10 @@ router.get('/:tableName/:id', async (req, res) => {
     if (!isAllowedTable(tableName)) return res.status(403).json({ error: 'Access denied.' });
 
     try {
-        const result = await sequelize.query(`SELECT * FROM "${tableName}" WHERE id = $1`, {
-            bind: [id],
-            type: Sequelize.QueryTypes.SELECT
-        });
+        const result = await sequelize.query(
+            `SELECT * FROM "${tableName}" WHERE ("id"::text = $1 OR "ID"::text = $1)`,
+            { bind: [String(id)], type: Sequelize.QueryTypes.SELECT }
+        );
 
         if (!result.length) return res.status(404).json({ error: 'Record not found' });
         res.json(result[0]);
@@ -901,10 +901,10 @@ router.put('/:tableName/:id', async (req, res) => {
         const updates = Object.keys(payload).map((key, i) => `"${key}" = $${i + 1}`).join(', ');
         const values = Object.values(payload);
 
-        const query = `UPDATE "${tableName}" SET ${updates} WHERE id = $${values.length + 1} RETURNING *`;
+        const query = `UPDATE "${tableName}" SET ${updates} WHERE ("id"::text = $${values.length + 1} OR "ID"::text = $${values.length + 1}) RETURNING *`;
 
         const result = await sequelize.query(query, {
-            bind: [...values, id],
+            bind: [...values, String(id)],
             type: Sequelize.QueryTypes.UPDATE
         });
 
