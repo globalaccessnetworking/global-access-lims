@@ -582,7 +582,7 @@ router.get('/:tableName', async (req, res) => {
             debug: {
                 columnCount: schema.length,
                 timestamp: new Date().toISOString(),
-                version: 'v15_1_registry_complete'
+                version: 'v16_get_priority_fix'
             }
         });
 
@@ -602,8 +602,15 @@ router.get('/:tableName/:id', async (req, res) => {
     if (!isAllowedTable(tableName)) return res.status(403).json({ error: 'Access denied.' });
 
     try {
+        // Priority: serial `id` match > legacy varchar `ID` match.
+        // Using OR without ORDER BY risks returning a legacy row whose varchar "ID"
+        // coincidentally equals the numeric id we're looking for (e.g. "ID"='211'
+        // on an old row when the intended row has serial id=211).
         const result = await sequelize.query(
-            `SELECT * FROM "${tableName}" WHERE ("id"::text = $1 OR "ID"::text = $1)`,
+            `SELECT * FROM "${tableName}"
+             WHERE ("id"::text = $1 OR "ID"::text = $1)
+             ORDER BY CASE WHEN "id"::text = $1 THEN 0 ELSE 1 END ASC
+             LIMIT 1`,
             { bind: [String(id)], type: Sequelize.QueryTypes.SELECT }
         );
 
@@ -914,7 +921,7 @@ router.put('/:tableName/:id', async (req, res) => {
         const updates = Object.keys(payload).map((key, i) => `"${key}" = $${i + 1}`).join(', ');
         const values = Object.values(payload);
 
-        const query = `UPDATE "${tableName}" SET ${updates} WHERE ("id"::text = $${values.length + 1} OR "ID"::text = $${values.length + 1}) RETURNING *`;
+        const query = `UPDATE "${tableName}" SET ${updates} WHERE ("${pkColName || 'id'}"::text = $${values.length + 1}) RETURNING *`;
 
         const result = await sequelize.query(query, {
             bind: [...values, String(id)],
@@ -1053,8 +1060,10 @@ router.delete('/:tableName/:id', async (req, res) => {
     if (!isAllowedTable(tableName)) return res.status(403).json({ error: 'Access denied.' });
 
     try {
-        await sequelize.query(`DELETE FROM "${tableName}" WHERE id = $1`, {
-            bind: [id],
+        const desc = await sequelize.getQueryInterface().describeTable(tableName);
+        const pkCol = (desc['id'] || !desc['ID']) ? 'id' : 'ID';
+        await sequelize.query(`DELETE FROM "${tableName}" WHERE "${pkCol}"::text = $1`, {
+            bind: [String(id)],
             type: Sequelize.QueryTypes.DELETE
         });
         res.json({ success: true });
