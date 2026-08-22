@@ -120,8 +120,11 @@ const LOOKUP_REGISTRY = {
     'GS_Racks':             { endpoint: '/lookup/racks',          table: 'rack_locations',              col: 'Rack_No' },
     'GS_Box_details':       { endpoint: '/lookup/boxes',          table: 'box_locations',               col: 'Box_detail' },
     'Against_Species':      { endpoint: '/lookup/species',        table: 'bacterial_species',           col: 'Species' },
-    'DNA_storage_Box_detail': { endpoint: '/lookup/boxes',          table: 'box_locations',               col: 'Box_detail' },
+    'DNA_storage_Box_detail': { endpoint: '/lookup/freezers',      table: 'freezer_locations',           col: 'Freezer' },
     'Antibiotic_resistance':  { endpoint: '/lookup/antibiotics',  table: 'antibiotics',             col: 'Complete_Name', multiSelect: true },
+    // ── Bacteriophage 4°C cold storage ─────────────────────────────────────────
+    '_4C_Fridge_Number':    { endpoint: '/lookup/freezers',       table: 'freezer_locations',           col: 'Freezer' },
+    '_4C_Rack_Number':      { endpoint: '/lookup/racks',          table: 'rack_locations',              col: 'Rack_No' },
 
     // ── ext_bacterial_strains ──────────────────────────────────────────────────────
     'Specie':               { endpoint: '/lookup/species',        table: 'bacterial_species',           col: 'Species' },
@@ -579,7 +582,7 @@ router.get('/:tableName', async (req, res) => {
             debug: {
                 columnCount: schema.length,
                 timestamp: new Date().toISOString(),
-                version: 'v15_dict_collision_fixed'
+                version: 'v15_1_registry_complete'
             }
         });
 
