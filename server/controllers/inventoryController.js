@@ -3,19 +3,24 @@ const { QueryTypes } = require('sequelize');
 
 const getBoxes = async (req, res) => {
     try {
+        // FIX: Query FROM box_locations (the master table) so ALL boxes appear in the
+        // dropdown — including new/empty boxes like "GS 15" that have no slots yet in
+        // box_position_index. The old query used box_position_index as the base, which
+        // caused boxes without any initialized slot rows to be completely invisible.
         const query = `
             SELECT 
-                b.box_name,
-                MAX(l."Box_detail") as box_display_name,
-                MAX(b.freezer_name) as freezer_name,
-                COUNT(*) as total_capacity,
-                SUM(CASE WHEN b.is_occupied THEN 1 ELSE 0 END) as occupied_count,
-                SUM(CASE WHEN NOT b.is_occupied THEN 1 ELSE 0 END) as empty_count,
-                SUM(CASE WHEN b.conflict_flag THEN 1 ELSE 0 END) as conflict_count
-            FROM box_position_index b
-            LEFT JOIN box_locations l ON CAST(b.box_name AS TEXT) = CAST(l."ID" AS TEXT)
-            GROUP BY b.box_name
-            ORDER BY b.box_name
+                l."Box_detail" AS box_name,
+                l."Box_detail" AS box_display_name,
+                COALESCE(MAX(b.freezer_name), '')                                              AS freezer_name,
+                COALESCE(COUNT(b.id), 0)                                                       AS total_capacity,
+                COALESCE(SUM(CASE WHEN b.is_occupied   THEN 1 ELSE 0 END), 0)                 AS occupied_count,
+                COALESCE(SUM(CASE WHEN NOT b.is_occupied THEN 1 ELSE 0 END), 0)               AS empty_count,
+                COALESCE(SUM(CASE WHEN b.conflict_flag THEN 1 ELSE 0 END), 0)                 AS conflict_count
+            FROM box_locations l
+            LEFT JOIN box_position_index b ON b.box_name = l."Box_detail"
+            WHERE l."Box_detail" IS NOT NULL AND l."Box_detail" != ''
+            GROUP BY l."id", l."ID", l."Box_detail"
+            ORDER BY l."Box_detail"
         `;
         const result = await sequelize.query(query, { type: QueryTypes.SELECT });
         res.json({ success: true, boxes: result });
@@ -469,13 +474,13 @@ const checkSlot = async (req, res) => {
             return res.status(400).json({ success: false, error: 'boxName and positionCode are required' });
         }
 
-        // box_position_index now stores DISPLAY NAMES (e.g. "GS-26 (C1-b)")
-        // The form stores numeric ID from the RelationalSelect dropdown
-        // If numeric, look up the display name from box_locations
+        // box_position_index stores DISPLAY NAMES (e.g. "GS-26 (C1-b)").
+        // The form stores the serial numeric `id` from box_locations (via RelationalSelect).
+        // FIX: check BOTH serial `id` AND legacy varchar `ID` so the lookup never fails.
         const boxVal = String(boxName).trim();
         if (/^\d+$/.test(boxVal)) {
             const boxRows = await sequelize.query(
-                `SELECT "Box_detail" FROM box_locations WHERE "ID"::text = :v LIMIT 1`,
+                `SELECT "Box_detail" FROM box_locations WHERE "id"::text = :v OR "ID"::text = :v LIMIT 1`,
                 { replacements: { v: boxVal }, type: QueryTypes.SELECT }
             );
             if (boxRows.length > 0 && boxRows[0].Box_detail) {

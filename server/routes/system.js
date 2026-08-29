@@ -622,8 +622,10 @@ router.get('/:tableName/:id', async (req, res) => {
 });
 
 // Helper to resolve a box field value to the display name used in box_position_index
-// box_position_index now stores DISPLAY NAMES (e.g. "GS-26 (C1-b)"), NOT numeric IDs.
-// Form fields store numeric IDs from box_locations.ID (via RelationalSelect dropdown).
+// box_position_index stores DISPLAY NAMES (e.g. "GS-26 (C1-b)"), NOT numeric IDs.
+// Form fields store the serial numeric `id` from box_locations (via RelationalSelect dropdown).
+// FIX: check BOTH serial `id` AND legacy varchar `ID` columns so the lookup never silently fails,
+// which was previously causing syncBoxIndex to skip writing occupancy to box_position_index.
 async function resolveBoxName(boxValue) {
     if (!boxValue) return null;
     const val = String(boxValue).trim();
@@ -631,7 +633,7 @@ async function resolveBoxName(boxValue) {
     // If it's a numeric ID (from dropdown), resolve to display name via box_locations
     if (/^\d+$/.test(val)) {
         const rows = await sequelize.query(
-            `SELECT "Box_detail" FROM box_locations WHERE "ID"::text = :v LIMIT 1`,
+            `SELECT "Box_detail" FROM box_locations WHERE "id"::text = :v OR "ID"::text = :v LIMIT 1`,
             { replacements: { v: val }, type: Sequelize.QueryTypes.SELECT }
         );
         if (rows.length > 0 && rows[0].Box_detail) return rows[0].Box_detail.trim();
