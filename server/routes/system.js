@@ -684,27 +684,27 @@ async function syncBoxIndex(tableName, record) {
     if (!c) return;
 
     // Clear all existing slots for this asset in the index
-    await sequelize.query(
+    await sequelize.query(`
         UPDATE box_position_index 
         SET is_occupied = false, asset_type = NULL, asset_id = NULL, asset_label = NULL, tube_label = NULL, source_table = NULL 
         WHERE source_table = :table AND asset_id = :id
-    , { replacements: { table: tableName, id: record.id } });
+    `, { replacements: { table: tableName, id: record.id } });
 
     // Set new slots - must resolve box field (could be ID or name) to the actual box_name used in box_position_index
     for (let m of c.mappings) {
         if (!m.box || !m.pos) continue;
         const resolvedBoxName = await resolveBoxName(m.box);
         if (!resolvedBoxName) {
-            console.warn([syncBoxIndex] Could not resolve box "" for table  record );
+            console.warn(`[syncBoxIndex] Could not resolve box "${m.box}" for table ${tableName} record ${record.id}`);
             continue;
         }
         let posArray = m.pos.split(',').map(p => p.trim().toUpperCase().replace(/[\s-]/g, ''));
         for (let posStr of posArray) {
-            await sequelize.query(
+            await sequelize.query(`
                 UPDATE box_position_index 
                 SET is_occupied = true, asset_type = :type, asset_id = :id, asset_label = :label, tube_label = :tube, source_table = :table, conflict_flag = false, updated_at = CURRENT_TIMESTAMP
                 WHERE box_name = :box AND position_code = :pos
-            , { 
+            `, { 
                 replacements: { 
                     type: c.type, 
                     id: record.id, 
@@ -715,7 +715,7 @@ async function syncBoxIndex(tableName, record) {
                     pos: posStr 
                 }
             });
-            console.log([syncBoxIndex] Updated slot / for  id= label="" tube="");
+            console.log(`[syncBoxIndex] Updated slot ${resolvedBoxName}/${posStr} for ${tableName} id=${record.id} label="${c.label || ''}" tube="${m.tube || ''}"`);
         }
     }
 }
