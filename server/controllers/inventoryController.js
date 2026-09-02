@@ -331,19 +331,19 @@ const removeTube = async (req, res) => {
         // 3. Clear location fields in the original table
         const config = {
             ext_bacteriophages: [
-                { box: 'GS_Box_details', pos: 'GS_position_in_Box', rack: 'GS_Rack_details', freezer: 'GS_Freezer_Name' },
-                { box: 'DNA_storage_Box_detail', pos: '_4C_Position_in_box', rack: 'DNA_storage_Rack_Detail', freezer: 'DNA_Storage_Freezer' }
+                { box: 'GS_Box_details', pos: 'GS_position_in_Box', rack: 'GS_Racks', freezer: 'GS_Freezer_Name' },
+                { box: 'DNA_storage_Box_detail', pos: '_4C_Position_in_box', rack: '_4C_Rack_Number', freezer: '_4C_Fridge_Number' }
             ],
             ext_bacterial_strains: [
-                { box: 'GS_Box_details', pos: 'Location_in_Box_GS', rack: 'Glycerol_Stock_Rack', freezer: 'Glycerol_Stock_Freezer' },
-                { box: 'GD_Box_detail', pos: 'Loction_in_Box_PD', rack: 'Rack_detail_PD', freezer: 'DNA_Store_Freezer' }
+                { box: 'GS_Box_details', pos: 'Location_in_Box_GS', rack: 'GS_Rack_Number', freezer: 'GS_Freezer_Number' },
+                { box: 'GD_Box_detail', pos: 'Loction_in_Box_PD', rack: 'GD_Rack_Number', freezer: 'GD_Freezer_Number' }
             ],
             ext_plasmids: [
-                { box: 'Glycerol_Stock_Box', pos: 'Location_in_Box_GS', rack: 'Glycerol_Stock_Rack', freezer: 'GS_Freezer_Name' },
-                { box: 'DNA_Store_Box_Detail', pos: 'Location_in_Box_GS', rack: 'DNA_Store_Rack_Detail', freezer: 'DNA_Store_Freezer' }
+                { box: 'Glycerol_Stock_Box', pos: 'Location_in_Box_GS', rack: 'Glycerol_Stock_Rack', freezer: 'GLycerol_Stock_Freezer' },
+                { box: 'DNA_Store_Box_Detail', pos: 'Location_in_Box_GS', rack: 'DNA_Store_Rack', freezer: 'DNA_Store_Freezer' }
             ],
             ext_primers_details: [
-                { box: 'Box_detail', pos: 'Location_in_Box', rack: 'Rack_detail', freezer: 'Freezer_Name' }
+                { box: 'Box_detail', pos: 'Location_in_Box', rack: 'Freezer_Shelve', freezer: 'Freezer' }
             ]
         };
 
