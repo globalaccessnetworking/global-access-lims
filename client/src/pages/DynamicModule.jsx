@@ -5,7 +5,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import {
     Search, Plus, FileDown, Filter, LayoutGrid,
-    List, MoreHorizontal, Database, AlertTriangle, X, Edit, Trash2, Check, Clock, Calendar
+    List, MoreHorizontal, Database, AlertTriangle, X, Edit, Trash2, Check, Clock, Calendar, Copy
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SmartLookup from '../components/SmartLookup';
@@ -253,6 +253,58 @@ const DynamicModule = ({ type: propsType }) => {
             }
         });
         setFormData(initialForm);
+        setIsModalOpen(true);
+    };
+
+    const handleDuplicate = (item) => {
+        const sanitized = { ...item };
+        delete sanitized.id;
+        delete sanitized.ID;
+        
+        // Clear known identifiers
+        const uniqueFields = ['Strain_No', 'Plasmid_Name', 'Bacteriophage_Name', 'Primer_Name', 'Item_Name', 'Asset_Name'];
+        uniqueFields.forEach(key => {
+            if (sanitized[key] !== undefined && sanitized[key] !== null) sanitized[key] = '';
+        });
+
+        // Clear known location fields
+        const locationFields = [
+            'GS_Box_details', 'Location_in_Box_GS', 'GS_Rack_Number', 'GS_Freezer_Number', 'GS_Rack_details', 'GS_Racks', 'GS_Freezer_Name', 'GS_position_in_Box',
+            'GD_Box_detail', 'Loction_in_Box_PD', 'GD_Rack_Number', 'GD_Freezer_Number', 'Rack_detail_PD',
+            'DNA_storage_Box_detail', '_4C_Position_in_box', '_4C_Rack_Number', '_4C_Fridge_Number', 'DNA_storage_Rack_Detail', 'DNA_Storage_Freezer',
+            'Glycerol_Stock_Box', 'Glycerol_Stock_Rack', 'GLycerol_Stock_Freezer',
+            'DNA_Store_Box_Detail', 'DNA_Store_Rack', 'DNA_Store_Freezer', 'DNA_Store_Rack_Detail',
+            'Box_detail', 'Location_in_Box', 'Freezer_Shelve', 'Freezer', 'Rack_detail', 'Freezer_Name'
+        ];
+        locationFields.forEach(key => {
+            if (sanitized[key] !== undefined && sanitized[key] !== null) sanitized[key] = '';
+        });
+
+        localStorage.setItem('duplicateData', JSON.stringify(sanitized));
+
+        if (type === 'ext_plasmids') {
+            navigate('/plasmid-entry?duplicate=1');
+            return;
+        }
+        if (type === 'ext_bacterial_strains' || type === 'ext_query_for_bacterial_strains') {
+            navigate('/strain-entry?duplicate=1');
+            return;
+        }
+        if (type === 'ext_bacteriophages') {
+            navigate('/phage-entry?duplicate=1');
+            return;
+        }
+        if (type === 'ext_lab_stock' || type === 'Chemical') {
+            navigate('/lab-stock-entry?duplicate=1');
+            return;
+        }
+        if (type === 'ext_primers_details') {
+            navigate('/primer-entry?duplicate=1');
+            return;
+        }
+
+        setModalMode('add');
+        setFormData(sanitized);
         setIsModalOpen(true);
     };
 
@@ -556,7 +608,8 @@ const DynamicModule = ({ type: propsType }) => {
                                         })}
                                         <td className="px-6 py-4 text-right">
                                             <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => openEditModal(row)} className="p-2 hover:bg-blue-500/10 text-slate-400 hover:text-blue-500 rounded-lg"><Edit size={14} /></button>
+                                                <button onClick={() => handleDuplicate(row)} className="p-2 hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-500 rounded-lg" title="Duplicate/Copy"><Copy size={14} /></button>
+                                                <button onClick={() => openEditModal(row)} className="p-2 hover:bg-blue-500/10 text-slate-400 hover:text-blue-500 rounded-lg" title="Edit"><Edit size={14} /></button>
                                                 <button onClick={() => handleDelete(row.id)} className="p-2 hover:bg-red-500/10 text-slate-400 hover:text-red-500 rounded-lg"><Trash2 size={14} /></button>
                                             </div>
                                         </td>

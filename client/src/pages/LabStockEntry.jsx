@@ -75,6 +75,10 @@ const LabStockEntry = () => {
                     ...dataRes.data,
                     id: dataRes.data.id 
                 }));
+            } else if (localStorage.getItem('duplicateData')) {
+                const dup = JSON.parse(localStorage.getItem('duplicateData'));
+                localStorage.removeItem('duplicateData');
+                setFormData(prev => ({ ...prev, ...dup }));
             } else {
                 setFormData(initialForm);
             }

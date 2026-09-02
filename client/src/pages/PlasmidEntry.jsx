@@ -100,6 +100,10 @@ const PlasmidEntry = () => {
                         Protein_Purification_status: res.data.Protein_Purification_status === 'Yes' ? 'Yes' : 'No'
                     }));
                 }
+            } else if (localStorage.getItem('duplicateData')) {
+                const dup = JSON.parse(localStorage.getItem('duplicateData'));
+                localStorage.removeItem('duplicateData');
+                setFormData(prev => ({ ...prev, ...dup }));
             } else {
                 setFormData(extendedForm);
             }
