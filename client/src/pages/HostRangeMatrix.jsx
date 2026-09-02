@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from 'axios';
 import {
     Search, FlaskConical, ChevronRight, Microscope,
-    Loader2, Filter, Edit3, X, Plus
+    Loader2, Filter, Edit3, X, Plus, ChevronLeft
 } from 'lucide-react';
 
 const api = axios.create({ baseURL: '/api' });
@@ -31,16 +31,20 @@ export default function PhageInfectivityViewer() {
     const [loadingPhages,   setLoadingPhages]   = useState(true);
     const [loadingProfile,  setLoadingProfile]  = useState(false);
     
-    // Filter states for table
+    // Filter & Pagination states for main table
     const [strainSearch,    setStrainSearch]    = useState('');
+    const [currentPage,     setCurrentPage]     = useState(1);
+    const rowsPerPage = 50;
     
     // Modal states
-    const [recordModalData, setRecordModalData] = useState(null); // The strain being edited
+    const [recordModalData, setRecordModalData] = useState(null);
     const [savingStrainId,  setSavingStrainId]  = useState(null);
     
-    // Custom strain test modal state
+    // Custom strain test modal state (Async)
     const [showCustomModal, setShowCustomModal] = useState(false);
     const [customSearch,    setCustomSearch]    = useState('');
+    const [asyncStrains,    setAsyncStrains]    = useState([]);
+    const [loadingAsync,    setLoadingAsync]    = useState(false);
 
     // Load phage list
     const loadPhages = useCallback(async (q = '') => {
@@ -62,12 +66,13 @@ export default function PhageInfectivityViewer() {
         return () => clearTimeout(t);
     }, [phageSearch, loadPhages]);
 
-    // Load profile
+    // Load profile (Main Matrix)
     const loadProfile = useCallback(async (phage) => {
         if (!phage) return;
         setSelectedPhage(phage);
         setProfile(null);
         setStrainSearch('');
+        setCurrentPage(1);
         setRecordModalData(null);
         setShowCustomModal(false);
         setLoadingProfile(true);
@@ -81,6 +86,28 @@ export default function PhageInfectivityViewer() {
         }
     }, []);
 
+    // Load custom strains (Async search)
+    useEffect(() => {
+        if (!showCustomModal || !selectedPhage) return;
+        const fetchCustom = async () => {
+            setLoadingAsync(true);
+            try {
+                const res = await api.get('/interactions/strains/search', {
+                    params: { q: customSearch, phage_id: selectedPhage.id }
+                });
+                if (res.data.success) {
+                    setAsyncStrains(res.data.strains || []);
+                }
+            } catch (err) {
+                console.error('Async search error:', err);
+            } finally {
+                setLoadingAsync(false);
+            }
+        };
+        const t = setTimeout(fetchCustom, 350);
+        return () => clearTimeout(t);
+    }, [customSearch, showCustomModal, selectedPhage]);
+
     // Save interaction
     const saveInteraction = async (strainId, resultValue) => {
         if (!selectedPhage || !strainId || !resultValue) return;
@@ -93,7 +120,7 @@ export default function PhageInfectivityViewer() {
                 result:    resultValue,
             });
             if (res.data.success) {
-                // Update local state inline
+                // Update main matrix inline
                 setProfile(prev => {
                     if (!prev) return prev;
                     const updatedStrains = prev.strains.map(s => {
@@ -104,8 +131,12 @@ export default function PhageInfectivityViewer() {
                     });
                     return { ...prev, strains: updatedStrains };
                 });
+                // Update async strains list inline if open
+                setAsyncStrains(prev => prev.map(s => {
+                    if (s.strain_id === strainId) return { ...s, result: resultValue };
+                    return s;
+                }));
                 setRecordModalData(null);
-                setShowCustomModal(false);
             }
         } catch (err) {
             console.error('Failed to save interaction:', err);
@@ -115,17 +146,25 @@ export default function PhageInfectivityViewer() {
         }
     };
 
-    const filteredStrains = (profile?.strains || []).filter(r =>
-        !strainSearch || 
-        r.strain_name?.toLowerCase().includes(strainSearch.toLowerCase()) ||
-        r.species_name?.toLowerCase().includes(strainSearch.toLowerCase())
-    );
-    
-    const customFilteredStrains = (profile?.strains || []).filter(r =>
-        !customSearch || 
-        r.strain_name?.toLowerCase().includes(customSearch.toLowerCase()) ||
-        r.species_name?.toLowerCase().includes(customSearch.toLowerCase())
-    ).slice(0, 50); // Limit to top 50 for quick lookup
+    // Client-side pagination logic
+    const { paginatedStrains, totalFiltered, totalPages } = useMemo(() => {
+        const all = profile?.strains || [];
+        const filtered = all.filter(r =>
+            !strainSearch || 
+            r.strain_name?.toLowerCase().includes(strainSearch.toLowerCase()) ||
+            r.species_name?.toLowerCase().includes(strainSearch.toLowerCase())
+        );
+        const startIndex = (currentPage - 1) * rowsPerPage;
+        const paginated = filtered.slice(startIndex, startIndex + rowsPerPage);
+        return {
+            paginatedStrains: paginated,
+            totalFiltered: filtered.length,
+            totalPages: Math.ceil(filtered.length / rowsPerPage)
+        };
+    }, [profile, strainSearch, currentPage]);
+
+    // Reset page on search
+    useEffect(() => { setCurrentPage(1); }, [strainSearch]);
 
     return (
         <div className="min-h-screen bg-slate-950 text-white p-6 pt-24 font-sans flex flex-col">
@@ -158,12 +197,12 @@ export default function PhageInfectivityViewer() {
                     <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden flex flex-col flex-1 h-full min-h-[500px]">
                         <div className="p-4 border-b border-white/5 flex items-center justify-between shrink-0">
                             <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                                Bacteriophages ({phages.filter(p => p.phage_name).length})
+                                Bacteriophages ({phages.length})
                             </span>
                             {loadingPhages && <Loader2 size={12} className="text-emerald-400 animate-spin" />}
                         </div>
                         <div className="overflow-y-auto flex-1 p-2">
-                            {phages.filter(p => p.phage_name).map(p => (
+                            {phages.map(p => (
                                 <button
                                     key={p.id}
                                     onClick={() => loadProfile(p)}
@@ -174,7 +213,7 @@ export default function PhageInfectivityViewer() {
                                     }`}
                                 >
                                     <div className="min-w-0">
-                                        <div className="text-sm font-bold text-white truncate">{p.phage_name}</div>
+                                        <div className="text-sm font-bold text-white truncate">{p.phage_name || '—'}</div>
                                         {p.against_species && (
                                             <div className="text-[10px] text-slate-500 truncate mt-0.5">{p.against_species}</div>
                                         )}
@@ -201,14 +240,14 @@ export default function PhageInfectivityViewer() {
                     ) : loadingProfile ? (
                         <div className="flex-1 bg-slate-900 border border-white/5 rounded-2xl flex items-center justify-center gap-3">
                             <Loader2 size={20} className="text-emerald-400 animate-spin" />
-                            <span className="text-slate-500 text-sm">Loading strains...</span>
+                            <span className="text-slate-500 text-sm">Loading matrix...</span>
                         </div>
                     ) : (
                         <div className="bg-slate-900 border border-white/5 rounded-2xl flex flex-col flex-1 overflow-hidden shadow-2xl h-full">
                             {/* Header */}
                             <div className="p-6 border-b border-white/5 bg-gradient-to-r from-emerald-500/5 to-transparent shrink-0 flex items-center justify-between">
                                 <div>
-                                    <h2 className="text-3xl font-black text-white">{selectedPhage.phage_name}</h2>
+                                    <h2 className="text-3xl font-black text-white">{selectedPhage.phage_name || '—'}</h2>
                                     <div className="flex flex-wrap gap-2 mt-3">
                                         {selectedPhage.against_species && (
                                             <span className="px-3 py-1 bg-purple-500/15 border border-purple-500/25 rounded-lg text-purple-400 text-sm font-semibold">
@@ -223,7 +262,7 @@ export default function PhageInfectivityViewer() {
                                     </div>
                                 </div>
                                 <button 
-                                    onClick={() => setShowCustomModal(true)}
+                                    onClick={() => { setCustomSearch(''); setShowCustomModal(true); }}
                                     className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-500/20"
                                 >
                                     <Plus size={18} /> Test Custom Strain
@@ -241,8 +280,28 @@ export default function PhageInfectivityViewer() {
                                             className="w-full bg-slate-800 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-base text-white focus:border-emerald-500 outline-none"
                                         />
                                     </div>
-                                    <div className="text-slate-400 text-sm font-semibold uppercase tracking-wider ml-4 bg-slate-800/50 px-4 py-3 rounded-xl border border-white/5">
-                                        Total Matrix Strains: <span className="text-white font-bold">{profile?.total_strains || 0}</span>
+                                    <div className="flex items-center gap-4 bg-slate-800/50 px-4 py-2 rounded-xl border border-white/5">
+                                        <div className="text-slate-400 text-sm font-semibold">
+                                            {totalFiltered} strains
+                                        </div>
+                                        <div className="w-px h-4 bg-white/10"></div>
+                                        <div className="flex items-center gap-2">
+                                            <button 
+                                                disabled={currentPage === 1}
+                                                onClick={() => setCurrentPage(p => p - 1)}
+                                                className="p-1 text-slate-400 hover:text-white disabled:opacity-30 transition-colors"
+                                            >
+                                                <ChevronLeft size={18} />
+                                            </button>
+                                            <span className="text-sm font-bold text-white px-2">Page {currentPage} of {totalPages || 1}</span>
+                                            <button 
+                                                disabled={currentPage >= totalPages}
+                                                onClick={() => setCurrentPage(p => p + 1)}
+                                                className="p-1 text-slate-400 hover:text-white disabled:opacity-30 transition-colors"
+                                            >
+                                                <ChevronRight size={18} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -257,12 +316,11 @@ export default function PhageInfectivityViewer() {
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-white/5">
-                                            {filteredStrains.map((r) => {
+                                            {paginatedStrains.map((r) => {
                                                 const hasResult = r.result && r.result !== '';
-                                                
                                                 return (
                                                     <tr key={r.strain_id} className="hover:bg-slate-800/50 transition-colors group text-base">
-                                                        <td className="px-6 py-4 font-bold text-white">{r.strain_name}</td>
+                                                        <td className="px-6 py-4 font-bold text-white">{r.strain_name || '—'}</td>
                                                         <td className="px-6 py-4 text-slate-400">{r.species_name || '—'}</td>
                                                         <td className="px-6 py-4">
                                                             {hasResult ? (
@@ -284,7 +342,7 @@ export default function PhageInfectivityViewer() {
                                                     </tr>
                                                 );
                                             })}
-                                            {filteredStrains.length === 0 && (
+                                            {paginatedStrains.length === 0 && (
                                                 <tr>
                                                     <td colSpan="4" className="text-center py-16 text-slate-500">
                                                         <div className="flex flex-col items-center justify-center gap-3">
@@ -305,13 +363,13 @@ export default function PhageInfectivityViewer() {
 
             {/* MODAL: Record / Update Result */}
             {recordModalData && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
                     <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col">
                         <div className="p-6 border-b border-white/5 flex items-center justify-between bg-slate-800/50">
                             <div>
                                 <h3 className="text-2xl font-black text-white">Record Plaque Assay</h3>
                                 <p className="text-slate-400 text-base mt-2">
-                                    {selectedPhage?.phage_name} × <span className="text-emerald-400 font-bold">{recordModalData.strain_name}</span>
+                                    {selectedPhage?.phage_name || '—'} × <span className="text-emerald-400 font-bold">{recordModalData.strain_name || '—'}</span>
                                 </p>
                             </div>
                             <button onClick={() => setRecordModalData(null)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">
@@ -319,7 +377,7 @@ export default function PhageInfectivityViewer() {
                             </button>
                         </div>
                         
-                        <div className="p-6 flex flex-col gap-3 bg-slate-900">
+                        <div className="p-6 flex flex-col gap-3 bg-slate-900 relative">
                             <p className="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Select Assay Result</p>
                             {RESULT_OPTIONS.map(opt => (
                                 <button
@@ -340,13 +398,13 @@ export default function PhageInfectivityViewer() {
                                     </div>
                                 </button>
                             ))}
+
+                            {savingStrainId === recordModalData.strain_id && (
+                                <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center rounded-2xl z-10">
+                                    <Loader2 size={40} className="text-emerald-400 animate-spin" />
+                                </div>
+                            )}
                         </div>
-                        
-                        {savingStrainId === recordModalData.strain_id && (
-                            <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center rounded-2xl">
-                                <Loader2 size={40} className="text-emerald-400 animate-spin" />
-                            </div>
-                        )}
                     </div>
                 </div>
             )}
@@ -362,7 +420,7 @@ export default function PhageInfectivityViewer() {
                                     Test Custom Strain
                                 </h3>
                                 <p className="text-emerald-400/80 text-base mt-2">
-                                    Search the entire database and quickly record a test for {selectedPhage?.phage_name}
+                                    Search the entire database and quickly record a test for {selectedPhage?.phage_name || '—'}
                                 </p>
                             </div>
                             <button onClick={() => setShowCustomModal(false)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-3 rounded-xl">
@@ -385,37 +443,44 @@ export default function PhageInfectivityViewer() {
                         </div>
 
                         <div className="flex-1 overflow-auto p-6 bg-slate-950/50">
-                            <div className="space-y-3">
-                                {customFilteredStrains.map(r => {
-                                    const hasResult = r.result && r.result !== '';
-                                    return (
-                                        <div key={r.strain_id} className="bg-slate-900 border border-white/5 rounded-xl p-5 flex items-center justify-between hover:bg-slate-800/50 transition-colors group">
-                                            <div>
-                                                <div className="font-bold text-white text-xl">{r.strain_name}</div>
-                                                <div className="text-slate-400 text-base mt-1">{r.species_name || 'Unknown Species'}</div>
+                            {loadingAsync ? (
+                                <div className="flex flex-col items-center justify-center py-16 gap-4">
+                                    <Loader2 size={32} className="text-emerald-400 animate-spin" />
+                                    <div className="text-slate-500">Searching global database...</div>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {asyncStrains.map(r => {
+                                        const hasResult = r.result && r.result !== '';
+                                        return (
+                                            <div key={r.strain_id} className="bg-slate-900 border border-white/5 rounded-xl p-5 flex items-center justify-between hover:bg-slate-800/50 transition-colors group">
+                                                <div>
+                                                    <div className="font-bold text-white text-xl">{r.strain_name || '—'}</div>
+                                                    <div className="text-slate-400 text-base mt-1">{r.species_name || 'Unknown Species'}</div>
+                                                    
+                                                    {hasResult && (
+                                                        <div className="mt-3 text-sm font-semibold text-slate-500 bg-slate-950 inline-block px-3 py-1.5 rounded-lg border border-white/5">
+                                                            Current Result: <span className={RESULT_STYLE[r.result]?.text}>{RESULT_OPTIONS.find(o => o.value === r.result)?.label}</span>
+                                                        </div>
+                                                    )}
+                                                </div>
                                                 
-                                                {hasResult && (
-                                                    <div className="mt-3 text-sm font-semibold text-slate-500 bg-slate-950 inline-block px-3 py-1.5 rounded-lg border border-white/5">
-                                                        Current Result: <span className={RESULT_STYLE[r.result]?.text}>{RESULT_OPTIONS.find(o => o.value === r.result)?.label}</span>
-                                                    </div>
-                                                )}
+                                                <button
+                                                    onClick={() => setRecordModalData(r)}
+                                                    className="px-6 py-3 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/20 hover:border-emerald-500 rounded-xl font-bold text-base transition-all shadow-sm"
+                                                >
+                                                    {hasResult ? 'Update Result' : 'Record Result'}
+                                                </button>
                                             </div>
-                                            
-                                            <button
-                                                onClick={() => setRecordModalData(r)}
-                                                className="px-6 py-3 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/20 hover:border-emerald-500 rounded-xl font-bold text-base transition-all shadow-sm"
-                                            >
-                                                {hasResult ? 'Update Result' : 'Record Result'}
-                                            </button>
+                                        );
+                                    })}
+                                    {asyncStrains.length === 0 && (
+                                        <div className="text-center py-16 text-slate-500">
+                                            <p className="text-lg">No strains match your search.</p>
                                         </div>
-                                    );
-                                })}
-                                {customFilteredStrains.length === 0 && (
-                                    <div className="text-center py-16 text-slate-500">
-                                        <p className="text-lg">No strains match your search.</p>
-                                    </div>
-                                )}
-                            </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

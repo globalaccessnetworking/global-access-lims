@@ -240,7 +240,6 @@ exports.getProfile = async (req, res) => {
 };
 
 // ─── GET /api/interactions/all-phages ─────────────────────────────────────────
-// Phase 182: Full phage list for the dropdown selector
 exports.getAllPhages = async (req, res) => {
     try {
         const { sequelize } = require('../models');
@@ -248,13 +247,13 @@ exports.getAllPhages = async (req, res) => {
         const s = search.trim().replace(/'/g, "''");
 
         const whereClause = s
-            ? `WHERE n."Bacteriophage_Name" ILIKE '%${s}%' OR b.id::text = '${s}'`
+            ? `WHERE n."Bacteriophage_Name" ILIKE '%${s}%' OR b."Glycerol_Stock_tube_Label" ILIKE '%${s}%' OR b.id::text = '${s}'`
             : '';
 
         const phages = await sequelize.query(
-            `SELECT DISTINCT ON (COALESCE(n."Bacteriophage_Name", b."Bacteriophage_Name"::text))
+            `SELECT
                 b.id,
-                COALESCE(n."Bacteriophage_Name", b."Bacteriophage_Name"::text) AS phage_name,
+                COALESCE(NULLIF(n."Bacteriophage_Name", ''), NULLIF(b."Glycerol_Stock_tube_Label", ''), 'Unnamed Phage (ID: ' || b.id || ')') AS phage_name,
                 hb."Host_Bacteria_No" AS host_bacteria,
                 sp."Species"          AS against_species
              FROM ext_bacteriophages b
@@ -262,7 +261,7 @@ exports.getAllPhages = async (req, res) => {
              LEFT JOIN ext_host_bacteria hb ON hb."id"::text = b."Host_Bacteria"::text
              LEFT JOIN bacterial_species sp ON sp."ID"::text = b."Against_Species"::text
              ${whereClause}
-             ORDER BY COALESCE(n."Bacteriophage_Name", b."Bacteriophage_Name"::text) ASC, b.id ASC`,
+             ORDER BY b.id ASC`,
             { type: QueryTypes.SELECT }
         );
 
@@ -270,6 +269,41 @@ exports.getAllPhages = async (req, res) => {
 
     } catch (err) {
         console.error('[PHAGES] error:', err.message);
+        res.status(500).json({ success: false, error: err.message });
+    }
+};
+
+// ─── GET /api/interactions/strains/search ─────────────────────────────────────
+exports.searchStrains = async (req, res) => {
+    try {
+        const { sequelize } = require('../models');
+        const { q = '', phage_id } = req.query;
+        const s = q.trim().replace(/'/g, "''");
+        const pid = Number(phage_id);
+
+        let whereClause = `WHERE s."Strain_No" IS NOT NULL AND TRIM(s."Strain_No") != ''`;
+        if (s) {
+            whereClause += ` AND (s."Strain_No" ILIKE '%${s}%' OR bs."Species" ILIKE '%${s}%')`;
+        }
+
+        const strains = await sequelize.query(
+            `SELECT
+                s.id AS strain_id,
+                s."Strain_No"  AS strain_name,
+                bs."Species"   AS species_name,
+                i.result
+             FROM ext_bacterial_strains s
+             LEFT JOIN bacterial_species bs ON bs."ID"::text = s."Specie"::text
+             LEFT JOIN ext_phage_host_interactions i ON i.strain_id = s.id AND i.phage_id = ${pid}
+             ${whereClause}
+             ORDER BY s."Strain_No" ASC
+             LIMIT 50`,
+            { type: QueryTypes.SELECT }
+        );
+
+        res.json({ success: true, strains });
+    } catch (err) {
+        console.error('[STRAINS SEARCH] error:', err.message);
         res.status(500).json({ success: false, error: err.message });
     }
 };
