@@ -338,12 +338,53 @@ const DynamicModule = ({ type: propsType }) => {
 
     const filteredData = useMemo(() => {
         if (!searchTerm) return moduleData.data;
-        const lower = searchTerm.toLowerCase();
-        return moduleData.data.filter(item =>
-            Object.values(item).some(val =>
-                String(val).toLowerCase().includes(lower)
-            )
-        );
+        const lower = searchTerm.toLowerCase().trim();
+        
+        // Pass 1: Strict Exact Priority Match
+        // Check if there is any EXACT match in identifier columns
+        const exactMatches = moduleData.data.filter(item => {
+            return Object.entries(item).some(([key, val]) => {
+                if (!val) return false;
+                const k = key.toLowerCase();
+                // Check if it's an ID-like column
+                if (k.includes('no') || k.includes('id') || k.includes('label') || k.includes('name')) {
+                    return String(val).toLowerCase().trim() === lower;
+                }
+                return false;
+            });
+        });
+
+        // If we found an exact match, ONLY return those exact matches!
+        if (exactMatches.length > 0) {
+            return exactMatches;
+        }
+
+        // Pass 2: Fallback with Smart Column Boundaries
+        // If no exact match, do a partial match, BUT protect ID columns from bleeding
+        // We use a regex word boundary to ensure "PA1" doesn't match "PA16", 
+        // but it CAN match "PA1-mutant" or "Tube PA1".
+        
+        // Build a regex that matches the term only if it's not immediately surrounded by alphanumeric characters
+        // Note: Javascript \b boundary treats '-' as a word boundary, which is perfect for "PA1-6".
+        // We escape the search term to prevent regex injection errors.
+        const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const boundaryRegex = new RegExp(`(^|[^a-zA-Z0-9])${escapeRegExp(lower)}([^a-zA-Z0-9]|$)`, 'i');
+
+        return moduleData.data.filter(item => {
+            return Object.entries(item).some(([key, val]) => {
+                if (!val) return false;
+                const k = key.toLowerCase();
+                const strVal = String(val).toLowerCase();
+                
+                if (k.includes('no') || k.includes('id') || k.includes('label')) {
+                    // Smart Boundary Match for ID columns (blocks 'PA1' matching 'PA16')
+                    return boundaryRegex.test(strVal);
+                }
+
+                // Normal partial match for generic text columns (Species, Details, etc.)
+                return strVal.includes(lower);
+            });
+        });
     }, [moduleData.data, searchTerm]);
 
     const handleExportCSV = () => {
