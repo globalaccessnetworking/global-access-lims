@@ -171,9 +171,7 @@ exports.upsertInteraction = async (req, res) => {
 };
 
 // ─── GET /api/interactions/profile/:phageId ───────────────────────────────────
-// Phase 182: Dual-source profile.
-// Source 1 (Legacy): ext_bacteriophages.Against_Species → bacterial_species → ext_bacterial_strains
-// Source 2 (Recorded): ext_phage_host_interactions
+// Single-source unified profile matching ALL bacterial strains
 exports.getProfile = async (req, res) => {
     try {
         const { sequelize } = require('../models');
@@ -183,7 +181,7 @@ exports.getProfile = async (req, res) => {
 
         console.log(`[PROFILE] Loading profile for phage_id = ${numericId}`);
 
-        // Get phage details including legacy Host_Bacteria and Against_Species
+        // Get phage details
         const [phage] = await sequelize.query(
             `SELECT
                 b.id,
@@ -203,39 +201,10 @@ exports.getProfile = async (req, res) => {
 
         if (!phage) return res.status(404).json({ success: false, error: 'Phage not found.' });
 
-        // Source 1: Legacy strains matched by species
-        // Phase 183 FIX: ext_bacterial_strains."Specie" is a NUMERIC FK to bacterial_species.ID.
-        // ext_bacteriophages."Against_Species" is ALSO a numeric FK to bacterial_species.ID.
-        // Correct approach: match the two integer FKs directly (ID-to-ID),
-        // then JOIN bacterial_species only for the human-readable display label.
-        // NEVER try to match the resolved text string against the numeric Specie column.
-        let legacyStrains = [];
-        if (phage.against_species_id !== null && phage.against_species_id !== undefined) {
-            const speciesId = Number(phage.against_species_id);
-            console.log(`[PROFILE] Matching strains where Specie ID = ${speciesId} (= "${phage.against_species_name}")`);
-            legacyStrains = await sequelize.query(
-                `SELECT
-                    s."Strain_No"  AS strain_name,
-                    bs."Species"   AS species_name,
-                    s."Detail_of_Bacterial_Strain" AS detail,
-                    s."Glycerol_Stock_tube_label"   AS stock_label,
-                    'legacy' AS source
-                 FROM ext_bacterial_strains s
-                 LEFT JOIN bacterial_species bs ON bs."ID"::text = s."Specie"::text
-                 WHERE s."Specie"::text = '${speciesId}'
-                   AND s."Strain_No" IS NOT NULL 
-                   AND TRIM(s."Strain_No") != ''
-                 ORDER BY s."Strain_No" ASC
-                 LIMIT 1000`,
-                { type: QueryTypes.SELECT }
-            ).catch(err => { console.error('[PROFILE] legacy strain error:', err.message); return []; });
-        } else {
-            console.log(`[PROFILE] No Against_Species ID set for phage_id=${numericId} — skipping legacy lookup`);
-        }
-
-        // Source 2: Recorded interactions (junction table)
-        const recordedInteractions = await sequelize.query(
+        // Fetch ALL strains joined with any recorded results for this phage
+        const allStrains = await sequelize.query(
             `SELECT
+                s.id AS strain_id,
                 s."Strain_No"  AS strain_name,
                 bs."Species"   AS species_name,
                 s."Detail_of_Bacterial_Strain" AS detail,
@@ -243,27 +212,25 @@ exports.getProfile = async (req, res) => {
                 i.result,
                 i.date_tested,
                 i.tested_by,
-                i.notes,
-                'recorded' AS source
-             FROM ext_phage_host_interactions i
-             JOIN ext_bacterial_strains s ON i.strain_id = s.id
+                CASE WHEN i.result IS NOT NULL THEN 'recorded' ELSE 'untested' END AS status
+             FROM ext_bacterial_strains s
              LEFT JOIN bacterial_species bs ON bs."ID"::text = s."Specie"::text
-             WHERE i.phage_id = ${numericId}
-             ORDER BY i.result DESC, s."Strain_No" ASC`,
+             LEFT JOIN ext_phage_host_interactions i ON i.strain_id = s.id AND i.phage_id = ${numericId}
+             WHERE s."Strain_No" IS NOT NULL 
+               AND TRIM(s."Strain_No") != ''
+             ORDER BY s."Strain_No" ASC`,
             { type: QueryTypes.SELECT }
-        ).catch(err => { console.error('[PROFILE] recorded error:', err.message); return []; });
+        ).catch(err => { console.error('[PROFILE] all strains error:', err.message); return []; });
 
-        console.log(`[PROFILE] Legacy strains: ${legacyStrains.length}, Recorded: ${recordedInteractions.length}`);
+        console.log(`[PROFILE] Total Strains: ${allStrains.length}`);
 
         res.json({
             success: true,
             phage_name: phage.phage_name || `Phage #${numericId}`,
             host_bacteria: phage.host_bacteria_name || null,
             against_species: phage.against_species_name || null,
-            legacy_strains: legacyStrains,
-            recorded_interactions: recordedInteractions,
-            total_legacy: legacyStrains.length,
-            total_recorded: recordedInteractions.length
+            strains: allStrains,
+            total_strains: allStrains.length
         });
 
     } catch (err) {
