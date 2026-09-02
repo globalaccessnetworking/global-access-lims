@@ -201,7 +201,7 @@ exports.getProfile = async (req, res) => {
 
         if (!phage) return res.status(404).json({ success: false, error: 'Phage not found.' });
 
-        // Fetch ALL strains joined with any recorded results for this phage
+        // Fetch ONLY strains joined with recorded results for this phage
         const allStrains = await sequelize.query(
             `SELECT
                 s.id AS strain_id,
@@ -212,10 +212,10 @@ exports.getProfile = async (req, res) => {
                 i.result,
                 i.date_tested,
                 i.tested_by,
-                CASE WHEN i.result IS NOT NULL THEN 'recorded' ELSE 'untested' END AS status
+                'recorded' AS status
              FROM ext_bacterial_strains s
              LEFT JOIN bacterial_species bs ON bs."ID"::text = s."Specie"::text
-             LEFT JOIN ext_phage_host_interactions i ON i.strain_id = s.id AND i.phage_id = ${numericId}
+             INNER JOIN ext_phage_host_interactions i ON i.strain_id = s.id AND i.phage_id = ${numericId}
              WHERE s."Strain_No" IS NOT NULL 
                AND TRIM(s."Strain_No") != ''
              ORDER BY s."Strain_No" ASC`,
@@ -251,7 +251,7 @@ exports.getAllPhages = async (req, res) => {
             : '';
 
         const phages = await sequelize.query(
-            `SELECT
+            `SELECT DISTINCT ON (COALESCE(NULLIF(n."Bacteriophage_Name", ''), NULLIF(b."Glycerol_Stock_tube_Label", ''), 'Unnamed Phage (ID: ' || b.id || ')'))
                 b.id,
                 COALESCE(NULLIF(n."Bacteriophage_Name", ''), NULLIF(b."Glycerol_Stock_tube_Label", ''), 'Unnamed Phage (ID: ' || b.id || ')') AS phage_name,
                 hb."Host_Bacteria_No" AS host_bacteria,
@@ -261,7 +261,7 @@ exports.getAllPhages = async (req, res) => {
              LEFT JOIN ext_host_bacteria hb ON hb."id"::text = b."Host_Bacteria"::text
              LEFT JOIN bacterial_species sp ON sp."ID"::text = b."Against_Species"::text
              ${whereClause}
-             ORDER BY b.id ASC`,
+             ORDER BY COALESCE(NULLIF(n."Bacteriophage_Name", ''), NULLIF(b."Glycerol_Stock_tube_Label", ''), 'Unnamed Phage (ID: ' || b.id || ')') ASC, b.id ASC`,
             { type: QueryTypes.SELECT }
         );
 

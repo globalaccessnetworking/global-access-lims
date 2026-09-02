@@ -323,20 +323,16 @@ export default function PhageInfectivityViewer() {
                                                         <td className="px-6 py-4 font-bold text-white">{r.strain_name || '—'}</td>
                                                         <td className="px-6 py-4 text-slate-400">{r.species_name || '—'}</td>
                                                         <td className="px-6 py-4">
-                                                            {hasResult ? (
-                                                                <span className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold border ${RESULT_STYLE[r.result]?.bg} ${RESULT_STYLE[r.result]?.text} ${RESULT_STYLE[r.result]?.border}`}>
-                                                                    {RESULT_OPTIONS.find(o => o.value === r.result)?.label || r.result}
-                                                                </span>
-                                                            ) : (
-                                                                <span className="text-slate-600 text-sm italic">— Untested —</span>
-                                                            )}
+                                                            <span className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold border ${RESULT_STYLE[r.result]?.bg} ${RESULT_STYLE[r.result]?.text} ${RESULT_STYLE[r.result]?.border}`}>
+                                                                {RESULT_OPTIONS.find(o => o.value === r.result)?.label || r.result}
+                                                            </span>
                                                         </td>
                                                         <td className="px-6 py-4 text-right">
                                                             <button 
                                                                 onClick={() => setRecordModalData(r)}
                                                                 className="inline-flex items-center gap-2 px-5 py-2.5 text-slate-300 hover:text-emerald-400 hover:bg-emerald-500/10 border border-slate-700 hover:border-emerald-500/30 rounded-lg transition-all font-bold text-sm tracking-wide shadow-sm"
                                                             >
-                                                                <Edit3 size={16} /> {hasResult ? 'Update' : 'Record'}
+                                                                <Edit3 size={16} /> Update
                                                             </button>
                                                         </td>
                                                     </tr>
