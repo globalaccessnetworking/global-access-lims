@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import {
-    Search, FlaskConical, ChevronRight, Download, Microscope,
-    Loader2, Filter, Edit3, Save, CheckCircle
+    Search, FlaskConical, ChevronRight, Microscope,
+    Loader2, Filter, Edit3, X, Plus
 } from 'lucide-react';
 
 const api = axios.create({ baseURL: '/api' });
 
 const RESULT_OPTIONS = [
-    { value: '+++', label: '+++  Complete Lysis',  color: 'bg-emerald-500' },
-    { value: '++',  label: '++   Strong Lysis',    color: 'bg-green-500' },
-    { value: '+',   label: '+    Partial Lysis',   color: 'bg-lime-500' },
-    { value: '±',   label: '±    Turbid Plaques',  color: 'bg-yellow-500' },
-    { value: '-',   label: '-    No Infection',    color: 'bg-red-500' },
+    { value: '+++', label: '+++ Complete Lysis',  color: 'bg-emerald-500', desc: 'Clear plaque, robust infection' },
+    { value: '++',  label: '++ Strong Lysis',    color: 'bg-green-500', desc: 'Slightly turbid but strong infection' },
+    { value: '+',   label: '+ Partial Lysis',   color: 'bg-lime-500', desc: 'Weak or partial clearing' },
+    { value: '±',   label: '± Turbid Plaques',  color: 'bg-yellow-500', desc: 'Very turbid/spotty plaques' },
+    { value: '-',   label: '- No Infection',    color: 'bg-red-500', desc: 'No visible plaque formation' },
 ];
 
 const RESULT_STYLE = {
@@ -34,9 +34,13 @@ export default function PhageInfectivityViewer() {
     // Filter states for table
     const [strainSearch,    setStrainSearch]    = useState('');
     
-    // Inline editing state
-    const [editingStrainId, setEditingStrainId] = useState(null);
+    // Modal states
+    const [recordModalData, setRecordModalData] = useState(null); // The strain being edited
     const [savingStrainId,  setSavingStrainId]  = useState(null);
+    
+    // Custom strain test modal state
+    const [showCustomModal, setShowCustomModal] = useState(false);
+    const [customSearch,    setCustomSearch]    = useState('');
 
     // Load phage list
     const loadPhages = useCallback(async (q = '') => {
@@ -64,7 +68,8 @@ export default function PhageInfectivityViewer() {
         setSelectedPhage(phage);
         setProfile(null);
         setStrainSearch('');
-        setEditingStrainId(null);
+        setRecordModalData(null);
+        setShowCustomModal(false);
         setLoadingProfile(true);
         try {
             const res = await api.get(`/interactions/profile/${phage.id}`);
@@ -76,12 +81,10 @@ export default function PhageInfectivityViewer() {
         }
     }, []);
 
-    // Save inline interaction
+    // Save interaction
     const saveInteraction = async (strainId, resultValue) => {
-        if (!selectedPhage || !strainId || !resultValue) {
-            setEditingStrainId(null);
-            return;
-        }
+        if (!selectedPhage || !strainId || !resultValue) return;
+        
         setSavingStrainId(strainId);
         try {
             const res = await api.post('/interactions/upsert', {
@@ -90,7 +93,7 @@ export default function PhageInfectivityViewer() {
                 result:    resultValue,
             });
             if (res.data.success) {
-                // Update local state without reloading full profile
+                // Update local state inline
                 setProfile(prev => {
                     if (!prev) return prev;
                     const updatedStrains = prev.strains.map(s => {
@@ -101,13 +104,14 @@ export default function PhageInfectivityViewer() {
                     });
                     return { ...prev, strains: updatedStrains };
                 });
+                setRecordModalData(null);
+                setShowCustomModal(false);
             }
         } catch (err) {
             console.error('Failed to save interaction:', err);
             alert('Failed to save result. Please try again.');
         } finally {
             setSavingStrainId(null);
-            setEditingStrainId(null);
         }
     };
 
@@ -116,25 +120,31 @@ export default function PhageInfectivityViewer() {
         r.strain_name?.toLowerCase().includes(strainSearch.toLowerCase()) ||
         r.species_name?.toLowerCase().includes(strainSearch.toLowerCase())
     );
+    
+    const customFilteredStrains = (profile?.strains || []).filter(r =>
+        !customSearch || 
+        r.strain_name?.toLowerCase().includes(customSearch.toLowerCase()) ||
+        r.species_name?.toLowerCase().includes(customSearch.toLowerCase())
+    ).slice(0, 50); // Limit to top 50 for quick lookup
 
     return (
-        <div className="min-h-screen bg-slate-950 text-white p-6 pt-24 font-sans">
-            <div className="mb-8">
+        <div className="min-h-screen bg-slate-950 text-white p-6 pt-24 font-sans flex flex-col">
+            <div className="mb-6 shrink-0">
                 <div className="flex items-center gap-3 mb-2">
                     <div className="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center border border-emerald-500/20">
                         <FlaskConical size={20} className="text-emerald-400" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-black text-white tracking-tight">Phage-Host Matrix</h1>
-                        <p className="text-slate-500 text-sm">Select a bacteriophage to view and record its plaque assay interactions against all bacterial strains</p>
+                        <p className="text-slate-500 text-sm">Select a bacteriophage to view and record its plaque assay interactions against bacterial strains</p>
                     </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
                 {/* LEFT: Phage Selector */}
-                <div className="lg:col-span-4 flex flex-col gap-4">
-                    <div className="relative">
+                <div className="lg:col-span-3 flex flex-col gap-4">
+                    <div className="relative shrink-0">
                         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                         <input
                             type="text"
@@ -145,20 +155,22 @@ export default function PhageInfectivityViewer() {
                         />
                     </div>
 
-                    <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden flex flex-col h-[calc(100vh-220px)]">
+                    <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden flex flex-col flex-1 h-full min-h-[500px]">
                         <div className="p-4 border-b border-white/5 flex items-center justify-between shrink-0">
                             <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                                Bacteriophages ({phages.filter(p => p.phage_name).length} named)
+                                Bacteriophages ({phages.filter(p => p.phage_name).length})
                             </span>
                             {loadingPhages && <Loader2 size={12} className="text-emerald-400 animate-spin" />}
                         </div>
-                        <div className="overflow-y-auto flex-1">
+                        <div className="overflow-y-auto flex-1 p-2">
                             {phages.filter(p => p.phage_name).map(p => (
                                 <button
                                     key={p.id}
                                     onClick={() => loadProfile(p)}
-                                    className={`w-full text-left px-4 py-3 border-b border-white/5 transition-all hover:bg-slate-800/50 flex items-center justify-between group ${
-                                        selectedPhage?.id === p.id ? 'bg-emerald-500/10 border-l-2 border-l-emerald-500' : ''
+                                    className={`w-full text-left px-3 py-3 rounded-xl mb-1 transition-all flex items-center justify-between group ${
+                                        selectedPhage?.id === p.id 
+                                            ? 'bg-emerald-500/15 border border-emerald-500/30' 
+                                            : 'border border-transparent hover:bg-slate-800/50'
                                     }`}
                                 >
                                     <div className="min-w-0">
@@ -175,9 +187,9 @@ export default function PhageInfectivityViewer() {
                 </div>
 
                 {/* RIGHT: Unified Strains Panel */}
-                <div className="lg:col-span-8">
+                <div className="lg:col-span-9 flex flex-col h-full min-h-[700px]">
                     {!selectedPhage ? (
-                        <div className="h-full min-h-[400px] bg-slate-900 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-4 p-12">
+                        <div className="flex-1 bg-slate-900 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-4 p-12">
                             <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center">
                                 <Microscope size={28} className="text-slate-600" />
                             </div>
@@ -187,111 +199,98 @@ export default function PhageInfectivityViewer() {
                             </div>
                         </div>
                     ) : loadingProfile ? (
-                        <div className="h-full min-h-[400px] bg-slate-900 border border-white/5 rounded-2xl flex items-center justify-center gap-3">
+                        <div className="flex-1 bg-slate-900 border border-white/5 rounded-2xl flex items-center justify-center gap-3">
                             <Loader2 size={20} className="text-emerald-400 animate-spin" />
                             <span className="text-slate-500 text-sm">Loading strains...</span>
                         </div>
                     ) : (
-                        <div className="bg-slate-900 border border-white/5 rounded-2xl flex flex-col h-[calc(100vh-220px)]">
+                        <div className="bg-slate-900 border border-white/5 rounded-2xl flex flex-col flex-1 overflow-hidden shadow-2xl h-full">
                             {/* Header */}
-                            <div className="p-6 border-b border-white/5 bg-gradient-to-r from-emerald-500/5 to-transparent shrink-0">
-                                <h2 className="text-xl font-black text-white">{selectedPhage.phage_name}</h2>
-                                <div className="flex flex-wrap gap-2 mt-2">
-                                    {selectedPhage.against_species && (
-                                        <span className="px-2 py-0.5 bg-purple-500/15 border border-purple-500/25 rounded-lg text-purple-400 text-xs font-semibold">
-                                            🎯 Target Species: {selectedPhage.against_species}
-                                        </span>
-                                    )}
-                                    {profile?.host_bacteria && (
-                                        <span className="px-2 py-0.5 bg-cyan-500/15 border border-cyan-500/25 rounded-lg text-cyan-400 text-xs font-semibold">
-                                            🦠 Propagation Host: {profile.host_bacteria}
-                                        </span>
-                                    )}
+                            <div className="p-6 border-b border-white/5 bg-gradient-to-r from-emerald-500/5 to-transparent shrink-0 flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-3xl font-black text-white">{selectedPhage.phage_name}</h2>
+                                    <div className="flex flex-wrap gap-2 mt-3">
+                                        {selectedPhage.against_species && (
+                                            <span className="px-3 py-1 bg-purple-500/15 border border-purple-500/25 rounded-lg text-purple-400 text-sm font-semibold">
+                                                🎯 Target Species: {selectedPhage.against_species}
+                                            </span>
+                                        )}
+                                        {profile?.host_bacteria && (
+                                            <span className="px-3 py-1 bg-cyan-500/15 border border-cyan-500/25 rounded-lg text-cyan-400 text-sm font-semibold">
+                                                🦠 Propagation Host: {profile.host_bacteria}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
+                                <button 
+                                    onClick={() => setShowCustomModal(true)}
+                                    className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition-colors flex items-center gap-2 shadow-lg shadow-emerald-500/20"
+                                >
+                                    <Plus size={18} /> Test Custom Strain
+                                </button>
                             </div>
 
                             {/* Content */}
                             <div className="p-6 flex-1 flex flex-col overflow-hidden">
                                 <div className="flex items-center justify-between mb-4 shrink-0">
-                                    <div className="relative flex-1 max-w-xs">
-                                        <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+                                    <div className="relative flex-1 max-w-md">
+                                        <Filter size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                                         <input
-                                            type="text" placeholder="Filter strains..."
+                                            type="text" placeholder="Filter strains in matrix..."
                                             value={strainSearch} onChange={e => setStrainSearch(e.target.value)}
-                                            className="w-full bg-slate-800 border border-white/10 rounded-lg py-2 pl-9 pr-3 text-sm text-white focus:border-emerald-500 outline-none"
+                                            className="w-full bg-slate-800 border border-white/10 rounded-xl py-3 pl-12 pr-4 text-base text-white focus:border-emerald-500 outline-none"
                                         />
                                     </div>
-                                    <div className="text-slate-400 text-xs font-semibold uppercase tracking-wider ml-4">
-                                        All Bacterial Strains ({profile?.total_strains || 0})
+                                    <div className="text-slate-400 text-sm font-semibold uppercase tracking-wider ml-4 bg-slate-800/50 px-4 py-3 rounded-xl border border-white/5">
+                                        Total Matrix Strains: <span className="text-white font-bold">{profile?.total_strains || 0}</span>
                                     </div>
                                 </div>
                                 
-                                <div className="overflow-auto rounded-xl border border-white/5 flex-1">
-                                    <table className="w-full text-sm">
+                                <div className="overflow-auto rounded-xl border border-white/5 flex-1 bg-slate-950/50">
+                                    <table className="w-full text-left">
                                         <thead className="sticky top-0 bg-slate-900 z-10 shadow-md">
                                             <tr className="bg-slate-800/50 border-b border-white/5">
-                                                <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Strain No.</th>
-                                                <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Species</th>
-                                                <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Stock Label</th>
-                                                <th className="text-left px-4 py-3 text-slate-400 text-xs font-semibold uppercase tracking-wider">Assay Result</th>
+                                                <th className="px-6 py-4 text-slate-400 text-sm font-semibold uppercase tracking-wider w-1/4">Strain No.</th>
+                                                <th className="px-6 py-4 text-slate-400 text-sm font-semibold uppercase tracking-wider w-1/4">Species</th>
+                                                <th className="px-6 py-4 text-slate-400 text-sm font-semibold uppercase tracking-wider w-1/4">Assay Result</th>
+                                                <th className="px-6 py-4 text-slate-400 text-sm font-semibold uppercase tracking-wider w-1/4 text-right">Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody className="divide-y divide-white/5">
                                             {filteredStrains.map((r) => {
-                                                const isEditing = editingStrainId === r.strain_id;
-                                                const isSaving  = savingStrainId === r.strain_id;
                                                 const hasResult = r.result && r.result !== '';
                                                 
                                                 return (
-                                                    <tr key={r.strain_id} className="border-b border-white/5 hover:bg-slate-800/30 transition-colors">
-                                                        <td className="px-4 py-3 font-bold text-white">{r.strain_name}</td>
-                                                        <td className="px-4 py-3 text-slate-400 text-xs">{r.species_name || '—'}</td>
-                                                        <td className="px-4 py-3 text-slate-400 text-xs">{r.stock_label || '—'}</td>
-                                                        <td className="px-4 py-3">
-                                                            {isEditing ? (
-                                                                <div className="flex items-center gap-2">
-                                                                    <select
-                                                                        autoFocus
-                                                                        defaultValue={r.result || ''}
-                                                                        onChange={(e) => saveInteraction(r.strain_id, e.target.value)}
-                                                                        onBlur={() => setEditingStrainId(null)}
-                                                                        disabled={isSaving}
-                                                                        className="bg-slate-950 border border-emerald-500/50 text-white text-xs rounded-lg px-2 py-1.5 outline-none focus:border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.2)] w-48"
-                                                                    >
-                                                                        <option value="" disabled>Select Result...</option>
-                                                                        {RESULT_OPTIONS.map(opt => (
-                                                                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {isSaving && <Loader2 size={14} className="text-emerald-400 animate-spin" />}
-                                                                </div>
+                                                    <tr key={r.strain_id} className="hover:bg-slate-800/50 transition-colors group text-base">
+                                                        <td className="px-6 py-4 font-bold text-white">{r.strain_name}</td>
+                                                        <td className="px-6 py-4 text-slate-400">{r.species_name || '—'}</td>
+                                                        <td className="px-6 py-4">
+                                                            {hasResult ? (
+                                                                <span className={`inline-flex items-center px-4 py-2 rounded-lg text-sm font-bold border ${RESULT_STYLE[r.result]?.bg} ${RESULT_STYLE[r.result]?.text} ${RESULT_STYLE[r.result]?.border}`}>
+                                                                    {RESULT_OPTIONS.find(o => o.value === r.result)?.label || r.result}
+                                                                </span>
                                                             ) : (
-                                                                <div className="flex items-center gap-3 group/edit">
-                                                                    {hasResult ? (
-                                                                        <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-bold border ${RESULT_STYLE[r.result]?.bg} ${RESULT_STYLE[r.result]?.text} ${RESULT_STYLE[r.result]?.border}`}>
-                                                                            {r.result}
-                                                                        </span>
-                                                                    ) : (
-                                                                        <span className="text-slate-600 text-xs italic">—</span>
-                                                                    )}
-                                                                    
-                                                                    <button 
-                                                                        onClick={() => setEditingStrainId(r.strain_id)}
-                                                                        className="p-1.5 text-slate-500 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-md transition-all opacity-0 group-hover/edit:opacity-100"
-                                                                        title="Edit Result"
-                                                                    >
-                                                                        <Edit3 size={14} />
-                                                                    </button>
-                                                                </div>
+                                                                <span className="text-slate-600 text-sm italic">— Untested —</span>
                                                             )}
+                                                        </td>
+                                                        <td className="px-6 py-4 text-right">
+                                                            <button 
+                                                                onClick={() => setRecordModalData(r)}
+                                                                className="inline-flex items-center gap-2 px-5 py-2.5 text-slate-300 hover:text-emerald-400 hover:bg-emerald-500/10 border border-slate-700 hover:border-emerald-500/30 rounded-lg transition-all font-bold text-sm tracking-wide shadow-sm"
+                                                            >
+                                                                <Edit3 size={16} /> {hasResult ? 'Update' : 'Record'}
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                 );
                                             })}
                                             {filteredStrains.length === 0 && (
                                                 <tr>
-                                                    <td colSpan="4" className="text-center py-12 text-slate-500">
-                                                        No strains match filter.
+                                                    <td colSpan="4" className="text-center py-16 text-slate-500">
+                                                        <div className="flex flex-col items-center justify-center gap-3">
+                                                            <Search size={32} className="text-slate-700" />
+                                                            <p className="text-lg">No strains match your filter criteria.</p>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             )}
@@ -303,6 +302,124 @@ export default function PhageInfectivityViewer() {
                     )}
                 </div>
             </div>
+
+            {/* MODAL: Record / Update Result */}
+            {recordModalData && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+                    <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col">
+                        <div className="p-6 border-b border-white/5 flex items-center justify-between bg-slate-800/50">
+                            <div>
+                                <h3 className="text-2xl font-black text-white">Record Plaque Assay</h3>
+                                <p className="text-slate-400 text-base mt-2">
+                                    {selectedPhage?.phage_name} × <span className="text-emerald-400 font-bold">{recordModalData.strain_name}</span>
+                                </p>
+                            </div>
+                            <button onClick={() => setRecordModalData(null)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-2 rounded-xl">
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="p-6 flex flex-col gap-3 bg-slate-900">
+                            <p className="text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider">Select Assay Result</p>
+                            {RESULT_OPTIONS.map(opt => (
+                                <button
+                                    key={opt.value}
+                                    onClick={() => saveInteraction(recordModalData.strain_id, opt.value)}
+                                    disabled={savingStrainId === recordModalData.strain_id}
+                                    className={`w-full text-left p-5 rounded-xl border transition-all flex flex-col gap-1.5 ${
+                                        recordModalData.result === opt.value 
+                                            ? `${RESULT_STYLE[opt.value].bg} ${RESULT_STYLE[opt.value].border} ring-2 ring-emerald-500/50 shadow-lg` 
+                                            : 'border-white/5 bg-slate-950 hover:border-slate-600 hover:bg-slate-800'
+                                    }`}
+                                >
+                                    <div className={`font-bold text-xl ${recordModalData.result === opt.value ? RESULT_STYLE[opt.value].text : 'text-slate-200'}`}>
+                                        {opt.label}
+                                    </div>
+                                    <div className="text-sm text-slate-400">
+                                        {opt.desc}
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                        
+                        {savingStrainId === recordModalData.strain_id && (
+                            <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center rounded-2xl">
+                                <Loader2 size={40} className="text-emerald-400 animate-spin" />
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL: Test Custom Strain */}
+            {showCustomModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+                    <div className="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col h-[85vh]">
+                        <div className="p-8 border-b border-white/5 flex items-center justify-between bg-emerald-500/10">
+                            <div>
+                                <h3 className="text-2xl font-black text-white flex items-center gap-3">
+                                    <Search size={24} className="text-emerald-400" />
+                                    Test Custom Strain
+                                </h3>
+                                <p className="text-emerald-400/80 text-base mt-2">
+                                    Search the entire database and quickly record a test for {selectedPhage?.phage_name}
+                                </p>
+                            </div>
+                            <button onClick={() => setShowCustomModal(false)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 p-3 rounded-xl">
+                                <X size={24} />
+                            </button>
+                        </div>
+                        
+                        <div className="p-6 border-b border-white/5 bg-slate-950 shrink-0">
+                            <div className="relative">
+                                <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-500" />
+                                <input
+                                    type="text"
+                                    placeholder="Type to search ANY bacterial strain in the database..."
+                                    value={customSearch}
+                                    onChange={e => setCustomSearch(e.target.value)}
+                                    autoFocus
+                                    className="w-full bg-slate-900 border border-emerald-500/30 rounded-xl py-5 pl-14 pr-6 text-lg text-white focus:border-emerald-500 outline-none shadow-lg shadow-emerald-500/10"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex-1 overflow-auto p-6 bg-slate-950/50">
+                            <div className="space-y-3">
+                                {customFilteredStrains.map(r => {
+                                    const hasResult = r.result && r.result !== '';
+                                    return (
+                                        <div key={r.strain_id} className="bg-slate-900 border border-white/5 rounded-xl p-5 flex items-center justify-between hover:bg-slate-800/50 transition-colors group">
+                                            <div>
+                                                <div className="font-bold text-white text-xl">{r.strain_name}</div>
+                                                <div className="text-slate-400 text-base mt-1">{r.species_name || 'Unknown Species'}</div>
+                                                
+                                                {hasResult && (
+                                                    <div className="mt-3 text-sm font-semibold text-slate-500 bg-slate-950 inline-block px-3 py-1.5 rounded-lg border border-white/5">
+                                                        Current Result: <span className={RESULT_STYLE[r.result]?.text}>{RESULT_OPTIONS.find(o => o.value === r.result)?.label}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            
+                                            <button
+                                                onClick={() => setRecordModalData(r)}
+                                                className="px-6 py-3 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/20 hover:border-emerald-500 rounded-xl font-bold text-base transition-all shadow-sm"
+                                            >
+                                                {hasResult ? 'Update Result' : 'Record Result'}
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                                {customFilteredStrains.length === 0 && (
+                                    <div className="text-center py-16 text-slate-500">
+                                        <p className="text-lg">No strains match your search.</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
