@@ -201,9 +201,20 @@ exports.getProfile = async (req, res) => {
 
         if (!phage) return res.status(404).json({ success: false, error: 'Phage not found.' });
 
-        // Fetch ONLY strains joined with recorded results for this phage
+        // Safely aggregate all duplicated IDs for this phage_name so we don't miss interactions
+        const safeName = (phage.phage_name || '').replace(/'/g, "''");
+        const duplicateIdsQuery = await sequelize.query(
+            `SELECT b.id FROM ext_bacteriophages b 
+             LEFT JOIN phage_names n ON n."ID"::text = b."Bacteriophage_Name"::text 
+             WHERE COALESCE(NULLIF(n."Bacteriophage_Name", ''), NULLIF(b."Glycerol_Stock_tube_Label", ''), 'Unnamed Phage (ID: ' || b.id || ')') = '${safeName}'`,
+             { type: QueryTypes.SELECT }
+        ).catch(() => [{ id: numericId }]);
+        const allIds = duplicateIdsQuery.map(r => r.id);
+        const idList = allIds.length > 0 ? allIds.join(',') : numericId;
+
+        // Fetch ONLY strains joined with recorded results for this phage (or any of its duplicates)
         const allStrains = await sequelize.query(
-            `SELECT
+            `SELECT DISTINCT ON (s.id)
                 s.id AS strain_id,
                 s."Strain_No"  AS strain_name,
                 bs."Species"   AS species_name,
@@ -215,10 +226,10 @@ exports.getProfile = async (req, res) => {
                 'recorded' AS status
              FROM ext_bacterial_strains s
              LEFT JOIN bacterial_species bs ON bs."ID"::text = s."Specie"::text
-             INNER JOIN ext_phage_host_interactions i ON i.strain_id = s.id AND i.phage_id = ${numericId}
+             INNER JOIN ext_phage_host_interactions i ON i.strain_id = s.id AND i.phage_id IN (${idList})
              WHERE s."Strain_No" IS NOT NULL 
                AND TRIM(s."Strain_No") != ''
-             ORDER BY s."Strain_No" ASC`,
+             ORDER BY s.id ASC`,
             { type: QueryTypes.SELECT }
         ).catch(err => { console.error('[PROFILE] all strains error:', err.message); return []; });
 

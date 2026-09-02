@@ -180,9 +180,9 @@ export default function PhageInfectivityViewer() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 h-[calc(100vh-180px)] min-h-[600px]">
                 {/* LEFT: Phage Selector */}
-                <div className="lg:col-span-3 flex flex-col gap-4">
+                <div className="lg:col-span-3 flex flex-col gap-4 h-full">
                     <div className="relative shrink-0">
                         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                         <input
@@ -194,14 +194,14 @@ export default function PhageInfectivityViewer() {
                         />
                     </div>
 
-                    <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden flex flex-col flex-1 h-full min-h-[500px]">
+                    <div className="bg-slate-900 border border-white/5 rounded-2xl overflow-hidden flex flex-col flex-1 min-h-0">
                         <div className="p-4 border-b border-white/5 flex items-center justify-between shrink-0">
                             <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
                                 Bacteriophages ({phages.length})
                             </span>
                             {loadingPhages && <Loader2 size={12} className="text-emerald-400 animate-spin" />}
                         </div>
-                        <div className="overflow-y-auto flex-1 p-2">
+                        <div className="overflow-y-auto flex-1 p-2 custom-scrollbar">
                             {phages.map(p => (
                                 <button
                                     key={p.id}
@@ -226,7 +226,7 @@ export default function PhageInfectivityViewer() {
                 </div>
 
                 {/* RIGHT: Unified Strains Panel */}
-                <div className="lg:col-span-9 flex flex-col h-full min-h-[700px]">
+                <div className="lg:col-span-9 flex flex-col h-full min-h-0">
                     {!selectedPhage ? (
                         <div className="flex-1 bg-slate-900 border border-white/5 rounded-2xl flex flex-col items-center justify-center gap-4 p-12">
                             <div className="w-16 h-16 bg-slate-800 rounded-2xl flex items-center justify-center">
