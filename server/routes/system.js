@@ -629,6 +629,7 @@ router.get('/:tableName/:id', async (req, res) => {
 async function resolveBoxName(boxValue) {
     if (!boxValue) return null;
     const val = String(boxValue).trim();
+    if (!val || val === '' || val === 'null') return null;
 
     // If it's a numeric ID (from dropdown), resolve to display name via box_locations
     if (/^\d+$/.test(val)) {
@@ -637,12 +638,35 @@ async function resolveBoxName(boxValue) {
             { replacements: { v: val }, type: Sequelize.QueryTypes.SELECT }
         );
         if (rows.length > 0 && rows[0].Box_detail) return rows[0].Box_detail.trim();
+        console.warn(`[resolveBoxName] No box_locations row found for numeric ID="${val}"`);
         return null;
     }
 
-    // Already a display name — use directly
-    return val;
+    // Already a display name string — verify it exists in box_position_index (exact match)
+    const exactRows = await sequelize.query(
+        `SELECT DISTINCT box_name FROM box_position_index WHERE box_name = :v LIMIT 1`,
+        { replacements: { v: val }, type: Sequelize.QueryTypes.SELECT }
+    );
+    if (exactRows.length > 0) return exactRows[0].box_name;
+
+    // Try case-insensitive match in box_position_index
+    const ciRows = await sequelize.query(
+        `SELECT DISTINCT box_name FROM box_position_index WHERE LOWER(box_name) = LOWER(:v) LIMIT 1`,
+        { replacements: { v: val }, type: Sequelize.QueryTypes.SELECT }
+    );
+    if (ciRows.length > 0) return ciRows[0].box_name;
+
+    // Try matching against box_locations Box_detail (display name stored in form)
+    const blRows = await sequelize.query(
+        `SELECT "Box_detail" FROM box_locations WHERE LOWER("Box_detail") = LOWER(:v) LIMIT 1`,
+        { replacements: { v: val }, type: Sequelize.QueryTypes.SELECT }
+    );
+    if (blRows.length > 0 && blRows[0].Box_detail) return blRows[0].Box_detail.trim();
+
+    console.warn(`[resolveBoxName] Could not resolve box value="${val}" — skipping sync for this slot`);
+    return null;
 }
+
 
 // Helper to sync box index
 async function syncBoxIndex(tableName, record) {
@@ -668,6 +692,7 @@ async function syncBoxIndex(tableName, record) {
             label: record.Plasmid_Name, 
             mappings: [ 
                 { box: record.Glycerol_Stock_Box, pos: record.Location_in_Box_GS, tube: record.Glycerol_Stock_Tube_Label }, 
+                // DNA Store uses the same Location_in_Box_GS column (confirmed from DB schema — only one position column)
                 { box: record.DNA_Store_Box_Detail, pos: record.Location_in_Box_GS, tube: record.PLasmid_DNA_Label } 
             ] 
         },
@@ -683,6 +708,8 @@ async function syncBoxIndex(tableName, record) {
     const c = config[tableName];
     if (!c) return;
 
+    console.log(`[syncBoxIndex] START: table=${tableName} id=${record.id} label="${c.label || ''}"`);
+
     // Clear all existing slots for this asset in the index
     await sequelize.query(`
         UPDATE box_position_index 
@@ -691,8 +718,12 @@ async function syncBoxIndex(tableName, record) {
     `, { replacements: { table: tableName, id: record.id } });
 
     // Set new slots - must resolve box field (could be ID or name) to the actual box_name used in box_position_index
+    let slotsUpdated = 0;
     for (let m of c.mappings) {
-        if (!m.box || !m.pos) continue;
+        if (!m.box || !m.pos) {
+            console.log(`[syncBoxIndex] Skipping empty mapping: box="${m.box}" pos="${m.pos}"`);
+            continue;
+        }
         const resolvedBoxName = await resolveBoxName(m.box);
         if (!resolvedBoxName) {
             console.warn(`[syncBoxIndex] Could not resolve box "${m.box}" for table ${tableName} record ${record.id}`);
@@ -700,7 +731,8 @@ async function syncBoxIndex(tableName, record) {
         }
         let posArray = m.pos.split(',').map(p => p.trim().toUpperCase().replace(/[\s-]/g, ''));
         for (let posStr of posArray) {
-            await sequelize.query(`
+            if (!posStr) continue;
+            const updateResult = await sequelize.query(`
                 UPDATE box_position_index 
                 SET is_occupied = true, asset_type = :type, asset_id = :id, asset_label = :label, tube_label = :tube, source_table = :table, conflict_flag = false, updated_at = CURRENT_TIMESTAMP
                 WHERE box_name = :box AND position_code = :pos
@@ -715,9 +747,12 @@ async function syncBoxIndex(tableName, record) {
                     pos: posStr 
                 }
             });
-            console.log(`[syncBoxIndex] Updated slot ${resolvedBoxName}/${posStr} for ${tableName} id=${record.id} label="${c.label || ''}" tube="${m.tube || ''}"`);
+            const rowsAffected = Array.isArray(updateResult) ? updateResult[1] : 0;
+            slotsUpdated += (rowsAffected || 0);
+            console.log(`[syncBoxIndex] Slot ${resolvedBoxName}/${posStr} => ${rowsAffected} row(s) updated for ${tableName} id=${record.id}`);
         }
     }
+    console.log(`[syncBoxIndex] DONE: table=${tableName} id=${record.id} — ${slotsUpdated} slot(s) synced`);
 }
 
 // @route   POST api/system/:tableName
