@@ -929,6 +929,24 @@ router.put('/:tableName/:id', async (req, res) => {
 
         const payload = { ...data };
 
+        // [CASCADE BOX RENAME] Pre-fetch the OLD box name BEFORE the update,
+        // so we can cascade the rename to all dependent tables afterward.
+        let oldBoxDisplayName = null;
+        if (tableName === 'box_locations' && payload.Box_detail) {
+            try {
+                const oldRows = await sequelize.query(
+                    `SELECT "Box_detail" FROM box_locations WHERE id::text = $1 OR "ID"::text = $1 LIMIT 1`,
+                    { bind: [String(id)], type: Sequelize.QueryTypes.SELECT }
+                );
+                if (oldRows.length > 0 && oldRows[0].Box_detail) {
+                    oldBoxDisplayName = String(oldRows[0].Box_detail).trim();
+                    console.log(`[CASCADE RENAME] Pre-fetch: box id=${id} old name="${oldBoxDisplayName}" → new name="${payload.Box_detail}"`);
+                }
+            } catch (e) {
+                console.warn('[CASCADE RENAME] Pre-fetch failed:', e.message);
+            }
+        }
+
         // [SECURE] Case Correction for Lab Tasks
         if (tableName === 'ext_lab_tasks' && payload.status) {
             const statusMap = {
@@ -1003,6 +1021,95 @@ router.put('/:tableName/:id', async (req, res) => {
         // Sequelize returns [[rows], rowCount] for UPDATE RETURNING, so result[0] is the array
         const updatedRows = result[0];
         const record = Array.isArray(updatedRows) ? updatedRows[0] : updatedRows;
+
+        // ============================================================
+        // [CASCADE BOX RENAME] If the user renamed a box in box_locations,
+        // propagate the new display name to box_position_index and all 
+        // data tables that store the old box name as a plain string.
+        // Without this, all tubes appear to vanish when a box is renamed.
+        // ============================================================
+        if (tableName === 'box_locations' && payload.Box_detail && record) {
+            try {
+                // Fetch the OLD box name before our update (use the id to find original)
+                // Since we already did the UPDATE, we need to find what the old name was.
+                // We stored the old value by checking what was in the DB before — 
+                // we can derive it from payload vs record: payload.Box_detail = new name.
+                const newBoxName = String(payload.Box_detail).trim();
+                
+                // Get all possible old names for this box id from box_position_index
+                // (what was stored there before this rename)
+                const oldSlots = await sequelize.query(
+                    `SELECT DISTINCT box_name FROM box_position_index WHERE box_name != :newName AND (
+                        SELECT COUNT(*) FROM box_position_index WHERE box_name = :newName
+                    ) = 0 OR box_name IN (
+                        SELECT DISTINCT box_name FROM box_position_index bpi
+                        WHERE bpi.asset_id IN (
+                            SELECT asset_id FROM box_position_index WHERE box_name = :newName
+                        )
+                    ) LIMIT 1`,
+                    { replacements: { newName: newBoxName }, type: Sequelize.QueryTypes.SELECT }
+                ).catch(() => []);
+
+                // More reliable: find old box names by looking at existing slots that
+                // belong to records whose source table references this box id
+                // Strategy: use the id of the updated box_locations row to find 
+                // all data records that reference it numerically, then check their box_name
+                const dataTablesBoxCols = [
+                    { table: 'ext_bacterial_strains', col: 'GS_Box_details' },
+                    { table: 'ext_bacterial_strains', col: 'GD_Box_detail' },
+                    { table: 'ext_bacteriophages',    col: 'GS_Box_details' },
+                    { table: 'ext_bacteriophages',    col: 'DNA_storage_Box_detail' },
+                    { table: 'ext_plasmids',          col: 'Glycerol_Stock_Box' },
+                    { table: 'ext_plasmids',          col: 'DNA_Store_Box_Detail' },
+                    { table: 'ext_primers_details',   col: 'Box_detail' },
+                ];
+
+                // Find all possible old names that were used to represent this box
+                // They would be: the numeric id as string, or the old display name
+                const boxId = String(id);
+                const possibleOldNames = new Set();
+
+                // Add the numeric ID (some old records store it as a number string)
+                possibleOldNames.add(boxId);
+
+                // Add the pre-fetched old display name (the most important one)
+                if (oldBoxDisplayName && oldBoxDisplayName !== newBoxName) {
+                    possibleOldNames.add(oldBoxDisplayName);
+                }
+
+                console.log(`[CASCADE RENAME] Box id=${boxId} renamed to "${newBoxName}". Cascading from old names: ${[...possibleOldNames].join(', ')}`);
+
+                // 1. Update box_position_index box_name for all possible old names
+                for (const oldName of possibleOldNames) {
+                    if (oldName === newBoxName) continue;
+                    const bpiResult = await sequelize.query(
+                        `UPDATE box_position_index SET box_name = :newName, updated_at = CURRENT_TIMESTAMP WHERE box_name = :oldName`,
+                        { replacements: { newName: newBoxName, oldName }, type: Sequelize.QueryTypes.UPDATE }
+                    ).catch(e => { console.warn(`[CASCADE RENAME] bpi update failed for "${oldName}":`, e.message); return [[], 0]; });
+                    const affected = Array.isArray(bpiResult) ? bpiResult[1] : 0;
+                    if (affected > 0) console.log(`[CASCADE RENAME] box_position_index: "${oldName}" → "${newBoxName}" (${affected} slots)`);
+                }
+
+                // 2. Update all data tables that store box name as a string column
+                for (const { table, col } of dataTablesBoxCols) {
+                    for (const oldName of possibleOldNames) {
+                        if (oldName === newBoxName) continue;
+                        try {
+                            const dtResult = await sequelize.query(
+                                `UPDATE "${table}" SET "${col}" = :newName WHERE "${col}"::text = :oldName`,
+                                { replacements: { newName: newBoxName, oldName }, type: Sequelize.QueryTypes.UPDATE }
+                            );
+                            const affected2 = Array.isArray(dtResult) ? dtResult[1] : 0;
+                            if (affected2 > 0) console.log(`[CASCADE RENAME] ${table}.${col}: "${oldName}" → "${newBoxName}" (${affected2} rows)`);
+                        } catch (_) {}
+                    }
+                }
+
+                console.log(`[CASCADE RENAME] Complete for box id=${boxId}`);
+            } catch (cascadeErr) {
+                console.error('[CASCADE RENAME] Error during cascade:', cascadeErr.message);
+            }
+        }
 
         try {
             if (record && record.id) {
