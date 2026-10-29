@@ -668,6 +668,49 @@ async function resolveBoxName(boxValue) {
 }
 
 
+// ── Box slot auto-initializer ──────────────────────────────────────────────
+// ROOT CAUSE FIX: When a new box is added by the client, its 100 grid slots
+// are NOT automatically created in box_position_index.  syncBoxIndex only runs
+// UPDATE statements, so it silently gets rowsAffected=0 and the new entry is
+// never shown in the Freezer Box Matrix UI.
+// This helper ensures every box always has a full 100-slot grid before we try
+// to mark a slot as occupied.
+const GRID_ROWS = ['A','B','C','D','E','F','G','H','I','J'];
+const GRID_COLS = [1,2,3,4,5,6,7,8,9,10];
+
+async function ensureBoxSlotsExist(boxName, freezerName) {
+    // Count existing slots for this box
+    const [{ cnt }] = await sequelize.query(
+        'SELECT COUNT(*) AS cnt FROM box_position_index WHERE box_name = :b',
+        { replacements: { b: boxName }, type: Sequelize.QueryTypes.SELECT }
+    );
+    if (parseInt(cnt, 10) >= 100) return; // Already fully initialized
+
+    console.log(`[syncBoxIndex] 🔧 Auto-initializing box "${boxName}" (currently has ${cnt} slots)...`);
+
+    const existingRows = await sequelize.query(
+        'SELECT position_code FROM box_position_index WHERE box_name = :b',
+        { replacements: { b: boxName }, type: Sequelize.QueryTypes.SELECT }
+    );
+    const existingCodes = new Set(existingRows.map(r => r.position_code));
+
+    let inserted = 0;
+    for (const row of GRID_ROWS) {
+        for (const col of GRID_COLS) {
+            const pos = row + col;
+            if (!existingCodes.has(pos)) {
+                await sequelize.query(
+                    `INSERT INTO box_position_index (box_name, freezer_name, "row", "column", position_code, is_occupied, conflict_flag)
+                     VALUES (:b, :fz, :r, :c, :p, false, false)`,
+                    { replacements: { b: boxName, fz: freezerName || null, r: row, c: col, p: pos } }
+                ).catch(() => {}); // ignore duplicate key errors
+                inserted++;
+            }
+        }
+    }
+    console.log(`[syncBoxIndex] ✅ Box "${boxName}" initialized with ${inserted} new slots.`);
+}
+
 // Helper to sync box index
 async function syncBoxIndex(tableName, record) {
     const config = {
@@ -675,32 +718,32 @@ async function syncBoxIndex(tableName, record) {
             type: 'phage', 
             label: record.Bacteriophage_Name, 
             mappings: [ 
-                { box: record.GS_Box_details, pos: record.GS_position_in_Box, tube: record.Glycerol_Stock_tube_Label }, 
-                { box: record.DNA_storage_Box_detail, pos: record._4C_Position_in_box, tube: record.DNA_Storage_Label } 
+                { box: record.GS_Box_details, pos: record.GS_position_in_Box, tube: record.Glycerol_Stock_tube_Label, freezer: record.GS_Freezer_Name }, 
+                { box: record.DNA_storage_Box_detail, pos: record._4C_Position_in_box, tube: record.DNA_Storage_Label, freezer: record._4C_Fridge_Number } 
             ] 
         },
         ext_bacterial_strains: { 
             type: 'bacteria', 
             label: record.Strain_No, 
             mappings: [ 
-                { box: record.GS_Box_details, pos: record.Location_in_Box_GS, tube: record.Glycerol_Stock_tube_label }, 
-                { box: record.GD_Box_detail, pos: record.Loction_in_Box_PD, tube: record.Genomic_DNA_tube_Label } 
+                { box: record.GS_Box_details, pos: record.Location_in_Box_GS, tube: record.Glycerol_Stock_tube_label, freezer: record.GS_Freezer_Number }, 
+                { box: record.GD_Box_detail, pos: record.Loction_in_Box_PD, tube: record.Genomic_DNA_tube_Label, freezer: record.GD_Freezer_Number } 
             ] 
         },
         ext_plasmids: { 
             type: 'plasmid', 
             label: record.Plasmid_Name, 
             mappings: [ 
-                { box: record.Glycerol_Stock_Box, pos: record.Location_in_Box_GS, tube: record.Glycerol_Stock_Tube_Label }, 
+                { box: record.Glycerol_Stock_Box, pos: record.Location_in_Box_GS, tube: record.Glycerol_Stock_Tube_Label, freezer: record.GLycerol_Stock_Freezer }, 
                 // DNA Store uses the same Location_in_Box_GS column (confirmed from DB schema — only one position column)
-                { box: record.DNA_Store_Box_Detail, pos: record.Location_in_Box_GS, tube: record.PLasmid_DNA_Label } 
+                { box: record.DNA_Store_Box_Detail, pos: record.Location_in_Box_GS, tube: record.PLasmid_DNA_Label, freezer: record.DNA_Store_Freezer } 
             ] 
         },
         ext_primers_details: { 
             type: 'primer', 
             label: record.Primer_Name, 
             mappings: [ 
-                { box: record.Box_detail, pos: record.Location_in_Box, tube: record.Purpose } 
+                { box: record.Box_detail, pos: record.Location_in_Box, tube: record.Purpose, freezer: record.Freezer_Name } 
             ] 
         }
     };
@@ -729,27 +772,70 @@ async function syncBoxIndex(tableName, record) {
             console.warn(`[syncBoxIndex] Could not resolve box "${m.box}" for table ${tableName} record ${record.id}`);
             continue;
         }
-        let posArray = m.pos.split(',').map(p => p.trim().toUpperCase().replace(/[\s-]/g, ''));
-        for (let posStr of posArray) {
-            if (!posStr) continue;
-            const updateResult = await sequelize.query(`
-                UPDATE box_position_index 
-                SET is_occupied = true, asset_type = :type, asset_id = :id, asset_label = :label, tube_label = :tube, source_table = :table, conflict_flag = false, updated_at = CURRENT_TIMESTAMP
-                WHERE box_name = :box AND position_code = :pos
-            `, { 
-                replacements: { 
-                    type: c.type, 
-                    id: record.id, 
-                    label: c.label || '', 
-                    tube: m.tube || '', 
-                    table: tableName, 
-                    box: resolvedBoxName, 
-                    pos: posStr 
+
+        // ── AUTO-INIT: Guarantee the box has all 100 grid slots before UPDATE ──
+        // This is the critical fix: if a box was newly added by the client, it
+        // won't have rows in box_position_index, so our UPDATE below would silently
+        // affect 0 rows and the entry would never appear in the UI.
+        try {
+            // Resolve freezer name (may be numeric ID or display string)
+            let freezerDisplay = null;
+            if (m.freezer) {
+                const fzVal = String(m.freezer).trim();
+                if (/^\d+$/.test(fzVal)) {
+                    const fzRows = await sequelize.query(
+                        `SELECT "Freezer" FROM freezer_locations WHERE "id"::text = :v OR "ID"::text = :v LIMIT 1`,
+                        { replacements: { v: fzVal }, type: Sequelize.QueryTypes.SELECT }
+                    ).catch(() => []);
+                    freezerDisplay = fzRows.length > 0 ? fzRows[0].Freezer : null;
+                } else {
+                    freezerDisplay = fzVal || null;
                 }
-            });
-            const rowsAffected = Array.isArray(updateResult) ? updateResult[1] : 0;
-            slotsUpdated += (rowsAffected || 0);
-            console.log(`[syncBoxIndex] Slot ${resolvedBoxName}/${posStr} => ${rowsAffected} row(s) updated for ${tableName} id=${record.id}`);
+            }
+            await ensureBoxSlotsExist(resolvedBoxName, freezerDisplay);
+        } catch (initErr) {
+            console.warn(`[syncBoxIndex] ensureBoxSlotsExist failed for "${resolvedBoxName}":`, initErr.message);
+        }
+
+        // Split on comma, handle multiple positions per slot
+        const rawPositions = m.pos.split(',').map(p => p.trim()).filter(Boolean);
+        for (let rawPos of rawPositions) {
+            // Build a list of position_code variants to try, because data may store
+            // "F-2" while box_position_index stores "F2", or vice versa.
+            const posVariants = Array.from(new Set([
+                rawPos.toUpperCase().replace(/[\s\-]/g, ''),  // "F2"  (strip dash & space)
+                rawPos.toUpperCase().trim(),                   // "F-2" (original)
+                rawPos.toUpperCase().replace(/\s/g, ''),       // remove only spaces
+            ])).filter(Boolean);
+
+            let matched = false;
+            for (const posStr of posVariants) {
+                const updateResult = await sequelize.query(`
+                    UPDATE box_position_index 
+                    SET is_occupied = true, asset_type = :type, asset_id = :id, asset_label = :label, tube_label = :tube, source_table = :table, conflict_flag = false, updated_at = CURRENT_TIMESTAMP
+                    WHERE box_name = :box AND position_code = :pos
+                `, { 
+                    replacements: { 
+                        type: c.type, 
+                        id: record.id, 
+                        label: c.label || '', 
+                        tube: m.tube || '', 
+                        table: tableName, 
+                        box: resolvedBoxName, 
+                        pos: posStr 
+                    }
+                });
+                const rowsAffected = Array.isArray(updateResult) ? updateResult[1] : 0;
+                if (rowsAffected > 0) {
+                    slotsUpdated += rowsAffected;
+                    console.log(`[syncBoxIndex] ✅ Slot ${resolvedBoxName}/${posStr} => ${rowsAffected} row(s) for ${tableName} id=${record.id}`);
+                    matched = true;
+                    break; // Found a matching variant, stop trying
+                }
+            }
+            if (!matched) {
+                console.warn(`[syncBoxIndex] ⚠️  No slot found for box="${resolvedBoxName}" pos variants=${posVariants.join('|')} (${tableName} id=${record.id})`);
+            }
         }
     }
     console.log(`[syncBoxIndex] DONE: table=${tableName} id=${record.id} — ${slotsUpdated} slot(s) synced`);

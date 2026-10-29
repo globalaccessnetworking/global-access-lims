@@ -1,16 +1,34 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import {
     Search, Plus, FileDown, Filter, LayoutGrid,
-    List, MoreHorizontal, Database, AlertTriangle, X, Edit, Trash2, Check, Clock, Calendar, Copy
+    List, MoreHorizontal, Database, AlertTriangle, X, Edit, Trash2, Check, Clock, Calendar, Copy,
+    ChevronLeft, ChevronRight, RefreshCw
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SmartLookup from '../components/SmartLookup';
 import RelationalSelect from '../components/RelationalSelect';
 
+// ── Safe value renderer ─────────────────────────────────────────────────────
+// Converts ANY backend value (null, undefined, object, Date, boolean, number)
+// into a safe string that React can render without crashing.
+const safeStr = (val) => {
+    if (val === null || val === undefined) return '-';
+    if (typeof val === 'boolean') return val ? 'Yes' : 'No';
+    if (typeof val === 'object') {
+        // Date objects
+        if (val instanceof Date) return val.toLocaleDateString();
+        // JSON objects / arrays
+        try { return JSON.stringify(val); } catch (_) { return '[Object]'; }
+    }
+    return String(val);
+};
+
+// ── Pagination constant ─────────────────────────────────────────────────────
+const ROWS_PER_PAGE = 100;
 
 const DynamicModule = ({ type: propsType }) => {
     const { type: paramsType } = useParams();
@@ -21,8 +39,11 @@ const DynamicModule = ({ type: propsType }) => {
     const [dataLoading, setDataLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [error, setError] = useState(null);
-    const [selectedIds, setSelectedIds] = useState([]); // [PHASE 168] 
+    const [selectedIds, setSelectedIds] = useState([]); // [PHASE 168]
     const [isBulkDeleting, setIsBulkDeleting] = useState(false);
+
+    // ── Pagination state ────────────────────────────────────────────────────
+    const [currentPage, setCurrentPage] = useState(1);
 
     // Dictionary cache for Data Grid rendering
     const [dictionaries, setDictionaries] = useState({});
@@ -34,6 +55,9 @@ const DynamicModule = ({ type: propsType }) => {
     const [searchParams] = useSearchParams();
     const typeFilter = searchParams.get('filter');
 
+    // AbortController ref — cancel stale in-flight fetch when type changes
+    const abortRef = useRef(null);
+
     // [PHASE 115-FINAL] Universal Title Mapping for a Premium "MS Access" Feel
     const getModuleTitle = () => {
         if (typeFilter) {
@@ -41,7 +65,7 @@ const DynamicModule = ({ type: propsType }) => {
             if (typeFilter === 'Strain') return 'Bacterial Strains';
             return typeFilter + 's';
         }
-        
+
         const raw = type.replace('ext_', '').replace(/_/g, ' ');
         const mapping = {
             'primers_details': 'Primers Library',
@@ -73,14 +97,14 @@ const DynamicModule = ({ type: propsType }) => {
 
             // 1. Relational text columns (translated labels) are ALWAYS shown
             if (c.isRelational && !lowerKey.endsWith('_id')) return true;
-            
+
             // 2. Hide technical internal IDs
             if (lowerKey.endsWith('_id')) return false;
-            if (lowerKey === 'id') return false; 
+            if (lowerKey === 'id') return false;
 
             // 3. WHITELIST: Essential fields that must always be visible for specific tables
             const WHITELIST = [
-                'Bacteriophage_Name', 'Plasmid_Name', 'Primer_Name', 'Item_Name', 
+                'Bacteriophage_Name', 'Plasmid_Name', 'Primer_Name', 'Item_Name',
                 'Species', 'Manufacturers', 'Category', 'Storage_Area', 'Freezer', 'Rack_No', 'Box_detail',
                 'DNA_sequence', 'Sequence', 'Purpose', 'Complete_Name', 'Abbreviation', 'Antibiotic_Disc',
                 'GS_Box_details', 'Glycerol_Stock_Box', 'DNA_Store_Box_Detail', 'GD_Box_detail', 'DNA_storage_Box_detail',
@@ -96,36 +120,61 @@ const DynamicModule = ({ type: propsType }) => {
     const visibleColumns = getVisibleColumns(moduleData.schema);
 
     useEffect(() => {
+        // Cancel any in-flight request from a previous table
+        if (abortRef.current) {
+            abortRef.current.abort();
+        }
+        abortRef.current = new AbortController();
+
+        // Reset state for the new table
+        setModuleData({ schema: [], data: [], count: 0 });
+        setSelectedIds([]);
+        setSearchTerm('');
+        setCurrentPage(1);
+        setError(null);
+
         fetchSchema();
-        fetchData();
-        setSelectedIds([]); // Reset selection on module change
-    }, [type, typeFilter]); // Re-fetch or re-process when filter changes
+        fetchData(abortRef.current.signal);
+
+        return () => {
+            // Cleanup: abort on unmount or before next effect
+            if (abortRef.current) abortRef.current.abort();
+        };
+    }, [type, typeFilter]);
 
     const fetchSchema = async () => {
         setSchemaLoading(true);
         try {
             const res = await api.get(`/system/${type}/schema`);
-            setModuleData(prev => ({ ...prev, schema: res.data.schema }));
+            setModuleData(prev => ({ ...prev, schema: res.data.schema || [] }));
         } catch (err) {
-            console.error("Failed to fetch schema", err);
+            if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+                console.error("Failed to fetch schema", err);
+            }
         } finally {
             setSchemaLoading(false);
         }
     };
 
-    const fetchData = async () => {
+    const fetchData = async (signal) => {
         setDataLoading(true);
         setError(null);
         try {
-            const res = await api.get(`/system/${type}`);
-            let data = res.data.data;
-            
+            const res = await api.get(`/system/${type}`, { signal });
+
+            // ── Null-safety: ensure data is always an array ──────────────
+            let data = res.data?.data;
+            if (!Array.isArray(data)) {
+                console.warn('[DynamicModule] fetchData: data is not an array, received:', typeof data, data);
+                data = [];
+            }
+
             // Apply URL Filter if present (e.g., ?filter=Phage)
             if (typeFilter && data.length > 0) {
                 // Find column key for type (usually 'type' or 'Asset_Type')
                 const typeKey = Object.keys(data[0]).find(k => k.toLowerCase() === 'type' || k.toLowerCase() === 'asset_type');
                 if (typeKey) {
-                    data = data.filter(item => String(item[typeKey]).toLowerCase() === typeFilter.toLowerCase());
+                    data = data.filter(item => safeStr(item[typeKey]).toLowerCase() === typeFilter.toLowerCase());
                 }
             }
 
@@ -133,14 +182,26 @@ const DynamicModule = ({ type: propsType }) => {
                 ...prev,
                 data: data,
                 count: data.length,
-                debug: res.data.debug
+                debug: res.data?.debug
             }));
         } catch (err) {
+            // Ignore intentional cancellation (e.g. user switched tables quickly)
+            if (err.name === 'CanceledError' || err.name === 'AbortError' || err.code === 'ERR_CANCELED') {
+                return;
+            }
             console.error("Failed to fetch module data", err);
-            setError(err.response?.data?.error || err.message);
+            setError(err.response?.data?.error || err.message || 'Unknown error fetching data');
+            setModuleData(prev => ({ ...prev, data: [], count: 0 }));
         } finally {
             setDataLoading(false);
         }
+    };
+
+    const handleRetry = () => {
+        if (abortRef.current) abortRef.current.abort();
+        abortRef.current = new AbortController();
+        setError(null);
+        fetchData(abortRef.current.signal);
     };
 
     const handleSave = async (e) => {
@@ -168,7 +229,9 @@ const DynamicModule = ({ type: propsType }) => {
                 await api.put(`/system/${type}/${formData.id}`, payload);
             }
             setIsModalOpen(false);
-            fetchData();
+            if (abortRef.current) abortRef.current.abort();
+            abortRef.current = new AbortController();
+            fetchData(abortRef.current.signal);
         } catch (err) {
             alert("Failed to save record: " + (err.response?.data?.error || err.message));
         }
@@ -178,7 +241,9 @@ const DynamicModule = ({ type: propsType }) => {
         if (!window.confirm("Delete this record permanently?")) return;
         try {
             await api.delete(`/system/${type}/${id}`);
-            fetchData();
+            if (abortRef.current) abortRef.current.abort();
+            abortRef.current = new AbortController();
+            fetchData(abortRef.current.signal);
         } catch (err) {
             alert("Delete failed.");
         }
@@ -192,7 +257,9 @@ const DynamicModule = ({ type: propsType }) => {
         try {
             await api.post(`/system/${type}/bulk-delete`, { ids: selectedIds });
             setSelectedIds([]);
-            fetchData();
+            if (abortRef.current) abortRef.current.abort();
+            abortRef.current = new AbortController();
+            fetchData(abortRef.current.signal);
         } catch (err) {
             alert("Bulk delete failed: " + (err.response?.data?.error || err.message));
         } finally {
@@ -209,7 +276,7 @@ const DynamicModule = ({ type: propsType }) => {
     };
 
     const toggleSelectRow = (id) => {
-        setSelectedIds(prev => 
+        setSelectedIds(prev =>
             prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
         );
     };
@@ -236,14 +303,14 @@ const DynamicModule = ({ type: propsType }) => {
             navigate('/primer-entry');
             return;
         }
-        
+
         // Antibiotic Discs and all others stay in generic modal
         setModalMode('add');
         const initialForm = {};
         moduleData.schema.forEach(col => {
             if (!['id', 'created_at', 'updated_at', 'createdAt', 'updatedAt'].includes(col.key.toLowerCase())) {
                 let defaultValue = '';
-                
+
                 // Smart default for filtered views
                 if (typeFilter && (col.key.toLowerCase() === 'type' || col.key.toLowerCase() === 'asset_type')) {
                     defaultValue = typeFilter;
@@ -260,7 +327,7 @@ const DynamicModule = ({ type: propsType }) => {
         const sanitized = { ...item };
         delete sanitized.id;
         delete sanitized.ID;
-        
+
         // Clear known identifiers
         const uniqueFields = ['Strain_No', 'Plasmid_Name', 'Bacteriophage_Name', 'Primer_Name', 'Item_Name', 'Asset_Name'];
         uniqueFields.forEach(key => {
@@ -336,19 +403,22 @@ const DynamicModule = ({ type: propsType }) => {
         setIsModalOpen(true);
     };
 
+    // ── Filtered data (full set — used for CSV export and search) ───────────
     const filteredData = useMemo(() => {
-        if (!searchTerm) return moduleData.data;
+        // Guard: ensure moduleData.data is always an array
+        const allData = Array.isArray(moduleData.data) ? moduleData.data : [];
+        if (!searchTerm) return allData;
         const lower = searchTerm.toLowerCase().trim();
-        
+
         // Pass 1: Strict Exact Priority Match
         // Check if there is any EXACT match in identifier columns
-        const exactMatches = moduleData.data.filter(item => {
+        const exactMatches = allData.filter(item => {
             return Object.entries(item).some(([key, val]) => {
-                if (!val) return false;
+                if (val === null || val === undefined) return false;
                 const k = key.toLowerCase();
                 // Check if it's an ID-like column
                 if (k.includes('no') || k.includes('id') || k.includes('label') || k.includes('name')) {
-                    return String(val).toLowerCase().trim() === lower;
+                    return safeStr(val).toLowerCase().trim() === lower;
                 }
                 return false;
             });
@@ -361,21 +431,21 @@ const DynamicModule = ({ type: propsType }) => {
 
         // Pass 2: Fallback with Smart Column Boundaries
         // If no exact match, do a partial match, BUT protect ID columns from bleeding
-        // We use a regex word boundary to ensure "PA1" doesn't match "PA16", 
+        // We use a regex word boundary to ensure "PA1" doesn't match "PA16",
         // but it CAN match "PA1-mutant" or "Tube PA1".
-        
+
         // Build a regex that matches the term only if it's not immediately surrounded by alphanumeric characters
         // Note: Javascript \b boundary treats '-' as a word boundary, which is perfect for "PA1-6".
         // We escape the search term to prevent regex injection errors.
         const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const boundaryRegex = new RegExp(`(^|[^a-zA-Z0-9])${escapeRegExp(lower)}([^a-zA-Z0-9]|$)`, 'i');
 
-        return moduleData.data.filter(item => {
+        return allData.filter(item => {
             return Object.entries(item).some(([key, val]) => {
-                if (!val) return false;
+                if (val === null || val === undefined) return false;
                 const k = key.toLowerCase();
-                const strVal = String(val).toLowerCase();
-                
+                const strVal = safeStr(val).toLowerCase();
+
                 if (k.includes('no') || k.includes('id') || k.includes('label')) {
                     // Smart Boundary Match for ID columns (blocks 'PA1' matching 'PA16')
                     return boundaryRegex.test(strVal);
@@ -387,10 +457,22 @@ const DynamicModule = ({ type: propsType }) => {
         });
     }, [moduleData.data, searchTerm]);
 
+    // ── Pagination derived values ────────────────────────────────────────────
+    const totalPages = Math.max(1, Math.ceil(filteredData.length / ROWS_PER_PAGE));
+    const safePage = Math.min(currentPage, totalPages);
+    const pageStart = (safePage - 1) * ROWS_PER_PAGE;
+    const pageEnd = pageStart + ROWS_PER_PAGE;
+    const pagedRows = filteredData.slice(pageStart, pageEnd);
+
+    // Reset to page 1 when search changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm]);
+
     const handleExportCSV = () => {
         if (!filteredData.length) return;
 
-        // 1. Prepare Headers (Exclude technical IDs)
+        // 1. Prepare Headers (Exclude technical IDs) — exports ALL filtered data, not just current page
         const headers = moduleData.schema
             .filter(c => !c.key.endsWith('_id') && c.key.toLowerCase() !== 'id')
             .map(c => c.label);
@@ -404,22 +486,22 @@ const DynamicModule = ({ type: propsType }) => {
 
                     // Dictionary lookup for relational labels
                     if (dictionaries[col.key]) {
-                        val = dictionaries[col.key][String(val)] || val;
+                        val = dictionaries[col.key][safeStr(val)] || val;
                     }
 
                     // CRITICAL: Strip Base64 to prevent Excel crashes
                     if (val && typeof val === 'string' && (val.startsWith('data:image') || val.length > 5000)) {
-                        return "[Image Data]";
+                        return "\"[Image Data]\"";
                     }
 
                     // Sanitize for CSV (Escape quotes)
-                    const stringVal = String(val || '').replace(/"/g, '""');
+                    const stringVal = safeStr(val).replace(/"/g, '""');
                     return `"${stringVal}"`;
                 }).join(',');
         });
 
         const csvContent = [headers.join(','), ...rows].join('\n');
-        
+
         // 3. Trigger Download
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -434,15 +516,15 @@ const DynamicModule = ({ type: propsType }) => {
     const exportPDF = () => {
         const doc = new jsPDF();
         doc.text(`Module Report: ${type}`, 14, 20);
-        
+
         const exportSchema = moduleData.schema.filter(c => !c.key.endsWith('_id'));
-        
+
         doc.autoTable({
             head: [exportSchema.map(c => c.label)],
             body: filteredData.map(item => exportSchema.map(c => {
                 const val = item[c.key];
-                if (dictionaries[c.key]) return dictionaries[c.key][String(val)] || val || '-';
-                return val || '-';
+                if (dictionaries[c.key]) return dictionaries[c.key][safeStr(val)] || safeStr(val);
+                return safeStr(val);
             })),
             startY: 35,
             theme: 'grid',
@@ -461,7 +543,8 @@ const DynamicModule = ({ type: propsType }) => {
                         {getModuleTitle()}
                     </h2>
                     <p className="text-slate-400 mt-1">
-                        {typeFilter ? `Filtered Repository` : `Dynamic Repository`} &bull; {moduleData.count} Records
+                        {typeFilter ? `Filtered Repository` : `Dynamic Repository`} &bull; {filteredData.length} of {moduleData.count} Records
+                        {totalPages > 1 && <span className="ml-2 text-emerald-400 text-xs font-mono">(Page {safePage}/{totalPages})</span>}
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -472,7 +555,7 @@ const DynamicModule = ({ type: propsType }) => {
                         </div>
                     )}
                     {selectedIds.length > 0 && (
-                        <button 
+                        <button
                             onClick={handleBulkDelete}
                             disabled={isBulkDeleting}
                             className={`flex items-center gap-2 px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 border border-rose-500/20 rounded-xl font-bold transition-all active:scale-95 ${isBulkDeleting ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -507,14 +590,20 @@ const DynamicModule = ({ type: propsType }) => {
                 </div>
             </div>
 
-            {/* Error Message */}
+            {/* Error Message with Retry */}
             {error && (
                 <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex items-center gap-3 text-red-400">
                     <AlertTriangle size={20} />
-                    <div className="text-sm">
+                    <div className="text-sm flex-1">
                         <p className="font-bold">System Connection Error</p>
                         <p className="opacity-80">{error}</p>
                     </div>
+                    <button
+                        onClick={handleRetry}
+                        className="flex items-center gap-2 px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-300 rounded-lg text-xs font-bold transition-all"
+                    >
+                        <RefreshCw size={12} /> Retry
+                    </button>
                 </div>
             )}
 
@@ -539,8 +628,8 @@ const DynamicModule = ({ type: propsType }) => {
                         <thead className="bg-slate-950/80 sticky top-0 z-10 border-b border-white/10">
                             <tr>
                                 <th className="px-6 py-4 w-10">
-                                    <input 
-                                        type="checkbox" 
+                                    <input
+                                        type="checkbox"
                                         className="w-4 h-4 rounded border-white/10 bg-white/5 checked:bg-emerald-500 transition-all cursor-pointer"
                                         checked={filteredData.length > 0 && selectedIds.length === filteredData.length}
                                         onChange={toggleSelectAll}
@@ -555,111 +644,169 @@ const DynamicModule = ({ type: propsType }) => {
                         <tbody className="divide-y divide-white/5">
                             {dataLoading ? (
                                 <tr><td colSpan="100" className="text-center py-20 text-slate-500 animate-pulse font-mono uppercase tracking-widest text-xs">Fetching Records...</td></tr>
+                            ) : error && filteredData.length === 0 ? (
+                                <tr><td colSpan="100" className="text-center py-20 text-slate-500 italic">
+                                    Failed to load data. Use the Retry button above.
+                                </td></tr>
                             ) : filteredData.length === 0 ? (
                                 <tr><td colSpan="100" className="text-center py-20 text-slate-500 italic">No records found.</td></tr>
                             ) : (
-                                filteredData.map((row, idx) => (
-                                    <tr 
-                                        key={row.id || idx} 
-                                        className={`hover:bg-white/5 group transition-colors ${selectedIds.includes(row.id) ? 'bg-emerald-500/5' : ''}`}
-                                    >
-                                        <td className="px-6 py-4">
-                                            <input 
-                                                type="checkbox" 
-                                                className="w-4 h-4 rounded border-white/10 bg-white/5 checked:bg-emerald-500 transition-all cursor-pointer"
-                                                checked={selectedIds.includes(row.id)}
-                                                onChange={() => toggleSelectRow(row.id)}
-                                            />
-                                        </td>
-                                        {visibleColumns.map(col => {
-                                            const val = row[col.key]; // STRICT KEY-TO-VALUE BINDING
-                                            const lowerKey = col.key.toLowerCase();
+                                // ── Only render current page rows (100 at a time) ─────────────
+                                pagedRows.map((row, idx) => {
+                                    // Wrap each row in try/catch to prevent one bad record
+                                    // from crashing the entire table
+                                    try {
+                                        return (
+                                            <tr
+                                                key={row.id || (pageStart + idx)}
+                                                className={`hover:bg-white/5 group transition-colors ${selectedIds.includes(row.id) ? 'bg-emerald-500/5' : ''}`}
+                                            >
+                                                <td className="px-6 py-4">
+                                                    <input
+                                                        type="checkbox"
+                                                        className="w-4 h-4 rounded border-white/10 bg-white/5 checked:bg-emerald-500 transition-all cursor-pointer"
+                                                        checked={selectedIds.includes(row.id)}
+                                                        onChange={() => toggleSelectRow(row.id)}
+                                                    />
+                                                </td>
+                                                {visibleColumns.map(col => {
+                                                    const val = row[col.key]; // STRICT KEY-TO-VALUE BINDING
+                                                    const lowerKey = col.key.toLowerCase();
 
-                                            // Handle Status Badges
-                                            if (lowerKey === 'status') {
-                                                const status = String(val || '').trim();
-                                                let badgeClass = 'bg-slate-500/10 text-slate-400 border-slate-500/20';
-                                                if (status === 'Completed' || status === 'Finished' || status === 'Success') badgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-                                                if (status === 'In Progress' || status === 'Running') badgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
-                                                if (status === 'Pending' || status === 'Todo') badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-                                                if (status === 'Critical' || status === 'Failed') badgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
+                                                    // Handle Status Badges
+                                                    if (lowerKey === 'status') {
+                                                        const status = safeStr(val).trim();
+                                                        let badgeClass = 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+                                                        if (status === 'Completed' || status === 'Finished' || status === 'Success') badgeClass = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+                                                        if (status === 'In Progress' || status === 'Running') badgeClass = 'bg-blue-500/10 text-blue-400 border-blue-500/20';
+                                                        if (status === 'Pending' || status === 'Todo') badgeClass = 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+                                                        if (status === 'Critical' || status === 'Failed') badgeClass = 'bg-rose-500/10 text-rose-400 border-rose-500/20';
 
-                                                return (
-                                                    <td key={col.key} className="px-6 py-4">
-                                                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase border ${badgeClass}`}>
-                                                            {status || 'Unknown'}
-                                                        </span>
-                                                    </td>
-                                                );
-                                            }
+                                                        return (
+                                                            <td key={col.key} className="px-6 py-4">
+                                                                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase border ${badgeClass}`}>
+                                                                    {status || 'Unknown'}
+                                                                </span>
+                                                            </td>
+                                                        );
+                                                    }
 
-                                            // [PHASE 159/160] HANDLE IMAGES & FILES
-                                            if (col.type === 'image' && val) {
-                                                return (
-                                                    <td key={col.key} className="px-6 py-4">
-                                                        <div className="relative group/img w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-black/40 shadow-inner">
-                                                            <img 
-                                                                src={val} 
-                                                                alt="Thumbnail" 
-                                                                className="w-full h-full object-cover transition-transform group-hover/img:scale-125 cursor-zoom-in"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    const newWin = window.open();
-                                                                    newWin.document.write(`<body style="margin:0; background:#0f172a; display:flex; align-items:center; justify-content:center;"><img src="${val}" style="max-width:90%; border-radius:12px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);"></body>`);
-                                                                }}
-                                                            />
-                                                        </div>
-                                                    </td>
-                                                );
-                                            }
+                                                    // [PHASE 159/160] HANDLE IMAGES & FILES
+                                                    if (col.type === 'image' && val) {
+                                                        return (
+                                                            <td key={col.key} className="px-6 py-4">
+                                                                <div className="relative group/img w-12 h-12 rounded-xl border border-white/10 overflow-hidden bg-black/40 shadow-inner">
+                                                                    <img
+                                                                        src={val}
+                                                                        alt="Thumbnail"
+                                                                        className="w-full h-full object-cover transition-transform group-hover/img:scale-125 cursor-zoom-in"
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            const newWin = window.open();
+                                                                            newWin.document.write(`<body style="margin:0; background:#0f172a; display:flex; align-items:center; justify-content:center;"><img src="${val}" style="max-width:90%; border-radius:12px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);"></body>`);
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </td>
+                                                        );
+                                                    }
 
-                                            if (col.type === 'file' && val) {
-                                                return (
-                                                    <td key={col.key} className="px-6 py-4">
-                                                        <button 
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-                                                                const link = document.createElement('a');
-                                                                link.href = val;
-                                                                link.download = `attachment_${col.label}_${row.id || 'file'}.pdf`;
-                                                                link.click();
-                                                            }}
-                                                            className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-lg border border-white/5 transition-all text-[10px] font-bold uppercase"
-                                                        >
-                                                            <FileText size={14} className="text-amber-400" /> Download
-                                                        </button>
-                                                    </td>
-                                                );
-                                            }
+                                                    if (col.type === 'file' && val) {
+                                                        return (
+                                                            <td key={col.key} className="px-6 py-4">
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        const link = document.createElement('a');
+                                                                        link.href = safeStr(val);
+                                                                        link.download = `attachment_${col.label}_${row.id || 'file'}.pdf`;
+                                                                        link.click();
+                                                                    }}
+                                                                    className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white rounded-lg border border-white/5 transition-all text-[10px] font-bold uppercase"
+                                                                >
+                                                                    <FileDown size={14} className="text-amber-400" /> Download
+                                                                </button>
+                                                            </td>
+                                                        );
+                                                    }
 
-                                            // Handle Deadline Highlighting
-                                            if (col.type === 'date' || lowerKey.includes('date') || lowerKey.includes('deadline')) {
-                                                const date = val ? new Date(val) : null;
-                                                const isOverdue = date && date < new Date() && row.status !== 'Completed';
-                                                return (
-                                                    <td key={col.key} className="px-6 py-4 text-sm font-mono">
-                                                        <span className={isOverdue ? 'text-rose-500 font-bold animate-pulse' : 'text-slate-400'}>
-                                                            {val ? new Date(val).toLocaleDateString() : '-'}
-                                                        </span>
-                                                    </td>
-                                                );
-                                            }
+                                                    // Handle Deadline Highlighting
+                                                    if (col.type === 'date' || lowerKey.includes('date') || lowerKey.includes('deadline')) {
+                                                        let date = null;
+                                                        try { date = val ? new Date(val) : null; } catch (_) {}
+                                                        const isOverdue = date && !isNaN(date) && date < new Date() && row.status !== 'Completed';
+                                                        return (
+                                                            <td key={col.key} className="px-6 py-4 text-sm font-mono">
+                                                                <span className={isOverdue ? 'text-rose-500 font-bold animate-pulse' : 'text-slate-400'}>
+                                                                    {date && !isNaN(date) ? date.toLocaleDateString() : '-'}
+                                                                </span>
+                                                            </td>
+                                                        );
+                                                    }
 
-                                            return <td key={col.key} className="px-6 py-4 text-sm text-slate-200">{String(val || '-')}</td>;
-                                        })}
-                                        <td className="px-6 py-4 text-right">
-                                            <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={() => handleDuplicate(row)} className="p-2 hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-500 rounded-lg" title="Duplicate/Copy"><Copy size={14} /></button>
-                                                <button onClick={() => openEditModal(row)} className="p-2 hover:bg-blue-500/10 text-slate-400 hover:text-blue-500 rounded-lg" title="Edit"><Edit size={14} /></button>
-                                                <button onClick={() => handleDelete(row.id)} className="p-2 hover:bg-red-500/10 text-slate-400 hover:text-red-500 rounded-lg"><Trash2 size={14} /></button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
+                                                    // Default cell — safeStr prevents any crash from objects/nulls
+                                                    const displayVal = safeStr(val);
+                                                    // Truncate very long strings (e.g. base64)
+                                                    const truncated = displayVal.length > 120 ? displayVal.substring(0, 120) + '…' : displayVal;
+                                                    return (
+                                                        <td key={col.key} className="px-6 py-4 text-sm text-slate-200 max-w-xs truncate" title={displayVal.length > 60 ? displayVal : undefined}>
+                                                            {truncated}
+                                                        </td>
+                                                    );
+                                                })}
+                                                <td className="px-6 py-4 text-right">
+                                                    <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <button onClick={() => handleDuplicate(row)} className="p-2 hover:bg-emerald-500/10 text-slate-400 hover:text-emerald-500 rounded-lg" title="Duplicate/Copy"><Copy size={14} /></button>
+                                                        <button onClick={() => openEditModal(row)} className="p-2 hover:bg-blue-500/10 text-slate-400 hover:text-blue-500 rounded-lg" title="Edit"><Edit size={14} /></button>
+                                                        <button onClick={() => handleDelete(row.id)} className="p-2 hover:bg-red-500/10 text-slate-400 hover:text-red-500 rounded-lg"><Trash2 size={14} /></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    } catch (renderErr) {
+                                        // One bad row should never crash the whole table
+                                        console.error('[DynamicModule] Row render error for id=' + row?.id, renderErr);
+                                        return (
+                                            <tr key={row?.id || (pageStart + idx)} className="bg-red-900/10">
+                                                <td colSpan="100" className="px-6 py-2 text-xs text-red-500/70 font-mono italic">
+                                                    ⚠ Record id={safeStr(row?.id)} could not be displayed (render error)
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                })
                             )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* ── Pagination Controls ─────────────────────────────────────── */}
+                {!dataLoading && filteredData.length > ROWS_PER_PAGE && (
+                    <div className="border-t border-white/5 px-6 py-3 flex items-center justify-between bg-slate-950/40 shrink-0">
+                        <span className="text-xs text-slate-500 font-mono">
+                            Showing {pageStart + 1}–{Math.min(pageEnd, filteredData.length)} of {filteredData.length} records
+                        </span>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={safePage === 1}
+                                className="flex items-center gap-1 px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 rounded-lg transition-all"
+                            >
+                                <ChevronLeft size={14} /> Prev
+                            </button>
+                            <span className="text-xs text-slate-400 px-2 font-mono">
+                                {safePage} / {totalPages}
+                            </span>
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={safePage === totalPages}
+                                className="flex items-center gap-1 px-3 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed text-slate-300 rounded-lg transition-all"
+                            >
+                                Next <ChevronRight size={14} />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Change Modal */}
@@ -680,7 +827,7 @@ const DynamicModule = ({ type: propsType }) => {
                                             <div className="text-[9px] text-red-500/70 font-mono text-left bg-black/30 p-2 rounded max-h-40 overflow-auto">
                                                 <p className="font-bold border-b border-white/5 mb-1 uppercase">Metadata Trace:</p>
                                                 {Object.entries(moduleData.debug.errors).map(([m, err]) => (
-                                                    <p key={m} className="mb-0.5"><span className="text-slate-500">{m}:</span> {String(err)}</p>
+                                                    <p key={m} className="mb-0.5"><span className="text-slate-500">{m}:</span> {safeStr(err)}</p>
                                                 ))}
                                             </div>
                                         )}
@@ -689,7 +836,7 @@ const DynamicModule = ({ type: propsType }) => {
                                     moduleData.schema
                                         .filter(c => !['id', 'created_at', 'updated_at', 'createdAt', 'updatedAt'].includes(c.key.toLowerCase()))
                                         .map(col => {
-                                        
+
                                         if (col.isRelational && col.endpoint) {
                                             return (
                                                 <div key={col.key}>
@@ -708,10 +855,10 @@ const DynamicModule = ({ type: propsType }) => {
                                         return (
                                             <div key={col.key}>
                                                 <label className="block text-xs font-bold text-slate-400 uppercase mb-2">{col.label}</label>
-                                                <input 
+                                                <input
                                                     type="text"
-                                                    value={formData[col.key] || ''} 
-                                                    onChange={e => setFormData({ ...formData, [col.key]: e.target.value })} 
+                                                    value={formData[col.key] || ''}
+                                                    onChange={e => setFormData({ ...formData, [col.key]: e.target.value })}
                                                     placeholder={`Type ${col.label}...`}
                                                     className="w-full px-4 py-2 bg-slate-900 border border-white/10 rounded-xl text-sm text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500 hover:border-white/20 transition-all"
                                                 />
